@@ -1,0 +1,50 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+*.tsbuildinfo
+
+# Environment
+.env
+!.env.templ
+package-lock.json
+oauth.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Test coverage
+coverage/
+
+# Certificates (sensitive)
+scripts/
+certificates/
+*.pem
+*.key
+*.crt
+
+# Bun
+bun.lockb
+
+# Misc
+errors/
+*.xml
+*.html
+*.tgz
+test.output
+
+# Claude
+settings.local.json
+CLAUDE.local.md

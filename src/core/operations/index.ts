@@ -1,0 +1,11 @@
+export { login } from './login';
+export { createObject } from './createObject';
+export { createView } from './createView';
+export { createLocalTable } from './createLocalTable';
+export { upsertReplicationFlow } from './upsertReplicationFlow';
+export type { ReplicationFlowResult } from './upsertReplicationFlow';
+export { objectExists } from './objectExists';
+export { deleteObject } from './deleteObject';
+export type { DeletableObjectType } from './deleteObject';
+export { runReplicationFlow } from './runReplicationFlow';
+export type { RunReplicationFlowResult } from './runReplicationFlow';

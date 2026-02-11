@@ -1,0 +1,186 @@
+{
+    "definitions": {
+        "Test_I_BusinessArea": {
+            "kind": "entity",
+            "@EndUserText.label": "Test - Business Area",
+            "@ObjectModel.modelingPattern": {
+                "#": "DATA_STRUCTURE"
+            },
+            "@ObjectModel.supportedCapabilities": [
+                {
+                    "#": "DATA_STRUCTURE"
+                }
+            ],
+            "elements": {
+                "BusinessArea": {
+                    "key": true,
+                    "notNull": true,
+                    "@EndUserText.label": "Business Area",
+                    "type": "cds.String",
+                    "length": 4
+                },
+                "ConsolidationBusinessArea": {
+                    "key": false,
+                    "@EndUserText.label": "Cons. Business Area",
+                    "type": "cds.String",
+                    "length": 4
+                },
+                "CrossSystemBusinessArea": {
+                    "key": false,
+                    "@EndUserText.label": "X-Syst. Business Area",
+                    "type": "cds.String",
+                    "length": 4
+                }
+            }
+        }
+    },
+    "version": {
+        "csn": "1.0"
+    },
+    "meta": {
+        "creator": "CDS Compiler v1.19.2"
+    },
+    "replicationflows": {
+        "Test_I_BusinessArea_Replication": {
+            "kind": "sap.dis.replicationflow",
+            "@EndUserText.label": "Test - I_BusinessArea: Basic Replication",
+            "contents": {
+                "description": "Test - I_BusinessArea: Basic Replication",
+                "sourceSystem": [
+                    {
+                        "connectionId": "Madiba_Media_Demo__S4_OnPrem",
+                        "connectionType": "SAPS4HANAOP",
+                        "container": "/CDS_EXTRACTION",
+                        "maxConnections": 10,
+                        "metadata": {}
+                    }
+                ],
+                "targetSystem": [
+                    {
+                        "connectionId": "$DWC",
+                        "connectionType": "HANA",
+                        "container": "",
+                        "maxConnections": 10,
+                        "metadata": {
+                            "connectionMetaschema": {
+                                "sources": [
+                                    "SAP"
+                                ]
+                            }
+                        }
+                    }
+                ],
+                "vTypes": {
+                    "scalar": {
+                        "string_4": {
+                            "name": "string_4",
+                            "description": "abap.char(4)",
+                            "vflow.type": "scalar",
+                            "template": "string",
+                            "value.length": 4
+                        }
+                    }
+                },
+                "replicationTasks": [
+                    {
+                        "name": "replicationtask1",
+                        "loadType": "INITIAL",
+                        "priority": 50,
+                        "truncate": false,
+                        "sourceObject": {
+                            "name": "I_BusinessArea",
+                            "definition": {
+                                "columns": [
+                                    {
+                                        "name": "BusinessArea",
+                                        "vflow.type": "scalar",
+                                        "businessName": "Business Area",
+                                        "key": true,
+                                        "vtype-ID": "$DYNAMIC.string_4",
+                                        "metadata": {}
+                                    },
+                                    {
+                                        "name": "ConsolidationBusinessArea",
+                                        "vflow.type": "scalar",
+                                        "businessName": "Cons. Business Area",
+                                        "vtype-ID": "$DYNAMIC.string_4",
+                                        "metadata": {}
+                                    },
+                                    {
+                                        "name": "CrossSystemBusinessArea",
+                                        "vflow.type": "scalar",
+                                        "businessName": "X-Syst. Business Area",
+                                        "vtype-ID": "$DYNAMIC.string_4",
+                                        "metadata": {}
+                                    }
+                                ]
+                            },
+                            "metadata": {
+                                "type": "tabular",
+                                "invalidColumns": [
+                                    "/1DH/OPERATION"
+                                ]
+                            },
+                            "businessName": "Business Area"
+                        },
+                        "targetObject": {
+                            "name": "Test_I_BusinessArea",
+                            "definition": {
+                                "columns": [
+                                    {
+                                        "name": "BusinessArea",
+                                        "vflow.type": "scalar",
+                                        "businessName": "Business Area",
+                                        "key": true,
+                                        "vtype-ID": "$DYNAMIC.string_4",
+                                        "metadata": {}
+                                    },
+                                    {
+                                        "name": "ConsolidationBusinessArea",
+                                        "vflow.type": "scalar",
+                                        "businessName": "Cons. Business Area",
+                                        "vtype-ID": "$DYNAMIC.string_4",
+                                        "metadata": {}
+                                    },
+                                    {
+                                        "name": "CrossSystemBusinessArea",
+                                        "vflow.type": "scalar",
+                                        "businessName": "X-Syst. Business Area",
+                                        "vtype-ID": "$DYNAMIC.string_4",
+                                        "metadata": {}
+                                    }
+                                ]
+                            },
+                            "metadata": {
+                                "isNew": false
+                            },
+                            "businessName": "Test - Business Area"
+                        }
+                    }
+                ],
+                "replicationTaskSetting": {
+                    "hasSkipMappingCapability": true
+                },
+                "replicationFlowSetting": {
+                    "ABAPcontentType": "Native Type",
+                    "ABAPcontentTypeDisabled": false
+                },
+                "deltaLoadTrigger": "ON_DELTA_INTERVAL"
+            },
+            "sources": {},
+            "targets": {
+                "Test_I_BusinessArea": {
+                    "elements": {
+                        "BusinessArea": {},
+                        "ConsolidationBusinessArea": {},
+                        "CrossSystemBusinessArea": {}
+                    }
+                }
+            },
+            "connections": {
+                "Madiba_Media_Demo__S4_OnPrem": {}
+            }
+        }
+    },
+    "$version": "1.0"
+}

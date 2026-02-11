@@ -1,0 +1,7 @@
+{
+  "enabledPlugins": {
+    "general@claude-central-marketplace": true,
+    "developer@claude-central-marketplace": true,
+    "typescript@claude-central-marketplace": true
+  }
+}

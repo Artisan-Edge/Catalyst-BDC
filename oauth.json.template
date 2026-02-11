@@ -1,0 +1,6 @@
+{
+    "client-id": "[client-id]",
+    "client-secret": "[client-secret]",
+    "authorization-url": "https://[client]-datasphere.authentication.us10.hana.ondemand.com/oauth/authorize",
+    "token-url": "https://[client]-datasphere.authentication.us10.hana.ondemand.com/oauth/token"
+}

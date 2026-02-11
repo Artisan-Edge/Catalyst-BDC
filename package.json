@@ -1,0 +1,33 @@
+{
+  "name": "catalyst-bdc",
+  "version": "0.1.1",
+  "description": "Programmatic Datasphere object creation via @sap/datasphere-cli",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test",
+    "login": "npx datasphere login --host https://madiba-tdd-bdc-datasphere.us10.hcs.cloud.sap/ --options-file oauth.json"
+  },
+  "dependencies": {
+    "@sap/datasphere-cli": "^2026.2.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.2.2",
+    "bun-types": "^1.2.0",
+    "dotenv": "^16.4.0",
+    "tsup": "^8.4.0",
+    "typescript": "^5.9.3"
+  }
+}
