@@ -11,7 +11,7 @@ import { debug } from '../utils/logging';
 
 export interface ReplicationFlowResult {
     output: string;
-    action: 'created' | 'updated';
+    action: 'created' | 'skipped';
     runResult?: RunReplicationFlowResult;
 }
 
@@ -28,13 +28,16 @@ export async function createReplicationFlow(
     const [exists, existsErr] = await objectExists(objectType.readCommand, objectName, executor);
     if (existsErr) return err(existsErr);
 
-    const action = exists ? 'updated' : 'created';
-    const command = exists ? objectType.updateCommand : objectType.command;
-    debug(`${exists ? 'Updating' : 'Creating'} replication flow "${objectName}"...`);
+    if (exists) {
+        debug(`Replication flow "${objectName}" already exists, skipping.`);
+        return ok({ output: 'already exists', action: 'skipped' });
+    }
+
+    debug(`Creating replication flow "${objectName}"...`);
 
     const [output, execErr] = await withTempCsn(payload, async (tmpFile) => {
         const [result, cmdErr] = await executor.exec({
-            command,
+            command: objectType.command,
             flags: ['--file-path', tmpFile, '--allow-missing-dependencies'],
         });
         if (cmdErr) return err(cmdErr);
@@ -42,5 +45,5 @@ export async function createReplicationFlow(
     });
     if (execErr) return err(execErr);
 
-    return ok({ output, action });
+    return ok({ output, action: 'created' });
 }
