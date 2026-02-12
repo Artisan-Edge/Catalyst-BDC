@@ -1,19 +1,23 @@
-import type { BdcConfig } from '../types/config';
-import type { CsnFile } from '../types/csn';
-import type { AsyncResult } from '../types/result';
-import { err } from '../types/result';
-import type { CliExecutor } from '../core/cli/executor';
-import type { ReplicationFlowResult } from '../core/operations/upsertReplicationFlow';
-import type { RunReplicationFlowResult } from '../core/operations/runReplicationFlow';
-import type { SessionData } from '../core/http/session';
-import type { DeletableObjectType } from '../core/operations/deleteObject';
-import { login as coreLogin } from '../core/operations/login';
-import { createView as coreCreateView } from '../core/operations/createView';
-import { createLocalTable as coreCreateLocalTable } from '../core/operations/createLocalTable';
-import { upsertReplicationFlow as coreUpsertReplicationFlow } from '../core/operations/upsertReplicationFlow';
-import { runReplicationFlow as coreRunReplicationFlow } from '../core/operations/runReplicationFlow';
-import { deleteObject as coreDeleteObject } from '../core/operations/deleteObject';
-import { getAccessToken, fetchCsrf, TOKEN_EXPIRY_BUFFER_SEC } from '../core/http/session';
+import type { BdcConfig } from "../types/config";
+import type { CsnFile } from "../types/csn";
+import type { AsyncResult } from "../types/result";
+import { err } from "../types/result";
+import type { CliExecutor } from "../core/cli/executor";
+import type { LocalTableResult } from "../core/operations/createLocalTable";
+import type { ReplicationFlowResult } from "../core/operations/createReplicationFlow";
+import type { RunReplicationFlowResult } from "../core/operations/runReplicationFlow";
+import type { SessionData } from "../core/http/session";
+import type { DeletableObjectType } from "../core/operations/deleteObject";
+import { login as coreLogin } from "../core/operations/login";
+import { createView as coreCreateView } from "../core/operations/createView";
+import { createLocalTable as coreCreateLocalTable } from "../core/operations/createLocalTable";
+import { createReplicationFlow as coreCreateReplicationFlow } from "../core/operations/createReplicationFlow";
+import { runReplicationFlow as coreRunReplicationFlow } from "../core/operations/runReplicationFlow";
+import { deleteObject as coreDeleteObject } from "../core/operations/deleteObject";
+import { objectExists as coreObjectExists } from "../core/operations/objectExists";
+import { DSP_OBJECT_TYPES } from "../types/objectTypes";
+import type { DspObjectTypeName } from "../types/objectTypes";
+import { getAccessToken, fetchCsrf, TOKEN_EXPIRY_BUFFER_SEC } from "../core/http/session";
 
 interface SessionCache {
     data: SessionData;
@@ -24,8 +28,9 @@ export interface BdcClient {
     readonly config: BdcConfig;
     login(): AsyncResult<void>;
     createView(csn: CsnFile, objectName: string): AsyncResult<string>;
-    createLocalTable(csn: CsnFile, objectName: string): AsyncResult<string>;
-    upsertReplicationFlow(csn: CsnFile, objectName: string, runFlowAfter?: boolean): AsyncResult<ReplicationFlowResult>;
+    createLocalTable(csn: CsnFile, objectName: string): AsyncResult<LocalTableResult>;
+    createReplicationFlow(csn: CsnFile, objectName: string, runFlowAfter?: boolean): AsyncResult<ReplicationFlowResult>;
+    objectExists(objectType: DspObjectTypeName, technicalName: string): AsyncResult<boolean>;
     deleteObject(objectType: DeletableObjectType, technicalName: string): AsyncResult<string>;
     runReplicationFlow(flowName: string): AsyncResult<RunReplicationFlowResult>;
 }
@@ -73,13 +78,13 @@ export class BdcClientImpl implements BdcClient {
         return coreCreateView(csn, objectName, this.executor);
     }
 
-    async createLocalTable(csn: CsnFile, objectName: string): AsyncResult<string> {
+    async createLocalTable(csn: CsnFile, objectName: string): AsyncResult<LocalTableResult> {
         return coreCreateLocalTable(csn, objectName, this.executor);
     }
 
-    async upsertReplicationFlow(csn: CsnFile, objectName: string, runFlowAfter = false): AsyncResult<ReplicationFlowResult> {
-        const [result, upsertErr] = await coreUpsertReplicationFlow(csn, objectName, this.executor);
-        if (upsertErr) return err(upsertErr);
+    async createReplicationFlow(csn: CsnFile, objectName: string, runFlowAfter = false): AsyncResult<ReplicationFlowResult> {
+        const [result, createErr] = await coreCreateReplicationFlow(csn, objectName, this.executor);
+        if (createErr) return err(createErr);
 
         if (!runFlowAfter) return [result, null];
 
@@ -87,6 +92,11 @@ export class BdcClientImpl implements BdcClient {
         if (runErr) return err(runErr);
 
         return [{ ...result, runResult }, null];
+    }
+
+    async objectExists(objectType: DspObjectTypeName, technicalName: string): AsyncResult<boolean> {
+        const { readCommand } = DSP_OBJECT_TYPES[objectType];
+        return coreObjectExists(readCommand, technicalName, this.executor);
     }
 
     async deleteObject(objectType: DeletableObjectType, technicalName: string): AsyncResult<string> {

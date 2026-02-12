@@ -36,7 +36,7 @@ describe('resolveDependencies', () => {
     });
 });
 
-describe('upsertReplicationFlow', () => {
+describe('createReplicationFlow', () => {
     const [client, clientErr] = createClient(config);
 
     beforeAll(async () => {
@@ -65,24 +65,30 @@ describe('upsertReplicationFlow', () => {
     }, 180_000);
 
     test('creates dependency local tables then the replication flow', async () => {
-        const [result, error] = await client!.upsertReplicationFlow(csn, flowName);
+        // Create dependency local tables first
+        for (const tableName of targetTableNames) {
+            const [_, tableErr] = await client!.createLocalTable(csn, tableName);
+            if (tableErr) {
+                console.error(`createLocalTable "${tableName}" failed:`, tableErr.message);
+            }
+            expect(tableErr).toBeNull();
+        }
+
+        // Create the replication flow
+        const [result, error] = await client!.createReplicationFlow(csn, flowName);
 
         if (error) {
-            console.error('upsertReplicationFlow failed:', error.message);
+            console.error('createReplicationFlow failed:', error.message);
         }
 
         expect(error).toBeNull();
         expect(result).not.toBeNull();
-        expect(result!.depOutputs).toHaveLength(targetTableNames.length);
-        for (let i = 0; i < targetTableNames.length; i++) {
-            expect(result!.depOutputs[i]!.name).toBe(targetTableNames[i]!);
-        }
-        expect(result!.flowOutput).toBeTruthy();
-        expect(result!.flowAction).toBe('created');
+        expect(result!.output).toBeTruthy();
+        expect(result!.action).toBe('created');
     }, 60_000);
 
     test('returns error for missing object in CSN', async () => {
-        const [result, error] = await client!.upsertReplicationFlow(csn, 'NonExistent');
+        const [result, error] = await client!.createReplicationFlow(csn, 'NonExistent');
         expect(result).toBeNull();
         expect(error).not.toBeNull();
         expect(error!.message).toContain('NonExistent');

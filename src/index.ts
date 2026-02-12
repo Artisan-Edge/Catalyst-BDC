@@ -9,6 +9,7 @@ export type { DspObjectType, DspObjectTypeName } from './types/objectTypes';
 export { DSP_OBJECT_TYPES } from './types/objectTypes';
 export type { Result, AsyncResult } from './types/result';
 export { ok, err } from './types/result';
-export type { ReplicationFlowResult } from './core/operations/upsertReplicationFlow';
+export type { LocalTableResult } from './core/operations/createLocalTable';
+export type { ReplicationFlowResult } from './core/operations/createReplicationFlow';
 export type { RunReplicationFlowResult } from './core/operations/runReplicationFlow';
 export type { DeletableObjectType } from './core/operations/deleteObject';
