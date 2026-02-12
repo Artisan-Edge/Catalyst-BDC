@@ -1,10 +1,12 @@
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
+import { z } from 'zod';
 import type { BdcConfig, OAuthConfig } from '../../types/config';
 import type { AsyncResult } from '../../types/result';
 import { ok, err } from '../../types/result';
 import { spawnAsync } from '../cli/executor';
+import { safeJsonParse } from '../utils/json';
 import { debug } from '../utils/logging';
 
 function isInlineOAuth(oauth: OAuthConfig | { optionsFile: string }): oauth is OAuthConfig {
@@ -42,12 +44,30 @@ async function withOptionsFile<T>(
     }
 }
 
+const cacheEntrySchema = z.array(z.object({
+    tenant: z.string(),
+    addedAt: z.string(),
+}));
+
 async function isAlreadyAuthenticated(host: string): Promise<boolean> {
     const result = await spawnAsync('npx', [
-        'datasphere', 'config', 'cache', 'list',
-        '--host', host,
+        'datasphere', 'config', 'cache', 'show',
     ]);
-    return result.code === 0;
+    if (result.code !== 0) return false;
+
+    // The CLI writes a Node version warning to stdout — strip everything after the JSON array
+    const jsonEnd = result.stdout.lastIndexOf(']');
+    if (jsonEnd === -1) return false;
+    const jsonText = result.stdout.slice(0, jsonEnd + 1);
+
+    const [entries, parseError] = safeJsonParse(jsonText, cacheEntrySchema);
+    if (parseError) {
+        debug('Failed to parse cache entries:', parseError.message);
+        return false;
+    }
+
+    const hostname = new URL(host).hostname;
+    return entries.some((entry) => entry.tenant === hostname);
 }
 
 export async function login(config: BdcConfig): AsyncResult<void> {
