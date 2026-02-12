@@ -77,7 +77,7 @@ export class BdcClientImpl implements BdcClient {
         return coreCreateLocalTable(csn, objectName, this.executor);
     }
 
-    async upsertReplicationFlow(csn: CsnFile, objectName: string, runFlowAfter = true): AsyncResult<ReplicationFlowResult> {
+    async upsertReplicationFlow(csn: CsnFile, objectName: string, runFlowAfter = false): AsyncResult<ReplicationFlowResult> {
         const [result, upsertErr] = await coreUpsertReplicationFlow(csn, objectName, this.executor);
         if (upsertErr) return err(upsertErr);
 
