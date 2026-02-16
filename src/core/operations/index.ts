@@ -1,12 +1,14 @@
 export { login } from './login';
-export { createObject } from './createObject';
-export { createView } from './createView';
-export { createLocalTable } from './createLocalTable';
-export type { LocalTableResult } from './createLocalTable';
-export { createReplicationFlow } from './createReplicationFlow';
-export type { ReplicationFlowResult } from './createReplicationFlow';
 export { objectExists } from './objectExists';
-export { deleteObject } from './deleteObject';
-export type { DeletableObjectType } from './deleteObject';
-export { runReplicationFlow } from './runReplicationFlow';
-export type { RunReplicationFlowResult } from './runReplicationFlow';
+
+// Local table
+export { createLocalTable, readLocalTable, updateLocalTable, deleteLocalTable, upsertLocalTable } from './local-table';
+export type { UpsertLocalTableResult } from './local-table';
+
+// Replication flow
+export { createReplicationFlow, readReplicationFlow, updateReplicationFlow, deleteReplicationFlow, upsertReplicationFlow, runReplicationFlow } from './replication-flow';
+export type { UpsertReplicationFlowResult, RunReplicationFlowResult } from './replication-flow';
+
+// SQL view
+export { createView, readView, updateView, deleteView, upsertView } from './sql-view';
+export type { UpsertViewResult } from './sql-view';

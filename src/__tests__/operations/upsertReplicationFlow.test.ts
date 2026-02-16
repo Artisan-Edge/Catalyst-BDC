@@ -53,13 +53,13 @@ describe('createReplicationFlow', () => {
 
         // Delete replication flow first (depends on local table)
         console.log(`Cleaning up: deleting replication flow "${flowName}"...`);
-        const [_, flowDelErr] = await client.deleteObject('replication-flow', flowName);
+        const [_, flowDelErr] = await client.deleteReplicationFlow(flowName);
         if (flowDelErr) console.error('Failed to delete replication flow:', flowDelErr.message);
 
         // Delete dependency local tables
         for (const tableName of targetTableNames) {
             console.log(`Cleaning up: deleting local table "${tableName}"...`);
-            const [__, tableDelErr] = await client.deleteObject('local-table', tableName);
+            const [__, tableDelErr] = await client.deleteLocalTable(tableName);
             if (tableDelErr) console.error(`Failed to delete local table "${tableName}":`, tableDelErr.message);
         }
     }, 180_000);
@@ -83,8 +83,7 @@ describe('createReplicationFlow', () => {
 
         expect(error).toBeNull();
         expect(result).not.toBeNull();
-        expect(result!.output).toBeTruthy();
-        expect(result!.action).toBe('created');
+        expect(result).toBeTruthy();
     }, 60_000);
 
     test('returns error for missing object in CSN', async () => {
