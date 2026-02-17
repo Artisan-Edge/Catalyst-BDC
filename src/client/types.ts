@@ -1,5 +1,6 @@
 import type { CsnFile } from '../types/csn';
 import type { AsyncResult } from '../types/result';
+import type { DatasphereRequestOptions } from '../types/requestor';
 import type { DatasphereObjectTypeName } from '../types/objectTypes';
 import type { OAuthTokens } from '../core/auth/oauth';
 import type { UpsertLocalTableResult } from '../core/operations/local-table/upsert';
@@ -49,4 +50,7 @@ export interface BdcClient {
 
     // Generic
     objectExists(objectType: DatasphereObjectTypeName, technicalName: string): AsyncResult<boolean>;
+
+    // Raw HTTP access (reuses auth + CSRF pipeline)
+    rawRequest(options: DatasphereRequestOptions): AsyncResult<Response>;
 }

@@ -142,4 +142,8 @@ export class BdcClientImpl implements BdcClient {
     objectExists(objectType: DatasphereObjectTypeName, technicalName: string): AsyncResult<boolean> {
         return coreObjectExists(this.requestor, this.config.space, objectType, technicalName);
     }
+
+    rawRequest(options: DatasphereRequestOptions): AsyncResult<Response> {
+        return this.request(options);
+    }
 }
