@@ -3,7 +3,7 @@ import type { OAuthTokens } from '../core/auth/oauth';
 import type { AsyncResult } from '../types/result';
 import { ok, err } from '../types/result';
 import { saveCachedTokens } from '../core/auth/tokenCache';
-import { refreshAccessToken, TOKEN_EXPIRY_BUFFER_SEC } from '../core/http/session';
+import { refreshAccessToken, TOKEN_EXPIRY_BUFFER_SEC } from '../core/http/refreshAccessToken';
 import { debug } from '../core/utils/logging';
 
 export interface EnsureAccessTokenResult {

@@ -4,7 +4,8 @@ import type { OAuthTokens } from '../core/auth/oauth';
 import type { AsyncResult } from '../types/result';
 import { ok, err } from '../types/result';
 import { loadCachedTokens, saveCachedTokens } from '../core/auth/tokenCache';
-import { refreshAccessToken, fetchCsrf, TOKEN_EXPIRY_BUFFER_SEC } from '../core/http/session';
+import { refreshAccessToken, TOKEN_EXPIRY_BUFFER_SEC } from '../core/http/refreshAccessToken';
+import { fetchCsrf } from '../core/http/fetchCsrf';
 import { login as coreLogin } from '../core/operations/login';
 import { debug } from '../core/utils/logging';
 

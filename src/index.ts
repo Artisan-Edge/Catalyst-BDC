@@ -15,8 +15,10 @@ export { ok, err } from './types/result';
 export type { OAuthTokens } from './core/auth/oauth';
 
 // HTTP helpers (for advanced usage / scripts)
-export { refreshAccessToken, fetchCsrf } from './core/http/session';
-export { checkResponse, buildDatasphereUrl } from './core/http/helpers';
+export { refreshAccessToken } from './core/http/refreshAccessToken';
+export { fetchCsrf } from './core/http/fetchCsrf';
+export { checkResponse } from './core/http/checkResponse';
+export { buildDatasphereUrl } from './core/http/buildDatasphereUrl';
 
 // Operation result types
 export type { UpsertLocalTableResult } from './core/operations/local-table/upsert';

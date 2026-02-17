@@ -1,7 +1,7 @@
 import type { CsrfCache } from './types';
 import type { AsyncResult } from '../types/result';
 import { ok, err } from '../types/result';
-import { fetchCsrf } from '../core/http/session';
+import { fetchCsrf } from '../core/http/fetchCsrf';
 
 export async function ensureCsrf(
     csrfCache: CsrfCache | null,

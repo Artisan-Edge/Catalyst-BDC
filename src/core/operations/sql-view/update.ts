@@ -3,7 +3,7 @@ import type { AsyncResult } from '../../../types/result';
 import { err } from '../../../types/result';
 import type { DatasphereRequestor } from '../../../types/requestor';
 import { extractObject } from '../../csn/extract';
-import { checkResponse } from '../../http/helpers';
+import { checkResponse } from '../../http/checkResponse';
 import { DATASPHERE_OBJECT_TYPES } from '../../../types/objectTypes';
 import { debug } from '../../utils/logging';
 

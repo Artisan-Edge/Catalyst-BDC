@@ -4,7 +4,7 @@ import type { AsyncResult } from '../types/result';
 import { ok, err } from '../types/result';
 import { ensureAccessToken } from './ensureAccessToken';
 import { ensureCsrf } from './ensureCsrf';
-import { buildDatasphereUrl } from '../core/http/helpers';
+import { buildDatasphereUrl } from '../core/http/buildDatasphereUrl';
 import { debug } from '../core/utils/logging';
 
 export interface RequestState {
