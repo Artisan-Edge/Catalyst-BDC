@@ -1,8 +1,7 @@
 import { z } from 'zod';
-import type { BdcConfig } from '../../../types/config';
 import type { AsyncResult } from '../../../types/result';
 import { ok, err } from '../../../types/result';
-import type { SessionData } from '../../http/session';
+import type { DatasphereRequestor } from '../../../types/requestor';
 import { debug } from '../../utils/logging';
 import { safeJsonParse } from '../../utils/json';
 
@@ -16,24 +15,21 @@ export interface RunReplicationFlowResult {
 }
 
 export async function runReplicationFlow(
+    requestor: DatasphereRequestor,
+    space: string,
     flowName: string,
-    config: BdcConfig,
-    session: SessionData,
 ): AsyncResult<RunReplicationFlowResult> {
-    const url = `${config.host}/dwaas-core/replicationflow/space/${config.space}/flows/${flowName}/run`;
-    debug('POST', url);
+    debug(`Running replication flow "${flowName}"...`);
 
-    const response = await fetch(url, {
+    const [response, reqErr] = await requestor.request({
         method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${session.accessToken}`,
-            'Content-Type': 'application/json',
-            'X-Csrf-Token': session.csrf,
-            'X-Requested-With': 'XMLHttpRequest',
-            'Cookie': session.cookies,
-        },
+        path: `/dwaas-core/replicationflow/space/${space}/flows/${flowName}/run`,
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ isDirect: true }),
     });
+
+    if (reqErr) return err(reqErr);
+    if (!response) return err(new Error(`Run replication flow "${flowName}": No response`));
 
     const body = await response.text();
     debug('Run response:', response.status, body);
@@ -41,7 +37,6 @@ export async function runReplicationFlow(
     if (response.ok) {
         const [parsed, parseErr] = safeJsonParse(body, runResponseSchema);
         if (parseErr) return err(parseErr);
-
         return ok({ status: response.status, runStatus: parsed.runStatus });
     }
 

@@ -1,6 +1,6 @@
 # Catalyst-BDC Documentation
 
-Programmatic Datasphere object creation via `@sap/datasphere-cli`.
+Programmatic Datasphere object management via direct HTTP API.
 
 ## Sections
 
@@ -17,7 +17,7 @@ Programmatic Datasphere object creation via `@sap/datasphere-cli`.
 
 ## Overview
 
-Catalyst-BDC is a TypeScript library that wraps the SAP Datasphere CLI for automated object management. It handles OAuth login, CSN extraction, dependency resolution, and CRUD operations for views, local tables, and replication flows.
+Catalyst-BDC is a TypeScript library for automated Datasphere object management. It communicates directly with the Datasphere REST API (no CLI dependency). It handles native OAuth browser login, CSRF token management, automatic token refresh, and CRUD operations for views, local tables, and replication flows.
 
 ---
 
@@ -30,7 +30,29 @@ cp .env.template .env        # fill in DSP_HOST and DSP_SPACE
 
 An `oauth.json` file is required for authentication. It must be present in the project root and contain the OAuth client credentials for the Datasphere tenant.
 
-Before running any script, ensure you have an active OAuth session. Sessions last 720 hours. Run `npm run login` to authenticate (opens a browser).
+### Authentication Options
+
+**Browser login (interactive):**
+```typescript
+const [tokens, loginErr] = await client.login();
+// Opens a browser, receives OAuth callback, stores tokens
+```
+
+**Pre-provided tokens (CI/headless):**
+```typescript
+const [client, err] = createClient({
+    host, space,
+    oauth: { optionsFile: './oauth.json' },
+    tokens: {
+        accessToken: '...',
+        refreshToken: '...',
+        tokenUrl: '...',
+        clientId: '...',
+        clientSecret: '...',
+    },
+});
+// No login() needed — operations work immediately
+```
 
 ---
 
@@ -47,8 +69,8 @@ A script follows this pattern:
 1. Import `dotenv/config` to load `.env` variables
 2. Read the CSN file from disk
 3. Create a `BdcClient` via `createClient(config)`
-4. Call `client.login()` to ensure an active session
-5. Call the desired operation (`createView`, `createLocalTable`, `upsertReplicationFlow`, etc.)
+4. Call `client.login()` to authenticate (opens browser for OAuth)
+5. Call the desired operation (`createView`, `upsertView`, `upsertLocalTable`, etc.)
 6. Handle the Result tuple — check the error before using the data
 
 ### Full example — uploading a view
@@ -56,9 +78,8 @@ A script follows this pattern:
 ```typescript
 import 'dotenv/config';
 import { readFileSync } from 'node:fs';
-import { createClient } from '../src/client';
-import type { CsnFile } from '../src/types/csn';
-import type { BdcConfig } from '../src/types/config';
+import { createClient } from '../src';
+import type { CsnFile, BdcConfig } from '../src';
 
 const CSN_PATH = 'C:/path/to/my-view.json';
 const VIEW_NAME = 'MY_VIEW_NAME';  // must match a key in csn.definitions
@@ -99,31 +120,6 @@ async function main(): Promise<void> {
 main();
 ```
 
-### Uploading a replication flow (with dependencies)
-
-Replication flows require their target local tables to exist first. `upsertReplicationFlow` handles this automatically — it resolves dependency table names from the CSN, creates or updates each one, then creates or updates the flow itself.
-
-```typescript
-const FLOW_NAME = 'MY_REPLICATION_FLOW';  // must match a key in csn.replicationflows
-
-const [result, flowErr] = await client.upsertReplicationFlow(csn, FLOW_NAME);
-if (flowErr) {
-    console.error('Failed:', flowErr.message);
-    process.exit(1);
-}
-
-// result.depOutputs — array of { name, output, action } for each dependency table
-// result.flowOutput — CLI output for the flow itself
-// result.flowAction — 'created' | 'updated'
-// result.runResult  — present if the flow was run after upsert (default: true)
-```
-
-Pass `false` as the third argument to skip running the flow after upsert:
-
-```typescript
-await client.upsertReplicationFlow(csn, FLOW_NAME, false);
-```
-
 ---
 
 ## BdcClient API
@@ -137,9 +133,10 @@ interface BdcConfig {
     host: string;       // Datasphere tenant URL (e.g. 'https://tenant.us10.hcs.cloud.sap/')
     space: string;      // Space ID (e.g. 'MYSPACE')
     verbose?: boolean;  // Enable debug logging
-    oauth?:             // OAuth credentials — either inline or file reference
+    oauth:              // OAuth credentials (required) — either inline or file reference
         | { clientId: string; clientSecret: string; authorizationUrl: string; tokenUrl: string }
         | { optionsFile: string };
+    tokens?: TokenConfig;  // Pre-provided tokens — skip login()
 }
 ```
 
@@ -149,12 +146,24 @@ interface BdcConfig {
 
 | Method | Signature | Description |
 |--------|-----------|-------------|
-| `login` | `() => AsyncResult<void>` | Ensures an active OAuth session. Opens a browser if needed. |
-| `createView` | `(csn, objectName) => AsyncResult<string>` | Creates a view. The `objectName` must be a key in `csn.definitions`. |
-| `createLocalTable` | `(csn, objectName) => AsyncResult<string>` | Creates a local table. The `objectName` must be a key in `csn.definitions`. |
-| `upsertReplicationFlow` | `(csn, objectName, runFlowAfter?) => AsyncResult<ReplicationFlowResult>` | Creates or updates a replication flow and its dependency local tables. Runs the flow after by default. |
-| `runReplicationFlow` | `(flowName) => AsyncResult<RunReplicationFlowResult>` | Runs an existing replication flow via HTTP API. |
-| `deleteObject` | `(objectType, technicalName) => AsyncResult<string>` | Deletes an object. `objectType` is `'view'`, `'local-table'`, or `'replication-flow'`. |
+| `login` | `() => AsyncResult<OAuthTokens>` | Native OAuth browser flow. Returns tokens. |
+| `createView` | `(csn, objectName) => AsyncResult<string>` | Creates a view via POST. |
+| `readView` | `(objectName) => AsyncResult<string>` | Reads a view definition via GET. |
+| `updateView` | `(csn, objectName) => AsyncResult<string>` | Updates a view via PUT. |
+| `deleteView` | `(objectName) => AsyncResult<string>` | Deletes a view via DELETE. |
+| `upsertView` | `(csn, objectName) => AsyncResult<UpsertViewResult>` | Creates or updates a view. |
+| `createLocalTable` | `(csn, objectName) => AsyncResult<string>` | Creates a local table. |
+| `readLocalTable` | `(objectName) => AsyncResult<string>` | Reads a local table definition. |
+| `updateLocalTable` | `(csn, objectName) => AsyncResult<string>` | Updates a local table. |
+| `deleteLocalTable` | `(objectName) => AsyncResult<string>` | Deletes a local table. |
+| `upsertLocalTable` | `(csn, objectName) => AsyncResult<UpsertLocalTableResult>` | Creates or updates a local table. |
+| `createReplicationFlow` | `(csn, objectName) => AsyncResult<string>` | Creates a replication flow. |
+| `readReplicationFlow` | `(objectName) => AsyncResult<string>` | Reads a replication flow definition. |
+| `updateReplicationFlow` | `(csn, objectName) => AsyncResult<string>` | Updates a replication flow. |
+| `deleteReplicationFlow` | `(objectName) => AsyncResult<string>` | Deletes a replication flow. |
+| `upsertReplicationFlow` | `(csn, objectName) => AsyncResult<UpsertReplicationFlowResult>` | Creates or updates a replication flow. |
+| `runReplicationFlow` | `(flowName) => AsyncResult<RunReplicationFlowResult>` | Triggers a replication flow run. |
+| `objectExists` | `(objectType, name) => AsyncResult<boolean>` | Checks if an object exists (GET + 200 check). |
 
 All methods return `AsyncResult<T>` which is `Promise<[T, null] | [null, Error]>`.
 
@@ -179,7 +188,7 @@ interface CsnFile {
 - **Views and local tables** are stored under `definitions`. Each key is the object's technical name.
 - **Replication flows** are stored under `replicationflows`. Each key is the flow's technical name.
 - A CSN file can contain multiple definitions, but the Datasphere API only accepts **one object per request**. The library handles extraction automatically — you pass the full CSN and the object name, and it extracts the single definition before uploading.
-- Dependency references (e.g. a view referencing `I_LANGUAGE`) don't need to be uploaded — the `--allow-missing-dependencies` flag is always set.
+- Missing dependencies are allowed — the `allowMissingDependencies=true` query parameter is always set.
 
 ---
 
@@ -211,14 +220,14 @@ console.log(result);
 
 ```
 src/
-├── types/           # Result tuples, BdcConfig (Zod), CSN types, object type registry
+├── types/           # Result tuples, BdcConfig (Zod), CSN types, object type registry, requestor
 ├── core/
-│   ├── cli/         # CliExecutor (execSync wrapper), temp file lifecycle
+│   ├── auth/        # Native OAuth browser flow (performOAuthLogin)
 │   ├── csn/         # extractObject, validateCsnFile, resolveDependencies
-│   ├── http/        # OAuth token management, CSRF token fetching
-│   ├── operations/  # login, createView, createLocalTable, upsertReplicationFlow, deleteObject, runReplicationFlow
+│   ├── http/        # checkResponse, buildDatasphereUrl, CSRF/token management
+│   ├── operations/  # CRUD operations for views, tables, flows (one function per file)
 │   └── utils/       # debug logging, safe JSON parsing
-├── client/          # BdcClient interface + createClient factory
+├── client/          # BdcClient interface + createClient factory (self-referencing DatasphereRequestor)
 └── index.ts         # Public barrel exports
 ```
 
@@ -227,7 +236,6 @@ src/
 | `npm run build` | tsup build (ESM + CJS + types) |
 | `npm run test` | bun test suite |
 | `npm run typecheck` | tsc --noEmit |
-| `npm run login` | OAuth login to Datasphere tenant |
 
 ---
 
@@ -236,11 +244,9 @@ src/
 | Document | Description |
 |----------|-------------|
 | [architecture.md](./architecture.md) | Module hierarchy, patterns, request lifecycle |
-| [cli-quirks.md](./cli-quirks.md) | Known CLI gotchas and workarounds |
-| [cli-commands.md](./cli-commands.md) | Object types and command options |
 | [references.md](./references.md) | External documentation sources |
 | [changelogs/](./changelogs/) | Version history and release notes |
 
 ---
 
-*Last updated: v0.1.0*
+*Last updated: v1.0.0*

@@ -1,22 +1,22 @@
 import type { AsyncResult } from '../../../types/result';
-import { ok, err } from '../../../types/result';
-import type { CliExecutor } from '../../cli/executor';
-import { DSP_OBJECT_TYPES } from '../../../types/objectTypes';
+import type { DatasphereRequestor } from '../../../types/requestor';
+import { checkResponse } from '../../http/helpers';
+import { DATASPHERE_OBJECT_TYPES } from '../../../types/objectTypes';
 import { debug } from '../../utils/logging';
 
 export async function readView(
+    requestor: DatasphereRequestor,
+    space: string,
     objectName: string,
-    executor: CliExecutor,
 ): AsyncResult<string> {
-    const { readCommand } = DSP_OBJECT_TYPES['view'];
+    const objectType = DATASPHERE_OBJECT_TYPES['view'];
 
     debug(`Reading view "${objectName}"...`);
 
-    const [result, execErr] = await executor.exec({
-        command: readCommand,
-        flags: ['--technical-name', objectName],
+    const [response, reqErr] = await requestor.request({
+        method: 'GET',
+        path: `/dwaas-core/api/v1/spaces/${space}/${objectType.endpoint}/${objectName}`,
     });
-    if (execErr) return err(execErr);
 
-    return ok(result.stdout);
+    return checkResponse(response, reqErr, `Read view "${objectName}"`);
 }

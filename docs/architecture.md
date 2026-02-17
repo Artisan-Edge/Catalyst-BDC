@@ -1,6 +1,6 @@
 # Architecture
 
-Layered TypeScript library wrapping `@sap/datasphere-cli` for programmatic object management.
+Layered TypeScript library for direct HTTP API communication with SAP Datasphere.
 
 ## Sections
 
@@ -19,30 +19,33 @@ Layered TypeScript library wrapping `@sap/datasphere-cli` for programmatic objec
 src/
 ├── types/               # Shared type definitions (leaf — no internal imports)
 │   ├── result.ts        # Result<T,E>, AsyncResult, ok(), err()
-│   ├── config.ts        # BdcConfig, OAuthConfig + Zod schemas
+│   ├── config.ts        # BdcConfig, OAuthConfig, TokenConfig + Zod schemas
 │   ├── csn.ts           # CsnFile, CsnEntity, CsnReplicationFlow
-│   ├── objectTypes.ts   # DSP_OBJECT_TYPES registry, DspObjectType
+│   ├── objectTypes.ts   # DATASPHERE_OBJECT_TYPES registry, DatasphereObjectType
+│   ├── requestor.ts     # DatasphereRequestor, DatasphereRequestOptions
 │   └── index.ts
 ├── core/
-│   ├── utils/           # Debug logging (leaf — no internal imports)
-│   │   └── logging.ts
-│   ├── cli/             # Shell execution layer
-│   │   ├── executor.ts  # CliExecutor: wraps execSync, returns Result
-│   │   └── tempFile.ts  # writeTempCsn / cleanupTempFile
+│   ├── utils/           # Debug logging, safe JSON parsing (leaf)
+│   │   ├── logging.ts
+│   │   └── json.ts
+│   ├── auth/            # Native OAuth browser flow
+│   │   └── oauth.ts     # performOAuthLogin() — authorization code flow
+│   ├── http/            # HTTP helpers
+│   │   ├── helpers.ts   # checkResponse(), buildDatasphereUrl()
+│   │   └── session.ts   # refreshAccessToken(), fetchCsrf()
 │   ├── csn/             # CSN file manipulation
-│   │   ├── extract.ts   # extractObject() — isolates single object from CSN
+│   │   ├── extract.ts   # extractObject() — isolates single object
 │   │   ├── validate.ts  # validateCsnFile() — structural checks
 │   │   └── resolveDeps.ts  # resolveDependencies() — pre-dep names
 │   ├── operations/      # Business logic (one function per file)
-│   │   ├── login.ts     # OAuth login + cache init
-│   │   ├── createView.ts
-│   │   ├── createLocalTable.ts
-│   │   ├── createReplicationFlow.ts  # Orchestrates deps + flow
-│   │   └── deleteObject.ts
+│   │   ├── login.ts     # OAuth login via performOAuthLogin
+│   │   ├── objectExists.ts  # GET + check 200 vs 404
+│   │   ├── sql-view/    # create, read, update, delete, upsert
+│   │   ├── local-table/ # create, read, update, delete, upsert
+│   │   └── replication-flow/  # create, read, update, delete, upsert, run
 │   └── index.ts
 ├── client/              # Public API surface
-│   ├── types.ts         # ClientContext (internal)
-│   ├── client.ts        # BdcClient interface + BdcClientImpl
+│   ├── client.ts        # BdcClient interface + BdcClientImpl (self-referencing requestor)
 │   └── index.ts         # createClient() factory
 └── index.ts             # Root barrel — public exports only
 ```
@@ -56,16 +59,35 @@ Strict hierarchy — no circular dependencies:
 ```
 types/            ← zod only
 core/utils/       ← (leaf)
-core/cli/         ← types/, core/utils/
+core/auth/        ← types/, core/utils/
+core/http/        ← types/, core/utils/
 core/csn/         ← types/
-core/operations/  ← types/, core/cli/, core/csn/, core/utils/
-client/           ← types/, core/operations/, core/cli/, core/utils/
-index.ts          ← client/, types/, core/operations/
+core/operations/  ← types/, core/auth/, core/http/, core/csn/, core/utils/
+client/           ← types/, core/operations/, core/http/, core/utils/
+index.ts          ← client/, types/, core/
 ```
 
 ---
 
 ## Key Patterns
+
+### DatasphereRequestor
+
+All operations receive a `DatasphereRequestor` interface instead of directly calling `fetch`. The client implements this interface via a self-referencing binding:
+
+```typescript
+interface DatasphereRequestor {
+    request(options: DatasphereRequestOptions): AsyncResult<Response, Error>;
+}
+
+// In BdcClientImpl:
+this.requestor = { request: this.request.bind(this) };
+```
+
+This pattern (from Catalyst-Relay's `AdtRequestor`) allows:
+- Automatic token refresh on expiry
+- CSRF auto-retry on 403
+- Operations to be tested with custom requestors
 
 ### Result Tuples
 
@@ -79,13 +101,23 @@ if (error) { /* handle */ }
 // data is guaranteed non-null
 ```
 
+### CRUD Endpoint Mapping
+
+| Operation | Method | Path | Query Params |
+|-----------|--------|------|-------------|
+| create | POST | `/dwaas-core/api/v1/spaces/{space}/{endpoint}` | `saveAnyway=true&allowMissingDependencies=true&deploy=true` |
+| read | GET | `/dwaas-core/api/v1/spaces/{space}/{endpoint}/{name}` | — |
+| update | PUT | `/dwaas-core/api/v1/spaces/{space}/{endpoint}/{name}` | `saveAnyway=true&allowMissingDependencies=true&deploy=true` |
+| delete | DELETE | `/dwaas-core/api/v1/spaces/{space}/{endpoint}/{name}` | `deleteAnyway=true` |
+| run | POST | `/dwaas-core/replicationflow/space/{space}/flows/{name}/run` | — |
+
 ### One Function Per File
 
-Each file in `core/operations/` and `core/csn/` exports a single function. This keeps each operation independently importable and testable.
+Each file in `core/operations/` exports a single function. This keeps each operation independently importable and testable.
 
 ### Barrel Exports
 
-Every directory has an `index.ts` that re-exports its contents. Consumers import from directory paths, never from specific files.
+Every directory has an `index.ts` that re-exports its contents.
 
 ---
 
@@ -94,11 +126,28 @@ Every directory has an `index.ts` that re-exports its contents. Consumers import
 ```typescript
 interface BdcClient {
     readonly config: BdcConfig;
-    login(): AsyncResult<void>;
-    createView(csn: CsnFile, objectName: string): AsyncResult<string>;
-    createLocalTable(csn: CsnFile, objectName: string): AsyncResult<string>;
-    createReplicationFlow(csn: CsnFile, objectName: string): AsyncResult<ReplicationFlowResult>;
-    deleteObject(objectType: DeletableObjectType, technicalName: string): AsyncResult<string>;
+    login(): AsyncResult<OAuthTokens>;
+
+    createView(csn, objectName): AsyncResult<string>;
+    readView(objectName): AsyncResult<string>;
+    updateView(csn, objectName): AsyncResult<string>;
+    deleteView(objectName): AsyncResult<string>;
+    upsertView(csn, objectName): AsyncResult<UpsertViewResult>;
+
+    createLocalTable(csn, objectName): AsyncResult<string>;
+    readLocalTable(objectName): AsyncResult<string>;
+    updateLocalTable(csn, objectName): AsyncResult<string>;
+    deleteLocalTable(objectName): AsyncResult<string>;
+    upsertLocalTable(csn, objectName): AsyncResult<UpsertLocalTableResult>;
+
+    createReplicationFlow(csn, objectName): AsyncResult<string>;
+    readReplicationFlow(objectName): AsyncResult<string>;
+    updateReplicationFlow(csn, objectName): AsyncResult<string>;
+    deleteReplicationFlow(objectName): AsyncResult<string>;
+    upsertReplicationFlow(csn, objectName): AsyncResult<UpsertReplicationFlowResult>;
+    runReplicationFlow(flowName): AsyncResult<RunReplicationFlowResult>;
+
+    objectExists(objectType, technicalName): AsyncResult<boolean>;
 }
 ```
 
@@ -116,28 +165,33 @@ const [client, err] = createClient({ host, space, oauth });
 interface BdcConfig {
     host: string;          // Datasphere tenant URL
     space: string;         // Space ID
-    verbose?: boolean;     // CLI --verbose flag
-    oauth?: OAuthConfig | { optionsFile: string };
+    verbose?: boolean;     // Enable debug logging
+    oauth: OAuthConfig | { optionsFile: string };  // Required
+    tokens?: TokenConfig;  // Optional: skip login() for CI/headless
 }
 ```
 
-OAuth accepts either inline credentials or a path to a JSON options file matching the CLI's `--options-file` format.
+OAuth accepts either inline credentials or a path to a JSON options file.
+
+`TokenConfig` allows pre-providing access/refresh tokens for headless environments where a browser login isn't possible.
 
 ---
 
 ## Request Lifecycle
 
-A typical `createReplicationFlow` call:
+A typical `createView` call:
 
-1. **Resolve dependencies** — `resolveDeps.ts` reads `flow.targets` to find local table names
-2. **Extract objects** — `extract.ts` isolates each object into a single-definition CSN
-3. **Write temp file** — `tempFile.ts` writes CSN to `os.tmpdir()` (avoids CLI space-in-path bug)
-4. **Execute CLI** — `executor.ts` runs `npx datasphere objects <type> create --file-path <tmp> ...`
-5. **Cleanup** — temp file deleted in `finally` block
-6. **Return Result** — success tuple with CLI output, or error tuple
+1. **Ensure access token** — check cached token expiry, refresh if needed
+2. **Ensure CSRF** — fetch from `/api/v1/csrf` if not cached
+3. **Extract object** — `extractObject()` isolates single definition from CSN
+4. **Build URL** — `buildDatasphereUrl()` constructs full URL with query params
+5. **POST** — send CSN payload as JSON body with auth + CSRF headers
+6. **CSRF retry** — if 403, invalidate CSRF cache, fetch new token, retry once
+7. **Check response** — `checkResponse()` extracts body text or returns error
+8. **Return Result** — success tuple with response body, or error tuple
 
-Login follows a different path: `spawn` (not `execSync`) for the interactive OAuth browser flow, then `execSync` for cache initialization.
+Login follows a different path: native OAuth authorization code flow via local HTTP callback server.
 
 ---
 
-*Last updated: v0.1.0*
+*Last updated: v1.0.0*

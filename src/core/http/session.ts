@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import type { AsyncResult } from '../../types/result';
 import { ok, err } from '../../types/result';
-import { spawnAsync } from '../cli/executor';
 import { debug } from '../utils/logging';
 import { safeJsonParse } from '../utils/json';
 
@@ -11,23 +10,6 @@ const tokenResponseSchema = z.object({
 });
 
 export const TOKEN_EXPIRY_BUFFER_SEC = 60;
-
-const storedSecretsSchema = z.object({
-    client_id: z.string(),
-    client_secret: z.string(),
-    token_url: z.string(),
-    access_token: z.string(),
-    refresh_token: z.string(),
-    expires_after: z.number(),
-});
-
-// CLI output can be a single object or an array
-const storedSecretsFromCliSchema = z.preprocess(
-    (val) => (Array.isArray(val) ? val[0] : val),
-    storedSecretsSchema,
-);
-
-type StoredSecrets = z.infer<typeof storedSecretsSchema>;
 
 export interface AccessTokenResult {
     accessToken: string;
@@ -40,39 +22,22 @@ export interface SessionData {
     cookies: string;
 }
 
-export async function getAccessToken(host: string): AsyncResult<AccessTokenResult> {
-    // Read stored secrets from the CLI's credential store
-    const result = await spawnAsync('npx', [
-        'datasphere', 'config', 'secrets', 'show',
-        '--host', host,
-    ]);
+export async function refreshAccessToken(
+    tokenUrl: string,
+    refreshToken: string,
+    clientId: string,
+    clientSecret: string,
+): AsyncResult<AccessTokenResult> {
+    debug('Refreshing access token...');
 
-    if (result.code !== 0) {
-        return err(new Error(
-            `Failed to read stored secrets (exit ${result.code}): ${result.stderr || result.stdout}`,
-        ));
-    }
-
-    const [secrets, parseErr] = safeJsonParse(result.stdout, storedSecretsFromCliSchema);
-    if (parseErr) return err(parseErr);
-
-    // Check if token is still valid (with 60s buffer)
-    const nowSec = Math.floor(Date.now() / 1000);
-    if (secrets.expires_after > nowSec + TOKEN_EXPIRY_BUFFER_SEC) {
-        debug('Access token still valid, expires in', secrets.expires_after - nowSec, 'seconds');
-        return ok({ accessToken: secrets.access_token, expiresAfter: secrets.expires_after });
-    }
-
-    // Token expired — refresh it
-    debug('Access token expired, refreshing...');
     const params = new URLSearchParams({
         grant_type: 'refresh_token',
-        refresh_token: secrets.refresh_token,
-        client_id: secrets.client_id,
-        client_secret: secrets.client_secret,
+        refresh_token: refreshToken,
+        client_id: clientId,
+        client_secret: clientSecret,
     });
 
-    const response = await fetch(secrets.token_url, {
+    const response = await fetch(tokenUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: params.toString(),
@@ -84,11 +49,11 @@ export async function getAccessToken(host: string): AsyncResult<AccessTokenResul
     }
 
     const body = await response.text();
-    const [tokenData, tokenParseErr] = safeJsonParse(body, tokenResponseSchema);
-    if (tokenParseErr) return err(tokenParseErr);
+    const [tokenData, parseErr] = safeJsonParse(body, tokenResponseSchema);
+    if (parseErr) return err(parseErr);
 
     const expiresAfter = Math.floor(Date.now() / 1000) + tokenData.expires_in;
-    debug('Token refreshed successfully, expires in', tokenData.expires_in, 'seconds');
+    debug('Token refreshed, expires in', tokenData.expires_in, 'seconds');
     return ok({ accessToken: tokenData.access_token, expiresAfter });
 }
 

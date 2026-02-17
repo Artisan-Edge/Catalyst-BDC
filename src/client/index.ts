@@ -2,7 +2,6 @@ import type { BdcConfig } from '../types/config';
 import type { Result } from '../types/result';
 import { ok, err } from '../types/result';
 import { bdcConfigSchema } from '../types/config';
-import { createCliExecutor } from '../core/cli/executor';
 import { activateLogging } from '../core/utils/logging';
 import { BdcClientImpl } from './client';
 import type { BdcClient } from './client';
@@ -18,6 +17,5 @@ export function createClient(config: BdcConfig): Result<BdcClient, Error> {
 
     if (config.verbose) activateLogging();
 
-    const executor = createCliExecutor(config);
-    return ok(new BdcClientImpl(config, executor));
+    return ok(new BdcClientImpl(config));
 }

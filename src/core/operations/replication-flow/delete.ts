@@ -1,19 +1,23 @@
 import type { AsyncResult } from '../../../types/result';
-import { ok, err } from '../../../types/result';
-import type { CliExecutor } from '../../cli/executor';
+import type { DatasphereRequestor } from '../../../types/requestor';
+import { checkResponse } from '../../http/helpers';
+import { DATASPHERE_OBJECT_TYPES } from '../../../types/objectTypes';
 import { debug } from '../../utils/logging';
 
 export async function deleteReplicationFlow(
+    requestor: DatasphereRequestor,
+    space: string,
     objectName: string,
-    executor: CliExecutor,
 ): AsyncResult<string> {
+    const objectType = DATASPHERE_OBJECT_TYPES['replication-flow'];
+
     debug(`Deleting replication flow "${objectName}"...`);
 
-    const [result, execErr] = await executor.exec({
-        command: 'objects replication-flows delete',
-        flags: ['--technical-name', objectName, '--force'],
+    const [response, reqErr] = await requestor.request({
+        method: 'DELETE',
+        path: `/dwaas-core/api/v1/spaces/${space}/${objectType.endpoint}/${objectName}`,
+        params: { deleteAnyway: 'true' },
     });
-    if (execErr) return err(execErr);
 
-    return ok(result.stdout);
+    return checkResponse(response, reqErr, `Delete replication flow "${objectName}"`);
 }

@@ -1,30 +1,32 @@
 import type { CsnFile } from '../../../types/csn';
 import type { AsyncResult } from '../../../types/result';
-import { ok, err } from '../../../types/result';
-import type { CliExecutor } from '../../cli/executor';
-import { withTempCsn } from '../../cli/tempFile';
+import { err } from '../../../types/result';
+import type { DatasphereRequestor } from '../../../types/requestor';
 import { extractObject } from '../../csn/extract';
-import { DSP_OBJECT_TYPES } from '../../../types/objectTypes';
+import { checkResponse } from '../../http/helpers';
+import { DATASPHERE_OBJECT_TYPES } from '../../../types/objectTypes';
 import { debug } from '../../utils/logging';
 
 export async function updateReplicationFlow(
+    requestor: DatasphereRequestor,
+    space: string,
     csn: CsnFile,
     objectName: string,
-    executor: CliExecutor,
 ): AsyncResult<string> {
-    const objectType = DSP_OBJECT_TYPES['replication-flow'];
+    const objectType = DATASPHERE_OBJECT_TYPES['replication-flow'];
 
     const [payload, extractErr] = extractObject(csn, objectType.csnKey, objectName);
     if (extractErr) return err(extractErr);
 
     debug(`Updating replication flow "${objectName}"...`);
 
-    return withTempCsn(payload, async (tmpFile) => {
-        const [result, execErr] = await executor.exec({
-            command: objectType.updateCommand,
-            flags: ['--file-path', tmpFile, '--allow-missing-dependencies'],
-        });
-        if (execErr) return err(execErr);
-        return ok(result.stdout);
+    const [response, reqErr] = await requestor.request({
+        method: 'PUT',
+        path: `/dwaas-core/api/v1/spaces/${space}/${objectType.endpoint}/${objectName}`,
+        params: { saveAnyway: 'true', allowMissingDependencies: 'true', deploy: 'true' },
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
     });
+
+    return checkResponse(response, reqErr, `Update replication flow "${objectName}"`);
 }

@@ -1,24 +1,33 @@
 import type { AsyncResult } from '../../types/result';
 import { ok } from '../../types/result';
-import type { CliExecutor } from '../cli/executor';
+import type { DatasphereRequestor } from '../../types/requestor';
+import type { DatasphereObjectTypeName } from '../../types/objectTypes';
+import { DATASPHERE_OBJECT_TYPES } from '../../types/objectTypes';
 import { debug } from '../utils/logging';
 
 export async function objectExists(
-    readCommand: string,
+    requestor: DatasphereRequestor,
+    space: string,
+    objectType: DatasphereObjectTypeName,
     technicalName: string,
-    executor: CliExecutor,
 ): AsyncResult<boolean> {
-    const [, execErr] = await executor.exec({
-        command: readCommand,
-        flags: ['--technical-name', technicalName],
-        quiet: true,
+    const { endpoint } = DATASPHERE_OBJECT_TYPES[objectType];
+
+    const [response, reqErr] = await requestor.request({
+        method: 'GET',
+        path: `/dwaas-core/api/v1/spaces/${space}/${endpoint}/${technicalName}`,
     });
 
-    if (!execErr) {
-        debug(`"${technicalName}" exists`);
-        return ok(true);
+    if (reqErr) {
+        debug(`"${technicalName}" check failed:`, reqErr.message);
+        return ok(false);
     }
 
-    debug(`"${technicalName}" does not exist`);
-    return ok(false);
+    if (!response || !response.ok) {
+        debug(`"${technicalName}" does not exist`);
+        return ok(false);
+    }
+
+    debug(`"${technicalName}" exists`);
+    return ok(true);
 }

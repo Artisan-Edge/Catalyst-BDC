@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { describe, test, expect, beforeAll, afterAll } from 'bun:test';
 import { createClient } from '../../client';
 import { resolveDependencies } from '../../core/csn/resolveDeps';
-import { DSP_OBJECT_TYPES } from '../../types/objectTypes';
+import { DATASPHERE_OBJECT_TYPES } from '../../types/objectTypes';
 import type { CsnFile } from '../../types/csn';
 import type { BdcConfig } from '../../types/config';
 import fixture from '../assets/I_BusinessArea.json';
@@ -25,13 +25,13 @@ const targetTableNames = csn.replicationflows?.[flowName]?.targets
 
 describe('resolveDependencies', () => {
     test('resolves target local table names from replication flow', () => {
-        const deps = resolveDependencies(csn, flowName, DSP_OBJECT_TYPES['replication-flow']);
+        const deps = resolveDependencies(csn, flowName, DATASPHERE_OBJECT_TYPES['replication-flow']);
         expect(deps).toEqual(targetTableNames);
         expect(deps.length).toBeGreaterThan(0);
     });
 
     test('returns empty array for view type (no preDeps)', () => {
-        const deps = resolveDependencies(csn, flowName, DSP_OBJECT_TYPES['view']);
+        const deps = resolveDependencies(csn, flowName, DATASPHERE_OBJECT_TYPES['view']);
         expect(deps).toEqual([]);
     });
 });

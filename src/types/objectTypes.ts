@@ -1,42 +1,30 @@
 import type { CsnFile } from './csn';
 
-export interface DspObjectType {
-    command: string;
-    readCommand: string;
-    updateCommand: string;
+export interface DatasphereObjectType {
+    endpoint: string;
     csnKey: keyof CsnFile & string;
     preDeps?: {
         csnKey: keyof CsnFile & string;
-        command: string;
-        readCommand: string;
-        updateCommand: string;
+        endpoint: string;
         resolve: (csn: CsnFile, objectName: string) => string[];
     };
 }
 
-export const DSP_OBJECT_TYPES = {
+export const DATASPHERE_OBJECT_TYPES = {
     view: {
-        command: 'objects views create',
-        readCommand: 'objects views read',
-        updateCommand: 'objects views update',
+        endpoint: 'views',
         csnKey: 'definitions',
     },
     'local-table': {
-        command: 'objects local-tables create',
-        readCommand: 'objects local-tables read',
-        updateCommand: 'objects local-tables update',
+        endpoint: 'localTable',
         csnKey: 'definitions',
     },
     'replication-flow': {
-        command: 'objects replication-flows create',
-        readCommand: 'objects replication-flows read',
-        updateCommand: 'objects replication-flows update',
+        endpoint: 'replicationflows',
         csnKey: 'replicationflows',
         preDeps: {
             csnKey: 'definitions',
-            command: 'objects local-tables create',
-            readCommand: 'objects local-tables read',
-            updateCommand: 'objects local-tables update',
+            endpoint: 'localTable',
             resolve: (csn: CsnFile, objectName: string): string[] => {
                 const flow = csn.replicationflows?.[objectName];
                 if (!flow?.targets) return [];
@@ -44,6 +32,6 @@ export const DSP_OBJECT_TYPES = {
             },
         },
     },
-} as const satisfies Record<string, DspObjectType>;
+} as const satisfies Record<string, DatasphereObjectType>;
 
-export type DspObjectTypeName = keyof typeof DSP_OBJECT_TYPES;
+export type DatasphereObjectTypeName = keyof typeof DATASPHERE_OBJECT_TYPES;
