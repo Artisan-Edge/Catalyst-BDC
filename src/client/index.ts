@@ -4,7 +4,7 @@ import { ok, err } from '../types/result';
 import { bdcConfigSchema } from '../types/config';
 import { activateLogging } from '../core/utils/logging';
 import { BdcClientImpl } from './client';
-import type { BdcClient } from './client';
+import type { BdcClient } from './types';
 
 export type { BdcClient };
 
