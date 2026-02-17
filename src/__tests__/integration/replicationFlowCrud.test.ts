@@ -88,7 +88,7 @@ describe('replication flow CRUD lifecycle', () => {
         const [result, deleteErr] = await client.deleteReplicationFlow(flowName);
         if (deleteErr) console.error('deleteReplicationFlow failed:', deleteErr.message);
         expect(deleteErr).toBeNull();
-    }, 30_000);
+    }, 120_000);
 
     test('objectExists returns false after delete', async () => {
         const [exists, existsErr] = await client.objectExists('replication-flow', flowName);

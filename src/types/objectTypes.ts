@@ -16,7 +16,7 @@ export const DATASPHERE_OBJECT_TYPES = {
         csnKey: 'definitions',
     },
     'local-table': {
-        endpoint: 'localTable',
+        endpoint: 'localtables',
         csnKey: 'definitions',
     },
     'replication-flow': {
@@ -24,7 +24,7 @@ export const DATASPHERE_OBJECT_TYPES = {
         csnKey: 'replicationflows',
         preDeps: {
             csnKey: 'definitions',
-            endpoint: 'localTable',
+            endpoint: 'localtables',
             resolve: (csn: CsnFile, objectName: string): string[] => {
                 const flow = csn.replicationflows?.[objectName];
                 if (!flow?.targets) return [];
