@@ -40,6 +40,7 @@ src/
 │   ├── operations/      # Business logic (one function per file)
 │   │   ├── login.ts     # OAuth login via performOAuthLogin
 │   │   ├── objectExists.ts  # GET + check 200 vs 404
+│   │   ├── analytic-model/  # create, read, update, delete, upsert
 │   │   ├── sql-view/    # create, read, update, delete, upsert
 │   │   ├── local-table/ # create, read, update, delete, upsert
 │   │   └── replication-flow/  # create, read, update, delete, upsert, run
@@ -127,6 +128,12 @@ Every directory has an `index.ts` that re-exports its contents.
 interface BdcClient {
     readonly config: BdcConfig;
     login(): AsyncResult<OAuthTokens>;
+
+    createAnalyticModel(csn, objectName): AsyncResult<string>;
+    readAnalyticModel(objectName): AsyncResult<string>;
+    updateAnalyticModel(csn, objectName): AsyncResult<string>;
+    deleteAnalyticModel(objectName): AsyncResult<string>;
+    upsertAnalyticModel(csn, objectName): AsyncResult<UpsertAnalyticModelResult>;
 
     createView(csn, objectName): AsyncResult<string>;
     readView(objectName): AsyncResult<string>;

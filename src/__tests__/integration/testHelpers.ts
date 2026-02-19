@@ -35,6 +35,11 @@ export async function safeDelete(
     name: string,
 ): Promise<void> {
     switch (type) {
+        case 'analytic-model': {
+            const [, deleteErr] = await client.deleteAnalyticModel(name);
+            if (deleteErr) console.warn(`Cleanup: failed to delete analytic model "${name}":`, deleteErr.message);
+            break;
+        }
         case 'view': {
             const [, deleteErr] = await client.deleteView(name);
             if (deleteErr) console.warn(`Cleanup: failed to delete view "${name}":`, deleteErr.message);

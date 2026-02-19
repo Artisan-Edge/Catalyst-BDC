@@ -19,6 +19,7 @@ export { refreshAccessToken, fetchCsrf } from './core/http/session';
 export { checkResponse, buildDatasphereUrl } from './core/http/helpers';
 
 // Operation result types
+export type { UpsertAnalyticModelResult } from './core/operations/analytic-model/upsert';
 export type { UpsertLocalTableResult } from './core/operations/local-table/upsert';
 export type { UpsertReplicationFlowResult } from './core/operations/replication-flow/upsert';
 export type { RunReplicationFlowResult } from './core/operations/replication-flow/run';

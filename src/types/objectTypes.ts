@@ -32,6 +32,10 @@ export const DATASPHERE_OBJECT_TYPES = {
             },
         },
     },
+    'analytic-model': {
+        endpoint: 'analyticmodels',
+        csnKey: 'definitions',
+    },
 } as const satisfies Record<string, DatasphereObjectType>;
 
 export type DatasphereObjectTypeName = keyof typeof DATASPHERE_OBJECT_TYPES;

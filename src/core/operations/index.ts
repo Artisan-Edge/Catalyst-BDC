@@ -9,6 +9,10 @@ export type { UpsertLocalTableResult } from './local-table';
 export { createReplicationFlow, readReplicationFlow, updateReplicationFlow, deleteReplicationFlow, upsertReplicationFlow, runReplicationFlow } from './replication-flow';
 export type { UpsertReplicationFlowResult, RunReplicationFlowResult } from './replication-flow';
 
+// Analytic model
+export { createAnalyticModel, readAnalyticModel, updateAnalyticModel, deleteAnalyticModel, upsertAnalyticModel } from './analytic-model';
+export type { UpsertAnalyticModelResult } from './analytic-model';
+
 // SQL view
 export { createView, readView, updateView, deleteView, upsertView } from './sql-view';
 export type { UpsertViewResult } from './sql-view';

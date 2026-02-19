@@ -17,7 +17,7 @@ Programmatic Datasphere object management via direct HTTP API.
 
 ## Overview
 
-Catalyst-BDC is a TypeScript library for automated Datasphere object management. It communicates directly with the Datasphere REST API (no CLI dependency). It handles native OAuth browser login, CSRF token management, automatic token refresh, and CRUD operations for views, local tables, and replication flows.
+Catalyst-BDC is a TypeScript library for automated Datasphere object management. It communicates directly with the Datasphere REST API (no CLI dependency). It handles native OAuth browser login, CSRF token management, automatic token refresh, and CRUD operations for views, local tables, replication flows, and analytic models.
 
 ---
 
@@ -147,6 +147,11 @@ interface BdcConfig {
 | Method | Signature | Description |
 |--------|-----------|-------------|
 | `login` | `() => AsyncResult<OAuthTokens>` | Native OAuth browser flow. Returns tokens. |
+| `createAnalyticModel` | `(csn, objectName) => AsyncResult<string>` | Creates an analytic model via POST. |
+| `readAnalyticModel` | `(objectName) => AsyncResult<string>` | Reads an analytic model definition via GET. |
+| `updateAnalyticModel` | `(csn, objectName) => AsyncResult<string>` | Updates an analytic model via PUT. |
+| `deleteAnalyticModel` | `(objectName) => AsyncResult<string>` | Deletes an analytic model via DELETE. |
+| `upsertAnalyticModel` | `(csn, objectName) => AsyncResult<UpsertAnalyticModelResult>` | Creates or updates an analytic model. |
 | `createView` | `(csn, objectName) => AsyncResult<string>` | Creates a view via POST. |
 | `readView` | `(objectName) => AsyncResult<string>` | Reads a view definition via GET. |
 | `updateView` | `(csn, objectName) => AsyncResult<string>` | Updates a view via PUT. |

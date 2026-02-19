@@ -6,11 +6,17 @@ import type { DatasphereRequestor, DatasphereRequestOptions } from '../types/req
 import type { DatasphereObjectTypeName } from '../types/objectTypes';
 import type { OAuthTokens } from '../core/auth/oauth';
 import { loadCachedTokens, saveCachedTokens } from '../core/auth/tokenCache';
+import type { UpsertAnalyticModelResult } from '../core/operations/analytic-model/upsert';
 import type { UpsertLocalTableResult } from '../core/operations/local-table/upsert';
 import type { UpsertReplicationFlowResult } from '../core/operations/replication-flow/upsert';
 import type { RunReplicationFlowResult } from '../core/operations/replication-flow/run';
 import type { UpsertViewResult } from '../core/operations/sql-view/upsert';
 import { login as coreLogin } from '../core/operations/login';
+import { createAnalyticModel as coreCreateAnalyticModel } from '../core/operations/analytic-model/create';
+import { readAnalyticModel as coreReadAnalyticModel } from '../core/operations/analytic-model/read';
+import { updateAnalyticModel as coreUpdateAnalyticModel } from '../core/operations/analytic-model/update';
+import { deleteAnalyticModel as coreDeleteAnalyticModel } from '../core/operations/analytic-model/delete';
+import { upsertAnalyticModel as coreUpsertAnalyticModel } from '../core/operations/analytic-model/upsert';
 import { createView as coreCreateView } from '../core/operations/sql-view/create';
 import { readView as coreReadView } from '../core/operations/sql-view/read';
 import { updateView as coreUpdateView } from '../core/operations/sql-view/update';
@@ -49,6 +55,13 @@ interface CsrfCache {
 export interface BdcClient {
     readonly config: BdcConfig;
     login(): AsyncResult<OAuthTokens>;
+
+    // Analytic model
+    createAnalyticModel(csn: CsnFile, objectName: string): AsyncResult<string>;
+    readAnalyticModel(objectName: string): AsyncResult<string>;
+    updateAnalyticModel(csn: CsnFile, objectName: string): AsyncResult<string>;
+    deleteAnalyticModel(objectName: string): AsyncResult<string>;
+    upsertAnalyticModel(csn: CsnFile, objectName: string): AsyncResult<UpsertAnalyticModelResult>;
 
     // SQL view
     createView(csn: CsnFile, objectName: string): AsyncResult<string>;
@@ -267,6 +280,27 @@ export class BdcClientImpl implements BdcClient {
         this.csrfCache = csrfResult;
 
         return ok(tokens);
+    }
+
+    // Analytic model
+    async createAnalyticModel(csn: CsnFile, objectName: string): AsyncResult<string> {
+        return coreCreateAnalyticModel(this.requestor, this.config.space, csn, objectName);
+    }
+
+    async readAnalyticModel(objectName: string): AsyncResult<string> {
+        return coreReadAnalyticModel(this.requestor, this.config.space, objectName);
+    }
+
+    async updateAnalyticModel(csn: CsnFile, objectName: string): AsyncResult<string> {
+        return coreUpdateAnalyticModel(this.requestor, this.config.space, csn, objectName);
+    }
+
+    async deleteAnalyticModel(objectName: string): AsyncResult<string> {
+        return coreDeleteAnalyticModel(this.requestor, this.config.space, objectName);
+    }
+
+    async upsertAnalyticModel(csn: CsnFile, objectName: string): AsyncResult<UpsertAnalyticModelResult> {
+        return coreUpsertAnalyticModel(this.requestor, this.config.space, csn, objectName);
     }
 
     // SQL view
