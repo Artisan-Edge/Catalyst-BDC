@@ -1,0 +1,1663 @@
+{
+  "definitions": {
+    "ZSNAP_F01S_103": {
+      "kind": "entity",
+      "elements": {
+        "COMPANYCODE": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "FISCALYEAR": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "ACCOUNTINGDOCUMENT": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 10
+        },
+        "LEDGERGLLINEITEM": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 6
+        },
+        "ACCOUNTINGDOCUMENTITEM": {
+          "key": false,
+          "type": "cds.String",
+          "length": 3
+        },
+        "DOCUMENTITEMTEXT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 50
+        },
+        "ACCOUNTINGDOCUMENTCATEGORY": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "ACCOUNTINGDOCUMENTTYPE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 2
+        },
+        "CLEARINGJOURNALENTRY": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "CLEARINGJOURNALENTRYFISCALYEAR": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "CONTROLLINGAREA": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "CHARTOFACCOUNTS": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "FISCALYEARVARIANT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 2
+        },
+        "INVOICEREFERENCE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "INVOICEITEMREFERENCE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 3
+        },
+        "INVOICEREFERENCEFISCALYEAR": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "DEBITCREDITCODE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "FINANCIALACCOUNTTYPE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "NETDUEDATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "CLEARINGDATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "POSTINGDATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "DOCUMENTDATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "DUECALCULATIONBASEDATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "CASHDISCOUNT1DAYS": {
+          "key": false,
+          "type": "cds.Decimal",
+          "precision": 3,
+          "scale": 0
+        },
+        "CASHDISCOUNT1PERCENT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 21
+        },
+        "CASHDISCOUNT1DATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "CASHDISCOUNT2DAYS": {
+          "key": false,
+          "type": "cds.Decimal",
+          "precision": 3,
+          "scale": 0
+        },
+        "CASHDISCOUNT2PERCENT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 21
+        },
+        "CASHDISCOUNT2DATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "DISCOUNTISAVAILABLE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "CASHDISCOUNTMISSED": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "PAYMENTTERMS": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PAYMENTBLOCKINGREASON": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "PAYMENTMETHOD": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "ISUSEDINPAYMENTTRANSACTION": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "TREASURYCONTRACTTYPE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "POSTINGKEY": {
+          "key": false,
+          "type": "cds.String",
+          "length": 2
+        },
+        "SUPPLIER": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "INVOICEREFERENCETYPE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "SPECIALGLCODE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "GLACCOUNT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "COSTCENTER": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "PROFITCENTER": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "FUNCTIONALAREA": {
+          "key": false,
+          "type": "cds.String",
+          "length": 16
+        },
+        "BUSINESSAREA": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "SEGMENT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "PARTNERCOMPANY": {
+          "key": false,
+          "type": "cds.String",
+          "length": 6
+        },
+        "PURCHASINGDOCUMENT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "ASSIGNMENTREFERENCE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 18
+        },
+        "AMOUNTINTRANSACTIONCURRENCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "TRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT1INTC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "TRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT2INTC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "TRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "TRANSACTIONCURRENCY": {
+          "key": false,
+          "@Semantics.currencyCode": true,
+          "type": "cds.String",
+          "length": 5
+        },
+        "AMOUNTINBALTC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "BALANCETRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT1INBALTC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "BALANCETRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT2INBALTC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "BALANCETRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "BALANCETRANSACTIONCURRENCY": {
+          "key": false,
+          "@Semantics.currencyCode": true,
+          "type": "cds.String",
+          "length": 5
+        },
+        "AMOUNTINCOMPANYCODECURRENCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "COMPANYCODECURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT1INCC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "COMPANYCODECURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT2INCC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "COMPANYCODECURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "COMPANYCODECURRENCY": {
+          "key": false,
+          "@Semantics.currencyCode": true,
+          "type": "cds.String",
+          "length": 5
+        },
+        "AMOUNTINGLOBALCURRENCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "GLOBALCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT1INGC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "GLOBALCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT2INGC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "GLOBALCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "GLOBALCURRENCY": {
+          "key": false,
+          "@Semantics.currencyCode": true,
+          "type": "cds.String",
+          "length": 5
+        },
+        "AMOUNTINDISPLAYCURRENCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "DISPLAYCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT1INDC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "DISPLAYCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT2INDC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "DISPLAYCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "DISPLAYCURRENCY": {
+          "key": false,
+          "@Semantics.currencyCode": true,
+          "type": "cds.String",
+          "length": 5
+        },
+        "FORCEDPARAMETER1": {
+          "key": false,
+          "@SNAP.generation.preserveField": true,
+          "type": "cds.Integer"
+        },
+        "FORCEDPARAMETER2": {
+          "key": false,
+          "@SNAP.generation.preserveField": true,
+          "type": "cds.Integer"
+        },
+        "FORCEDPARAMETER3": {
+          "key": false,
+          "@SNAP.generation.preserveField": true,
+          "type": "cds.Integer"
+        },
+        "FORCEDPARAMETER4": {
+          "key": false,
+          "@SNAP.generation.preserveField": true,
+          "type": "cds.Integer"
+        }
+      },
+      "@DataWarehouse.businessDefinition.description": "Assigns aging grid buckets based on parameter-driven day intervals, derives net due arrears days, and performs currency conversion for AP aging analysis.",
+      "@DataWarehouse.businessDefinition.purpose": "Calculates dynamic aging buckets and performs currency conversion for open AP items",
+      "@DataWarehouse.businessDefinition.contact": "Egan Bosch",
+      "@DataWarehouse.businessDefinition.responsibleTeam": "Artisan Edge, Inc.",
+      "_meta": {
+        "dependencies": {
+          "folderAssignment": "Folder_YBEQBWWQ"
+        }
+      },
+      "params": {
+        "P_SIGNAGE": {
+          "@Consumption.defaultValue": "R",
+          "@EndUserText.label": "Signage",
+          "@Consumption.valueHelpDefinition": [
+            {
+              "entity": {
+                "name": "ZSNAP_F01C_P_SIGNAGE",
+                "element": "P_SIGNAGE"
+              }
+            }
+          ],
+          "default": "R",
+          "type": "cds.String",
+          "length": 1
+        },
+        "P_KEYDATE": {
+          "@EndUserText.label": "Open Items As Of",
+          "type": "cds.Date"
+        },
+        "P_DISPLAYCURRENCY": {
+          "@Consumption.defaultValue": "USD",
+          "@EndUserText.label": "Display Currency",
+          "default": "USD",
+          "type": "cds.String",
+          "length": 5
+        },
+        "P_EXCHANGERATETYPE": {
+          "@Consumption.defaultValue": "M",
+          "@EndUserText.label": "Exchange Rate Type",
+          "default": "M",
+          "type": "cds.String",
+          "length": 4
+        },
+        "P_NETDUEINTERVAL1INDAYS": {
+          "@Consumption.defaultValue": "30",
+          "@EndUserText.label": "Net Due Interval 1 in Days",
+          "default": "30",
+          "type": "cds.Integer"
+        },
+        "P_NETDUEINTERVAL2INDAYS": {
+          "@Consumption.defaultValue": "60",
+          "@EndUserText.label": "Net Due Interval 2 in Days",
+          "default": "60",
+          "type": "cds.Integer"
+        },
+        "P_NETDUEINTERVAL3INDAYS": {
+          "@Consumption.defaultValue": "90",
+          "@EndUserText.label": "Net Due Interval 3 in Days",
+          "default": "90",
+          "type": "cds.Integer"
+        },
+        "P_NETDUEINTERVAL4INDAYS": {
+          "@Consumption.defaultValue": "180",
+          "@EndUserText.label": "Net Due Interval 4 in Days",
+          "default": "180",
+          "type": "cds.Integer"
+        }
+      },
+      "@ObjectModel.supportedCapabilities": [
+        {
+          "#": "DATA_STRUCTURE"
+        }
+      ],
+      "@ObjectModel.modelingPattern": {
+        "#": "DATA_STRUCTURE"
+      },
+      "@DataWarehouse.consumption.external": false,
+      "@DataWarehouse.businessDefinition.tags": [
+        {
+          "key": "F01",
+          "value": "F01"
+        }
+      ],
+      "@DataWarehouse.tableFunction.script": "return select\n\tMAIN.COMPANYCODE,\n\tMAIN.FISCALYEAR,\n\tMAIN.ACCOUNTINGDOCUMENT,\n\tMAIN.LEDGERGLLINEITEM,\n\tMAIN.ACCOUNTINGDOCUMENTITEM,\n\tMAIN.DOCUMENTITEMTEXT,\n\tMAIN.ACCOUNTINGDOCUMENTCATEGORY,\n\tMAIN.ACCOUNTINGDOCUMENTTYPE,\n\tMAIN.CLEARINGJOURNALENTRY,\n\tMAIN.CLEARINGJOURNALENTRYFISCALYEAR,\n\tMAIN.CONTROLLINGAREA,\n\tMAIN.CHARTOFACCOUNTS,\n\tMAIN.FISCALYEARVARIANT,\n\tMAIN.INVOICEREFERENCE,\n\tMAIN.INVOICEITEMREFERENCE,\n\tMAIN.INVOICEREFERENCEFISCALYEAR,\n\tMAIN.DEBITCREDITCODE,\n\tMAIN.FINANCIALACCOUNTTYPE,\n\tcase MAIN.USEREFERENCEDINVOICEDATES\n\t\twhen 'X' then MAIN.NETDUEDATE\n\t\telse _REFERENCEDINVOICES.\"NetDueDate\"\n\tend as NETDUEDATE,\n\tMAIN.CLEARINGDATE,\n\tMAIN.POSTINGDATE,\n\tMAIN.DOCUMENTDATE,\n\tMAIN.DUECALCULATIONBASEDATE,\n\tMAIN.CASHDISCOUNT1DAYS,\n\tMAIN.CASHDISCOUNT1PERCENT,\n\tcase MAIN.USEREFERENCEDINVOICEDATES\n\t\twhen 'X' then MAIN.CASHDISCOUNT1DATE\n\t\telse case\n\t\t\twhen _REFERENCEDINVOICES.\"CashDiscount1Percent\" <> 0 then TO_VARCHAR (ADD_DAYS (TO_DATE (_REFERENCEDINVOICES.\"DueCalculationBaseDate\", 'YYYYMMDD'), cast (_REFERENCEDINVOICES.\"CashDiscount1Days\" as INTEGER)), 'YYYYMMDD')\n\t\t\telse _REFERENCEDINVOICES.\"NetDueDate\"\n\t\tend\n\tend as CASHDISCOUNT1DATE,\n\tMAIN.CASHDISCOUNT2DAYS,\n\tMAIN.CASHDISCOUNT2PERCENT,\n\tcase MAIN.USEREFERENCEDINVOICEDATES\n\t\twhen 'X' then MAIN.CASHDISCOUNT2DATE\n\t\telse case\n\t\t\twhen _REFERENCEDINVOICES.\"CashDiscount2Percent\" <> 0 then TO_VARCHAR (ADD_DAYS (TO_DATE (_REFERENCEDINVOICES.\"DueCalculationBaseDate\", 'YYYYMMDD'), cast (_REFERENCEDINVOICES.\"CashDiscount2Days\" as INTEGER)), 'YYYYMMDD')\n\t\t\telse _REFERENCEDINVOICES.\"NetDueDate\"\n\t\tend\n\tend as CASHDISCOUNT2DATE,\n\tMAIN.DISCOUNTISAVAILABLE,\n\tcase\n\t\twhen MAIN.CASHDISCOUNT1DATE < TO_VARCHAR (:P_KEYDATE, 'YYYYMMDD') and MAIN.DISCOUNTISAVAILABLE = 'X' then 'X'\n\t\telse cast ('' as NVARCHAR(1))\n\tend as CASHDISCOUNTMISSED,\n\tMAIN.PAYMENTTERMS,\n\tMAIN.PAYMENTBLOCKINGREASON,\n\tMAIN.PAYMENTMETHOD,\n\tMAIN.ISUSEDINPAYMENTTRANSACTION,\n\tMAIN.TREASURYCONTRACTTYPE,\n\tMAIN.POSTINGKEY,\n\tMAIN.SUPPLIER,\n\tMAIN.INVOICEREFERENCETYPE,\n\tMAIN.SPECIALGLCODE,\n\tMAIN.GLACCOUNT,\n\tMAIN.COSTCENTER,\n\tMAIN.PROFITCENTER,\n\tMAIN.FUNCTIONALAREA,\n\tMAIN.BUSINESSAREA,\n\tMAIN.SEGMENT,\n\tMAIN.PARTNERCOMPANY,\n\tMAIN.PURCHASINGDOCUMENT,\n\tMAIN.ASSIGNMENTREFERENCE,\n\t\n\t/*@Semantics.amount.currencyCode: 'TransactionCurrency'*/\n\tMAIN.AMOUNTINTRANSACTIONCURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'TransactionCurrency'*/\n\tMAIN.CASHDISCOUNT1INTC,\n\t\n\t/*@Semantics.amount.currencyCode: 'TransactionCurrency'*/\n\tMAIN.CASHDISCOUNT2INTC,\n\tMAIN.TRANSACTIONCURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'BalanceTransactionCurrency'*/\n\tMAIN.AMOUNTINBALTC,\n\t\n\t/*@Semantics.amount.currencyCode: 'BalanceTransactionCurrency'*/\n\tMAIN.CASHDISCOUNT1INBALTC,\n\t\n\t/*@Semantics.amount.currencyCode: 'BalanceTransactionCurrency'*/\n\tMAIN.CASHDISCOUNT2INBALTC,\n\tMAIN.BALANCETRANSACTIONCURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'CompanyCodeCurrency'*/\n\tMAIN.AMOUNTINCOMPANYCODECURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'CompanyCodeCurrency'*/\n\tMAIN.CASHDISCOUNT1INCC,\n\t\n\t/*@Semantics.amount.currencyCode: 'CompanyCodeCurrency'*/\n\tMAIN.CASHDISCOUNT2INCC,\n\tMAIN.COMPANYCODECURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'GlobalCurrency'*/\n\tMAIN.AMOUNTINGLOBALCURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'GlobalCurrency'*/\n\tMAIN.CASHDISCOUNT1INGC,\n\t\n\t/*@Semantics.amount.currencyCode: 'GlobalCurrency'*/\n\tMAIN.CASHDISCOUNT2INGC,\n\tMAIN.GLOBALCURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'DisplayCurrency'*/\n\tcast (CONVERT_CURRENCY (\"CLIENT\" => '000', \"SOURCE_UNIT\" => MAIN.COMPANYCODECURRENCY, \"TARGET_UNIT\" => :P_DISPLAYCURRENCY, \"AMOUNT\" => MAIN.AMOUNTINCOMPANYCODECURRENCY, \"REFERENCE_DATE\" => :P_KEYDATE, \"SCHEMA\" => 'HDLFS', \"CONVERSION_TYPE\" => :P_EXCHANGERATETYPE, \"STEPS\" => 'shift,convert,round', \"PRECISIONS_TABLE\" => 'SAP.CURRENCY.VIEW.TCURX', \"CONFIGURATION_TABLE\" => 'SAP.CURRENCY.VIEW.TCURV', \"PREFACTORS_TABLE\" => 'SAP.CURRENCY.VIEW.TCURF', \"RATES_TABLE\" => 'SAP.CURRENCY.VIEW.TCURR') as DECIMAL(23,2)) as AMOUNTINDISPLAYCURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'DisplayCurrency'*/\n\tcast (CONVERT_CURRENCY (\"CLIENT\" => '000', \"SOURCE_UNIT\" => MAIN.COMPANYCODECURRENCY, \"TARGET_UNIT\" => :P_DISPLAYCURRENCY, \"AMOUNT\" => MAIN.CASHDISCOUNT1INCC, \"REFERENCE_DATE\" => :P_KEYDATE, \"SCHEMA\" => 'HDLFS', \"CONVERSION_TYPE\" => :P_EXCHANGERATETYPE, \"STEPS\" => 'shift,convert,round', \"PRECISIONS_TABLE\" => 'SAP.CURRENCY.VIEW.TCURX', \"CONFIGURATION_TABLE\" => 'SAP.CURRENCY.VIEW.TCURV', \"PREFACTORS_TABLE\" => 'SAP.CURRENCY.VIEW.TCURF', \"RATES_TABLE\" => 'SAP.CURRENCY.VIEW.TCURR') as DECIMAL(23,2)) as CASHDISCOUNT1INDC,\n\t\n\t/*@Semantics.amount.currencyCode: 'DisplayCurrency'*/\n\tcast (CONVERT_CURRENCY (\"CLIENT\" => '000', \"SOURCE_UNIT\" => MAIN.COMPANYCODECURRENCY, \"TARGET_UNIT\" => :P_DISPLAYCURRENCY, \"AMOUNT\" => MAIN.CASHDISCOUNT2INCC, \"REFERENCE_DATE\" => :P_KEYDATE, \"SCHEMA\" => 'HDLFS', \"CONVERSION_TYPE\" => :P_EXCHANGERATETYPE, \"STEPS\" => 'shift,convert,round', \"PRECISIONS_TABLE\" => 'SAP.CURRENCY.VIEW.TCURX', \"CONFIGURATION_TABLE\" => 'SAP.CURRENCY.VIEW.TCURV', \"PREFACTORS_TABLE\" => 'SAP.CURRENCY.VIEW.TCURF', \"RATES_TABLE\" => 'SAP.CURRENCY.VIEW.TCURR') as DECIMAL(23,2)) as CASHDISCOUNT2INDC,\n\tcast (:P_DISPLAYCURRENCY as NVARCHAR(5)) as DISPLAYCURRENCY,\n\t\n\t/*@SNAP.generation.preserveField: true*/\n\t:P_NETDUEINTERVAL1INDAYS as FORCEDPARAMETER1,\n\t\n\t/*@SNAP.generation.preserveField: true*/\n\t:P_NETDUEINTERVAL2INDAYS as FORCEDPARAMETER2,\n\t\n\t/*@SNAP.generation.preserveField: true*/\n\t:P_NETDUEINTERVAL3INDAYS as FORCEDPARAMETER3,\n\t\n\t/*@SNAP.generation.preserveField: true*/\n\t:P_NETDUEINTERVAL4INDAYS as FORCEDPARAMETER4\nfrom ZSNAP_F01S_052(:P_SIGNAGE, :P_KEYDATE) as MAIN\nleft outer join I_OPERATIONALACCTGDOCITEM as _REFERENCEDINVOICES on MAIN.COMPANYCODE = _REFERENCEDINVOICES.\"CompanyCode\" and MAIN.INVOICEREFERENCE = _REFERENCEDINVOICES.\"AccountingDocument\" and MAIN.INVOICEITEMREFERENCE = _REFERENCEDINVOICES.\"AccountingDocumentItem\" and MAIN.INVOICEREFERENCEFISCALYEAR = _REFERENCEDINVOICES.\"FiscalYear\" and _REFERENCEDINVOICES.\"FinancialAccountType\" = 'K' and MAIN.ACCOUNTINGDOCUMENTCATEGORY = _REFERENCEDINVOICES.\"AccountingDocumentCategory\"\nwhere MAIN.CLEARINGDATE > TO_VARCHAR (:P_KEYDATE, 'YYYYMMDD')\n\tor MAIN.CLEARINGDATE = '00000000';",
+      "@Analytics.dbViewType": "TABLE_FUNCTION",
+      "@EndUserText.label": "SNAP F01: Open Items Base"
+    },
+    "ZSNAP_F01S_203": {
+      "kind": "entity",
+      "elements": {
+        "COMPANYCODE": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "FISCALYEAR": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "ACCOUNTINGDOCUMENT": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 10
+        },
+        "LEDGERGLLINEITEM": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 6
+        },
+        "ACCOUNTINGDOCUMENTITEM": {
+          "key": false,
+          "type": "cds.String",
+          "length": 3
+        },
+        "DOCUMENTITEMTEXT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 50
+        },
+        "ACCOUNTINGDOCUMENTCATEGORY": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "ACCOUNTINGDOCUMENTTYPE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 2
+        },
+        "CLEARINGJOURNALENTRY": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "CLEARINGJOURNALENTRYFISCALYEAR": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "INVOICEREFERENCE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "INVOICEITEMREFERENCE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 3
+        },
+        "INVOICEREFERENCEFISCALYEAR": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "DEBITCREDITCODE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "CONTROLLINGAREA": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "CHARTOFACCOUNTS": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "FISCALYEARVARIANT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 2
+        },
+        "CLEARINGDATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "POSTINGDATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "DOCUMENTDATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "DUECALCULATIONBASEDATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "CASHDISCOUNT1DAYS": {
+          "key": false,
+          "type": "cds.Decimal",
+          "precision": 3,
+          "scale": 0
+        },
+        "CASHDISCOUNT1PERCENT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 21
+        },
+        "CASHDISCOUNT1DATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "CASHDISCOUNT2DAYS": {
+          "key": false,
+          "type": "cds.Decimal",
+          "precision": 3,
+          "scale": 0
+        },
+        "CASHDISCOUNT2PERCENT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 21
+        },
+        "CASHDISCOUNT2DATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "DISCOUNTISAVAILABLE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "CASHDISCOUNTMISSED": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "PAYMENTTERMS": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PAYMENTBLOCKINGREASON": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "PAYMENTMETHOD": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "ISUSEDINPAYMENTTRANSACTION": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "TREASURYCONTRACTTYPE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "POSTINGKEY": {
+          "key": false,
+          "type": "cds.String",
+          "length": 2
+        },
+        "FINANCIALACCOUNTTYPE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "SUPPLIER": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "PARTNERCOMPANY": {
+          "key": false,
+          "type": "cds.String",
+          "length": 6
+        },
+        "INVOICEREFERENCETYPE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "NETDUEDATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "SPECIALGLCODE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "GLACCOUNT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "COSTCENTER": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "PROFITCENTER": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "FUNCTIONALAREA": {
+          "key": false,
+          "type": "cds.String",
+          "length": 16
+        },
+        "BUSINESSAREA": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "SEGMENT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "PURCHASINGDOCUMENT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "ASSIGNMENTREFERENCE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 18
+        },
+        "EARLYPAYMENTTOLERANCEDAYS": {
+          "key": false,
+          "type": "cds.Integer"
+        },
+        "CLEARINGDATEVSDUEDATEOFFSET": {
+          "key": false,
+          "type": "cds.Decimal",
+          "precision": 10,
+          "scale": 0
+        },
+        "NETDUEARREARSDAYSINT": {
+          "key": false,
+          "type": "cds.Decimal",
+          "precision": 10,
+          "scale": 0
+        },
+        "DAYSOVERDUEINT": {
+          "key": false,
+          "type": "cds.Decimal",
+          "precision": 10,
+          "scale": 0
+        },
+        "ISCLEARED": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "NETDUEINTERVALTEXT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 50
+        },
+        "ISCLEAREDINLAST12MONTHS": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "AMOUNTINTRANSACTIONCURRENCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "TRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT1INTC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "TRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT2INTC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "TRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "TRANSACTIONCURRENCY": {
+          "key": false,
+          "@Semantics.currencyCode": true,
+          "type": "cds.String",
+          "length": 5
+        },
+        "AMOUNTINBALTC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "BALANCETRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT1INBALTC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "BALANCETRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT2INBALTC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "BALANCETRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "BALANCETRANSACTIONCURRENCY": {
+          "key": false,
+          "@Semantics.currencyCode": true,
+          "type": "cds.String",
+          "length": 5
+        },
+        "AMOUNTINCOMPANYCODECURRENCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "COMPANYCODECURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT1INCC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "COMPANYCODECURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT2INCC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "COMPANYCODECURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "COMPANYCODECURRENCY": {
+          "key": false,
+          "@Semantics.currencyCode": true,
+          "type": "cds.String",
+          "length": 5
+        },
+        "AMOUNTINGLOBALCURRENCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "GLOBALCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT1INGC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "GLOBALCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT2INGC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "GLOBALCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "GLOBALCURRENCY": {
+          "key": false,
+          "@Semantics.currencyCode": true,
+          "type": "cds.String",
+          "length": 5
+        },
+        "AMOUNTINDISPLAYCURRENCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "DISPLAYCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT1INDC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "DISPLAYCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT2INDC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "DISPLAYCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "DISPLAYCURRENCY": {
+          "key": false,
+          "@Semantics.currencyCode": true,
+          "type": "cds.String",
+          "length": 5
+        }
+      },
+      "@DataWarehouse.businessDefinition.description": "Filters for items cleared after P_ClearedDate and derives payment timing categories (early, on-time, late) based on clearing date vs cash discount dates and tolerance days.",
+      "@DataWarehouse.businessDefinition.purpose": "Processes cleared AP items and calculates early payment indicators for discount optimization",
+      "@DataWarehouse.businessDefinition.contact": "Egan Bosch",
+      "@DataWarehouse.businessDefinition.responsibleTeam": "Artisan Edge, Inc.",
+      "_meta": {
+        "dependencies": {
+          "folderAssignment": "Folder_YBEQBWWQ"
+        }
+      },
+      "params": {
+        "P_SIGNAGE": {
+          "@Consumption.defaultValue": "R",
+          "@EndUserText.label": "Signage",
+          "@Consumption.valueHelpDefinition": [
+            {
+              "entity": {
+                "name": "ZSNAP_F01C_P_SIGNAGE",
+                "element": "P_SIGNAGE"
+              }
+            }
+          ],
+          "default": "R",
+          "type": "cds.String",
+          "length": 1
+        },
+        "P_KEYDATE": {
+          "@EndUserText.label": "Open Items As Of",
+          "type": "cds.Date"
+        },
+        "P_CLEAREDDATE": {
+          "@EndUserText.label": "Cleared Items After",
+          "type": "cds.Date"
+        },
+        "P_DISPLAYCURRENCY": {
+          "@Consumption.defaultValue": "USD",
+          "@EndUserText.label": "Display Currency",
+          "default": "USD",
+          "type": "cds.String",
+          "length": 5
+        },
+        "P_EXCHANGERATETYPE": {
+          "@Consumption.defaultValue": "M",
+          "@EndUserText.label": "Exchange Rate Type",
+          "default": "M",
+          "type": "cds.String",
+          "length": 4
+        },
+        "P_EARLYPAYMENTTOLERANCEDAYS": {
+          "@Consumption.defaultValue": "2",
+          "@EndUserText.label": "Early Payment Tolerance Days",
+          "default": "2",
+          "type": "cds.Integer"
+        }
+      },
+      "@ObjectModel.supportedCapabilities": [
+        {
+          "#": "DATA_STRUCTURE"
+        }
+      ],
+      "@ObjectModel.modelingPattern": {
+        "#": "DATA_STRUCTURE"
+      },
+      "@DataWarehouse.consumption.external": false,
+      "@DataWarehouse.businessDefinition.tags": [
+        {
+          "key": "F01",
+          "value": "F01"
+        }
+      ],
+      "@DataWarehouse.tableFunction.script": "return select\n\tMAIN.COMPANYCODE,\n\tMAIN.FISCALYEAR,\n\tMAIN.ACCOUNTINGDOCUMENT,\n\tMAIN.LEDGERGLLINEITEM,\n\tMAIN.ACCOUNTINGDOCUMENTITEM,\n\tMAIN.DOCUMENTITEMTEXT,\n\tMAIN.ACCOUNTINGDOCUMENTCATEGORY,\n\tMAIN.ACCOUNTINGDOCUMENTTYPE,\n\tMAIN.CLEARINGJOURNALENTRY,\n\tMAIN.CLEARINGJOURNALENTRYFISCALYEAR,\n\tMAIN.INVOICEREFERENCE,\n\tMAIN.INVOICEITEMREFERENCE,\n\tMAIN.INVOICEREFERENCEFISCALYEAR,\n\tMAIN.DEBITCREDITCODE,\n\tMAIN.CONTROLLINGAREA,\n\tMAIN.CHARTOFACCOUNTS,\n\tMAIN.FISCALYEARVARIANT,\n\tMAIN.CLEARINGDATE,\n\tMAIN.POSTINGDATE,\n\tMAIN.DOCUMENTDATE,\n\tMAIN.DUECALCULATIONBASEDATE,\n\tMAIN.CASHDISCOUNT1DAYS,\n\tMAIN.CASHDISCOUNT1PERCENT,\n\tMAIN.CASHDISCOUNT1DATE,\n\tMAIN.CASHDISCOUNT2DAYS,\n\tMAIN.CASHDISCOUNT2PERCENT,\n\tMAIN.CASHDISCOUNT2DATE,\n\tMAIN.DISCOUNTISAVAILABLE,\n\tcase\n\t\twhen MAIN.CLEARINGDATE > MAIN.CASHDISCOUNT1DATE and MAIN.DISCOUNTISAVAILABLE = 'X' then 'X'\n\t\telse cast ('' as NVARCHAR(1))\n\tend as CASHDISCOUNTMISSED,\n\tMAIN.PAYMENTTERMS,\n\tMAIN.PAYMENTBLOCKINGREASON,\n\tMAIN.PAYMENTMETHOD,\n\tMAIN.ISUSEDINPAYMENTTRANSACTION,\n\tMAIN.TREASURYCONTRACTTYPE,\n\tMAIN.POSTINGKEY,\n\tMAIN.FINANCIALACCOUNTTYPE,\n\tMAIN.SUPPLIER,\n\tMAIN.PARTNERCOMPANY,\n\tMAIN.INVOICEREFERENCETYPE,\n\tMAIN.NETDUEDATE,\n\tMAIN.SPECIALGLCODE,\n\tMAIN.GLACCOUNT,\n\tMAIN.COSTCENTER,\n\tMAIN.PROFITCENTER,\n\tMAIN.FUNCTIONALAREA,\n\tMAIN.BUSINESSAREA,\n\tMAIN.SEGMENT,\n\tMAIN.PURCHASINGDOCUMENT,\n\tMAIN.ASSIGNMENTREFERENCE,\n\t:P_EARLYPAYMENTTOLERANCEDAYS as EARLYPAYMENTTOLERANCEDAYS,\n\tcast (case\n\t\twhen MAIN.CLEARINGDATE <= MAIN.CASHDISCOUNT1DATE then DAYS_BETWEEN (MAIN.CLEARINGDATE, TO_DATE (MAIN.CASHDISCOUNT1DATE, 'YYYYMMDD'))\n\t\twhen MAIN.CLEARINGDATE <= MAIN.CASHDISCOUNT2DATE then DAYS_BETWEEN (MAIN.CLEARINGDATE, TO_DATE (MAIN.CASHDISCOUNT2DATE, 'YYYYMMDD'))\n\t\telse DAYS_BETWEEN (MAIN.CLEARINGDATE, MAIN.NETDUEDATE)\n\tend as DECIMAL(10,0)) as CLEARINGDATEVSDUEDATEOFFSET,\n\tcast (DAYS_BETWEEN (MAIN.NETDUEDATE, MAIN.CLEARINGDATE) as DECIMAL(10,0)) as NETDUEARREARSDAYSINT,\n\tcast (case\n\t\twhen MAIN.CLEARINGDATE > MAIN.NETDUEDATE then DAYS_BETWEEN (MAIN.NETDUEDATE, MAIN.CLEARINGDATE)\n\t\telse 0\n\tend as DECIMAL(10,0)) as DAYSOVERDUEINT,\n\t'C' as ISCLEARED,\n\tcast ('A. Cleared' as NVARCHAR(50)) as NETDUEINTERVALTEXT,\n\tcast (case\n\t\twhen MAIN.CLEARINGDATE >= TO_VARCHAR (ADD_MONTHS (:P_KEYDATE, -12), 'YYYYMMDD') and MAIN.CLEARINGJOURNALENTRY <> MAIN.ACCOUNTINGDOCUMENT then 'X'\n\t\telse ''\n\tend as NVARCHAR(1)) as ISCLEAREDINLAST12MONTHS,\n\t\n\t/*@Semantics.amount.currencyCode: 'TransactionCurrency'*/\n\tMAIN.AMOUNTINTRANSACTIONCURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'TransactionCurrency'*/\n\tMAIN.CASHDISCOUNT1INTC,\n\t\n\t/*@Semantics.amount.currencyCode: 'TransactionCurrency'*/\n\tMAIN.CASHDISCOUNT2INTC,\n\tMAIN.TRANSACTIONCURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'BalanceTransactionCurrency'*/\n\tMAIN.AMOUNTINBALTC,\n\t\n\t/*@Semantics.amount.currencyCode: 'BalanceTransactionCurrency'*/\n\tMAIN.CASHDISCOUNT1INBALTC,\n\t\n\t/*@Semantics.amount.currencyCode: 'BalanceTransactionCurrency'*/\n\tMAIN.CASHDISCOUNT2INBALTC,\n\tMAIN.BALANCETRANSACTIONCURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'CompanyCodeCurrency'*/\n\tMAIN.AMOUNTINCOMPANYCODECURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'CompanyCodeCurrency'*/\n\tMAIN.CASHDISCOUNT1INCC,\n\t\n\t/*@Semantics.amount.currencyCode: 'CompanyCodeCurrency'*/\n\tMAIN.CASHDISCOUNT2INCC,\n\tMAIN.COMPANYCODECURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'GlobalCurrency'*/\n\tMAIN.AMOUNTINGLOBALCURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'GlobalCurrency'*/\n\tMAIN.CASHDISCOUNT1INGC,\n\t\n\t/*@Semantics.amount.currencyCode: 'GlobalCurrency'*/\n\tMAIN.CASHDISCOUNT2INGC,\n\tMAIN.GLOBALCURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'DisplayCurrency'*/\n\tcast (CONVERT_CURRENCY (\"CLIENT\" => '000', \"SOURCE_UNIT\" => MAIN.COMPANYCODECURRENCY, \"TARGET_UNIT\" => :P_DISPLAYCURRENCY, \"AMOUNT\" => MAIN.AMOUNTINCOMPANYCODECURRENCY, \"REFERENCE_DATE\" => TO_DATE (MAIN.CLEARINGDATE), \"SCHEMA\" => 'HDLFS', \"CONVERSION_TYPE\" => :P_EXCHANGERATETYPE, \"STEPS\" => 'shift,convert,round', \"PRECISIONS_TABLE\" => 'SAP.CURRENCY.VIEW.TCURX', \"CONFIGURATION_TABLE\" => 'SAP.CURRENCY.VIEW.TCURV', \"PREFACTORS_TABLE\" => 'SAP.CURRENCY.VIEW.TCURF', \"RATES_TABLE\" => 'SAP.CURRENCY.VIEW.TCURR') as DECIMAL(23,2)) as AMOUNTINDISPLAYCURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'DisplayCurrency'*/\n\tcast (CONVERT_CURRENCY (\"CLIENT\" => '000', \"SOURCE_UNIT\" => MAIN.COMPANYCODECURRENCY, \"TARGET_UNIT\" => :P_DISPLAYCURRENCY, \"AMOUNT\" => MAIN.CASHDISCOUNT1INCC, \"REFERENCE_DATE\" => TO_DATE (MAIN.CLEARINGDATE), \"SCHEMA\" => 'HDLFS', \"CONVERSION_TYPE\" => :P_EXCHANGERATETYPE, \"STEPS\" => 'shift,convert,round', \"PRECISIONS_TABLE\" => 'SAP.CURRENCY.VIEW.TCURX', \"CONFIGURATION_TABLE\" => 'SAP.CURRENCY.VIEW.TCURV', \"PREFACTORS_TABLE\" => 'SAP.CURRENCY.VIEW.TCURF', \"RATES_TABLE\" => 'SAP.CURRENCY.VIEW.TCURR') as DECIMAL(23,2)) as CASHDISCOUNT1INDC,\n\t\n\t/*@Semantics.amount.currencyCode: 'DisplayCurrency'*/\n\tcast (CONVERT_CURRENCY (\"CLIENT\" => '000', \"SOURCE_UNIT\" => MAIN.COMPANYCODECURRENCY, \"TARGET_UNIT\" => :P_DISPLAYCURRENCY, \"AMOUNT\" => MAIN.CASHDISCOUNT2INCC, \"REFERENCE_DATE\" => TO_DATE (MAIN.CLEARINGDATE), \"SCHEMA\" => 'HDLFS', \"CONVERSION_TYPE\" => :P_EXCHANGERATETYPE, \"STEPS\" => 'shift,convert,round', \"PRECISIONS_TABLE\" => 'SAP.CURRENCY.VIEW.TCURX', \"CONFIGURATION_TABLE\" => 'SAP.CURRENCY.VIEW.TCURV', \"PREFACTORS_TABLE\" => 'SAP.CURRENCY.VIEW.TCURF', \"RATES_TABLE\" => 'SAP.CURRENCY.VIEW.TCURR') as DECIMAL(23,2)) as CASHDISCOUNT2INDC,\n\tcast (:P_DISPLAYCURRENCY as NVARCHAR(5)) as DISPLAYCURRENCY\nfrom ZSNAP_F01S_052(:P_SIGNAGE, :P_KEYDATE) as MAIN\nwhere MAIN.CLEARINGDATE <= TO_VARCHAR (:P_KEYDATE, 'YYYYMMDD')\n\tand MAIN.CLEARINGDATE > TO_VARCHAR (:P_CLEAREDDATE, 'YYYYMMDD')\n\tand MAIN.CLEARINGDATE <> '00000000';",
+      "@Analytics.dbViewType": "TABLE_FUNCTION",
+      "@EndUserText.label": "SNAP F01: Cleared Items Base"
+    },
+    "ZSNAP_F01S_F72060": {
+      "kind": "entity",
+      "elements": {
+        "ACCOUNTINGDOCUMENT": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 10
+        },
+        "COMPANYCODE": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "FISCALYEAR": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "LEDGER": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 2
+        },
+        "LEDGERGLLINEITEM": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 6
+        },
+        "SOURCELEDGER": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 2
+        },
+        "ACCOUNTINGDOCUMENTTYPE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 2
+        },
+        "ACCOUNTINGDOCUMENTCATEGORY": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "ACCOUNTINGDOCUMENTITEM": {
+          "key": false,
+          "type": "cds.String",
+          "length": 3
+        },
+        "CLEARINGJOURNALENTRY": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "CLEARINGJOURNALENTRYFISCALYEAR": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "CLEARINGDATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "SPECIALGLCODE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "BUSINESSAREA": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "CHARTOFACCOUNTS": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "CONTROLLINGAREA": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "COSTCENTER": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "DEBITCREDITCODE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "FINANCIALACCOUNTTYPE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "FUNCTIONALAREA": {
+          "key": false,
+          "type": "cds.String",
+          "length": 16
+        },
+        "GLACCOUNT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "PROFITCENTER": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "SPECIALPERIOD": {
+          "key": false,
+          "type": "cds.String",
+          "length": 3
+        },
+        "FISCALYEARPERIOD": {
+          "key": false,
+          "type": "cds.String",
+          "length": 7
+        },
+        "FISCALYEARVARIANT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 2
+        },
+        "FISCALPERIODENDDATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "SUPPLIER": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "ENDINGBALANCEAMTINTRANSCRCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "TRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "TRANSACTIONCURRENCY": {
+          "key": false,
+          "@Semantics.currencyCode": true,
+          "type": "cds.String",
+          "length": 5
+        },
+        "ENDINGBALANCEAMTINCOCODECRCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "COMPANYCODECURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "COMPANYCODECURRENCY": {
+          "key": false,
+          "@Semantics.currencyCode": true,
+          "type": "cds.String",
+          "length": 5
+        },
+        "ENDINGBALANCEAMTINGLOBALCRCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "GLOBALCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "GLOBALCURRENCY": {
+          "key": false,
+          "@Semantics.currencyCode": true,
+          "type": "cds.String",
+          "length": 5
+        }
+      },
+      "@DataWarehouse.businessDefinition.description": "SNAP F72: Duplicate Activity for Balances",
+      "@DataWarehouse.businessDefinition.purpose": "",
+      "@DataWarehouse.businessDefinition.contact": "Egan Bosch",
+      "@DataWarehouse.businessDefinition.responsibleTeam": "Artisan Edge, Inc.",
+      "_meta": {
+        "dependencies": {
+          "folderAssignment": "Folder_YBEQBWWQ"
+        }
+      },
+      "params": {
+        "P_SFROMFISCALYEAR": {
+          "@EndUserText.label": "P_SFromFiscalYear",
+          "type": "cds.String",
+          "length": 4
+        },
+        "P_STOFISCALYEARPERIOD": {
+          "@EndUserText.label": "P_SToFiscalYearPeriod",
+          "type": "cds.String",
+          "length": 7
+        }
+      },
+      "@ObjectModel.supportedCapabilities": [
+        {
+          "#": "DATA_STRUCTURE"
+        }
+      ],
+      "@ObjectModel.modelingPattern": {
+        "#": "DATA_STRUCTURE"
+      },
+      "@DataWarehouse.consumption.external": false,
+      "@DataWarehouse.businessDefinition.tags": [
+        {
+          "key": "F01",
+          "value": "F01"
+        }
+      ],
+      "@DataWarehouse.tableFunction.script": "return select\n\tMAIN.ACCOUNTINGDOCUMENT,\n\tMAIN.COMPANYCODE,\n\tMAIN.FISCALYEAR,\n\tMAIN.LEDGER,\n\tMAIN.LEDGERGLLINEITEM,\n\tMAIN.SOURCELEDGER,\n\tMAIN.ACCOUNTINGDOCUMENTTYPE,\n\tMAIN.ACCOUNTINGDOCUMENTCATEGORY,\n\tMAIN.ACCOUNTINGDOCUMENTITEM,\n\tMAIN.CLEARINGJOURNALENTRY,\n\tMAIN.CLEARINGJOURNALENTRYFISCALYEAR,\n\tMAIN.CLEARINGDATE,\n\tMAIN.SPECIALGLCODE,\n\tMAIN.BUSINESSAREA,\n\tMAIN.CHARTOFACCOUNTS,\n\tMAIN.CONTROLLINGAREA,\n\tMAIN.COSTCENTER,\n\tMAIN.DEBITCREDITCODE,\n\tMAIN.FINANCIALACCOUNTTYPE,\n\tMAIN.FUNCTIONALAREA,\n\tMAIN.GLACCOUNT,\n\tMAIN.PROFITCENTER,\n\tBALANCEPERIODS.FISCALPERIOD as SPECIALPERIOD,\n\tBALANCEPERIODS.FISCALYEARPERIOD,\n\tMAIN.FISCALYEARVARIANT,\n\tBALANCEPERIODS.FISCALPERIODENDDATE,\n\tMAIN.SUPPLIER,\n\t\n\t/*@Semantics.amount.currencyCode: 'TransactionCurrency'*/\n\tcast (MAIN.AMOUNTINTRANSACTIONCURRENCY as DECIMAL(23,2)) as ENDINGBALANCEAMTINTRANSCRCY,\n\tMAIN.TRANSACTIONCURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'CompanyCodeCurrency'*/\n\tcast (MAIN.AMOUNTINCOMPANYCODECURRENCY as DECIMAL(23,2)) as ENDINGBALANCEAMTINCOCODECRCY,\n\tMAIN.COMPANYCODECURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'GlobalCurrency'*/\n\tcast (MAIN.AMOUNTINGLOBALCURRENCY as DECIMAL(23,2)) as ENDINGBALANCEAMTINGLOBALCRCY,\n\tMAIN.GLOBALCURRENCY\nfrom ZSNAP_F01S_F72055(:P_SFROMFISCALYEAR, :P_STOFISCALYEARPERIOD) as MAIN\ninner join ZSNAP_F01S_F72056 (\n\t:P_SFROMFISCALYEAR,\n\t:P_STOFISCALYEARPERIOD\n) as BALANCEPERIODS on MAIN.FISCALYEARVARIANT = BALANCEPERIODS.FISCALYEARVARIANT and MAIN.FISCALYEAR = BALANCEPERIODS.FISCALYEAR and MAIN.FISCALPERIOD <= BALANCEPERIODS.FISCALPERIOD\nwhere MAIN.ISSTARTINGBALANCERELEVANT = 'X';",
+      "@Analytics.dbViewType": "TABLE_FUNCTION",
+      "@EndUserText.label": "SNAP F72: Duplicate Activity for Balances"
+    },
+    "ZSNAP_F01G_NETDUEINTERVAL0": {
+      "kind": "entity",
+      "elements": {
+        "NETDUEDATE": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 8
+        },
+        "NETDUEINTERVALTEXT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 40
+        }
+      },
+      "@DataWarehouse.businessDefinition.description": "SNAP: 0 Interval Net Due Buckets",
+      "@DataWarehouse.businessDefinition.purpose": "",
+      "@DataWarehouse.businessDefinition.contact": "Egan Bosch",
+      "@DataWarehouse.businessDefinition.responsibleTeam": "Artisan Edge, Inc.",
+      "_meta": {
+        "dependencies": {
+          "folderAssignment": "Folder_YBEQBWWQ"
+        }
+      },
+      "params": {
+        "P_KEYDATE": {
+          "@EndUserText.label": "Open Items As Of",
+          "type": "cds.Date"
+        },
+        "P_NETDUEINTERVAL1INDAYS": {
+          "@Consumption.defaultValue": "30",
+          "@EndUserText.label": "Net Due Interval 1 in Days",
+          "default": "30",
+          "type": "cds.Integer"
+        },
+        "P_NETDUEINTERVAL2INDAYS": {
+          "@Consumption.defaultValue": "60",
+          "@EndUserText.label": "Net Due Interval 2 in Days",
+          "default": "60",
+          "type": "cds.Integer"
+        },
+        "P_NETDUEINTERVAL3INDAYS": {
+          "@Consumption.defaultValue": "90",
+          "@EndUserText.label": "Net Due Interval 3 in Days",
+          "default": "90",
+          "type": "cds.Integer"
+        },
+        "P_NETDUEINTERVAL4INDAYS": {
+          "@Consumption.defaultValue": "180",
+          "@EndUserText.label": "Net Due Interval 4 in Days",
+          "default": "180",
+          "type": "cds.Integer"
+        }
+      },
+      "@ObjectModel.supportedCapabilities": [
+        {
+          "#": "DATA_STRUCTURE"
+        }
+      ],
+      "@ObjectModel.modelingPattern": {
+        "#": "DATA_STRUCTURE"
+      },
+      "@DataWarehouse.consumption.external": false,
+      "@DataWarehouse.businessDefinition.tags": [
+        {
+          "key": "F01",
+          "value": "F01"
+        }
+      ],
+      "@DataWarehouse.tableFunction.script": "return select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\tcast ('D. Overdue' as NVARCHAR(40)) as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 0 and MAIN.\"CalendarDate\" < INTERVALS.KEYDATE\nunion all select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\tcast ('C. Due on Key Date' as NVARCHAR(40)) as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 0 and MAIN.\"CalendarDate\" = INTERVALS.KEYDATE\nunion all select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\tcast ('B. Not Yet Due' as NVARCHAR(40)) as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 0 and MAIN.\"CalendarDate\" > INTERVALS.KEYDATE;",
+      "@Analytics.dbViewType": "TABLE_FUNCTION",
+      "@EndUserText.label": "SNAP: 0 Interval Net Due Buckets"
+    },
+    "ZSNAP_F01G_NETDUEINTERVAL1": {
+      "kind": "entity",
+      "elements": {
+        "NETDUEDATE": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 8
+        },
+        "NETDUEINTERVALTEXT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 40
+        }
+      },
+      "@DataWarehouse.businessDefinition.description": "SNAP: 1 Interval Net Due Buckets",
+      "@DataWarehouse.businessDefinition.purpose": "",
+      "@DataWarehouse.businessDefinition.contact": "Egan Bosch",
+      "@DataWarehouse.businessDefinition.responsibleTeam": "Artisan Edge, Inc.",
+      "_meta": {
+        "dependencies": {
+          "folderAssignment": "Folder_YBEQBWWQ"
+        }
+      },
+      "params": {
+        "P_KEYDATE": {
+          "@EndUserText.label": "Open Items As Of",
+          "type": "cds.Date"
+        },
+        "P_NETDUEINTERVAL1INDAYS": {
+          "@Consumption.defaultValue": "30",
+          "@EndUserText.label": "Net Due Interval 1 in Days",
+          "default": "30",
+          "type": "cds.Integer"
+        },
+        "P_NETDUEINTERVAL2INDAYS": {
+          "@Consumption.defaultValue": "60",
+          "@EndUserText.label": "Net Due Interval 2 in Days",
+          "default": "60",
+          "type": "cds.Integer"
+        },
+        "P_NETDUEINTERVAL3INDAYS": {
+          "@Consumption.defaultValue": "90",
+          "@EndUserText.label": "Net Due Interval 3 in Days",
+          "default": "90",
+          "type": "cds.Integer"
+        },
+        "P_NETDUEINTERVAL4INDAYS": {
+          "@Consumption.defaultValue": "180",
+          "@EndUserText.label": "Net Due Interval 4 in Days",
+          "default": "180",
+          "type": "cds.Integer"
+        }
+      },
+      "@ObjectModel.supportedCapabilities": [
+        {
+          "#": "DATA_STRUCTURE"
+        }
+      ],
+      "@ObjectModel.modelingPattern": {
+        "#": "DATA_STRUCTURE"
+      },
+      "@DataWarehouse.consumption.external": false,
+      "@DataWarehouse.businessDefinition.tags": [
+        {
+          "key": "F01",
+          "value": "F01"
+        }
+      ],
+      "@DataWarehouse.tableFunction.script": "return select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\tcast ('F. More than' || ' ' || cast (:P_NETDUEINTERVAL1INDAYS as NVARCHAR(20)) || ' ' || 'Overdue' as NVARCHAR(40)) as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 1 and MAIN.\"CalendarDate\" < INTERVALS.INTERVAL1MINUSDATE\nunion all select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\t'E. Less than' || ' ' || cast (:P_NETDUEINTERVAL1INDAYS as NVARCHAR(20)) || ' ' || 'Overdue' as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 1 and MAIN.\"CalendarDate\" >= INTERVALS.INTERVAL1MINUSDATE and MAIN.\"CalendarDate\" < INTERVALS.KEYDATE\nunion all select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\tcast ('D. Due on Key Date' as NVARCHAR(40)) as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 1 and MAIN.\"CalendarDate\" = INTERVALS.KEYDATE\nunion all select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\t'C. Due within' || ' ' || cast (:P_NETDUEINTERVAL1INDAYS as NVARCHAR(20)) as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 1 and MAIN.\"CalendarDate\" > INTERVALS.KEYDATE and MAIN.\"CalendarDate\" <= INTERVALS.INTERVAL1PLUSDATE\nunion all select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\t'B. Due in over' || ' ' || cast (:P_NETDUEINTERVAL1INDAYS as NVARCHAR(20)) as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 1 and MAIN.\"CalendarDate\" > INTERVALS.INTERVAL1PLUSDATE;",
+      "@Analytics.dbViewType": "TABLE_FUNCTION",
+      "@EndUserText.label": "SNAP: 1 Interval Net Due Buckets"
+    },
+    "ZSNAP_F01G_NETDUEINTERVAL2": {
+      "kind": "entity",
+      "elements": {
+        "NETDUEDATE": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 8
+        },
+        "NETDUEINTERVALTEXT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 40
+        }
+      },
+      "@DataWarehouse.businessDefinition.description": "SNAP: 2 Interval Net Due Buckets",
+      "@DataWarehouse.businessDefinition.purpose": "",
+      "@DataWarehouse.businessDefinition.contact": "Egan Bosch",
+      "@DataWarehouse.businessDefinition.responsibleTeam": "Artisan Edge, Inc.",
+      "_meta": {
+        "dependencies": {
+          "folderAssignment": "Folder_YBEQBWWQ"
+        }
+      },
+      "params": {
+        "P_KEYDATE": {
+          "@EndUserText.label": "Open Items As Of",
+          "type": "cds.Date"
+        },
+        "P_NETDUEINTERVAL1INDAYS": {
+          "@Consumption.defaultValue": "30",
+          "@EndUserText.label": "Net Due Interval 1 in Days",
+          "default": "30",
+          "type": "cds.Integer"
+        },
+        "P_NETDUEINTERVAL2INDAYS": {
+          "@Consumption.defaultValue": "60",
+          "@EndUserText.label": "Net Due Interval 2 in Days",
+          "default": "60",
+          "type": "cds.Integer"
+        },
+        "P_NETDUEINTERVAL3INDAYS": {
+          "@Consumption.defaultValue": "90",
+          "@EndUserText.label": "Net Due Interval 3 in Days",
+          "default": "90",
+          "type": "cds.Integer"
+        },
+        "P_NETDUEINTERVAL4INDAYS": {
+          "@Consumption.defaultValue": "180",
+          "@EndUserText.label": "Net Due Interval 4 in Days",
+          "default": "180",
+          "type": "cds.Integer"
+        }
+      },
+      "@ObjectModel.supportedCapabilities": [
+        {
+          "#": "DATA_STRUCTURE"
+        }
+      ],
+      "@ObjectModel.modelingPattern": {
+        "#": "DATA_STRUCTURE"
+      },
+      "@DataWarehouse.consumption.external": false,
+      "@DataWarehouse.businessDefinition.tags": [
+        {
+          "key": "F01",
+          "value": "F01"
+        }
+      ],
+      "@DataWarehouse.tableFunction.script": "return select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\tcast ('H. More than' || ' ' || cast (:P_NETDUEINTERVAL2INDAYS as NVARCHAR(20)) || ' ' || 'Overdue' as NVARCHAR(40)) as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 2 and MAIN.\"CalendarDate\" < INTERVALS.INTERVAL2MINUSDATE\nunion all select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\t'G. Overdue by' || ' ' || cast (:P_NETDUEINTERVAL1INDAYS + 1 as NVARCHAR(20)) || ' ' || '-' || ' ' || cast (:P_NETDUEINTERVAL2INDAYS as NVARCHAR(20)) as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 2 and MAIN.\"CalendarDate\" >= INTERVALS.INTERVAL2MINUSDATE and MAIN.\"CalendarDate\" < INTERVALS.INTERVAL1MINUSDATE\nunion all select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\t'F. Less than' || ' ' || cast (:P_NETDUEINTERVAL1INDAYS as NVARCHAR(20)) || ' ' || 'Overdue' as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 2 and MAIN.\"CalendarDate\" >= INTERVALS.INTERVAL1MINUSDATE and MAIN.\"CalendarDate\" < INTERVALS.KEYDATE\nunion all select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\tcast ('E. Due on Key Date' as NVARCHAR(40)) as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 2 and MAIN.\"CalendarDate\" = INTERVALS.KEYDATE\nunion all select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\t'D. Due within' || ' ' || cast (:P_NETDUEINTERVAL1INDAYS as NVARCHAR(20)) as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 2 and MAIN.\"CalendarDate\" > INTERVALS.KEYDATE and MAIN.\"CalendarDate\" <= INTERVALS.INTERVAL1PLUSDATE\nunion all select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\t'C. Due between' || ' ' || cast (:P_NETDUEINTERVAL1INDAYS + 1 as NVARCHAR(20)) || ' ' || '-' || ' ' || cast (:P_NETDUEINTERVAL2INDAYS as NVARCHAR(20)) as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 2 and MAIN.\"CalendarDate\" > INTERVALS.INTERVAL1PLUSDATE and MAIN.\"CalendarDate\" <= INTERVALS.INTERVAL2PLUSDATE\nunion all select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\t'B. Due in over' || ' ' || cast (:P_NETDUEINTERVAL2INDAYS as NVARCHAR(20)) as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 2 and MAIN.\"CalendarDate\" > INTERVALS.INTERVAL2PLUSDATE;",
+      "@Analytics.dbViewType": "TABLE_FUNCTION",
+      "@EndUserText.label": "SNAP: 2 Interval Net Due Buckets"
+    },
+    "ZSNAP_F01G_NETDUEINTERVAL3": {
+      "kind": "entity",
+      "elements": {
+        "NETDUEDATE": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 8
+        },
+        "NETDUEINTERVALTEXT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 40
+        }
+      },
+      "@DataWarehouse.businessDefinition.description": "SNAP: 3 Interval Net Due Buckets",
+      "@DataWarehouse.businessDefinition.purpose": "",
+      "@DataWarehouse.businessDefinition.contact": "Egan Bosch",
+      "@DataWarehouse.businessDefinition.responsibleTeam": "Artisan Edge, Inc.",
+      "_meta": {
+        "dependencies": {
+          "folderAssignment": "Folder_YBEQBWWQ"
+        }
+      },
+      "params": {
+        "P_KEYDATE": {
+          "@EndUserText.label": "Open Items As Of",
+          "type": "cds.Date"
+        },
+        "P_NETDUEINTERVAL1INDAYS": {
+          "@Consumption.defaultValue": "30",
+          "@EndUserText.label": "Net Due Interval 1 in Days",
+          "default": "30",
+          "type": "cds.Integer"
+        },
+        "P_NETDUEINTERVAL2INDAYS": {
+          "@Consumption.defaultValue": "60",
+          "@EndUserText.label": "Net Due Interval 2 in Days",
+          "default": "60",
+          "type": "cds.Integer"
+        },
+        "P_NETDUEINTERVAL3INDAYS": {
+          "@Consumption.defaultValue": "90",
+          "@EndUserText.label": "Net Due Interval 3 in Days",
+          "default": "90",
+          "type": "cds.Integer"
+        },
+        "P_NETDUEINTERVAL4INDAYS": {
+          "@Consumption.defaultValue": "180",
+          "@EndUserText.label": "Net Due Interval 4 in Days",
+          "default": "180",
+          "type": "cds.Integer"
+        }
+      },
+      "@ObjectModel.supportedCapabilities": [
+        {
+          "#": "DATA_STRUCTURE"
+        }
+      ],
+      "@ObjectModel.modelingPattern": {
+        "#": "DATA_STRUCTURE"
+      },
+      "@DataWarehouse.consumption.external": false,
+      "@DataWarehouse.businessDefinition.tags": [
+        {
+          "key": "F01",
+          "value": "F01"
+        }
+      ],
+      "@DataWarehouse.tableFunction.script": "return select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\tcast ('J. More than' || ' ' || cast (:P_NETDUEINTERVAL3INDAYS as NVARCHAR(20)) || ' ' || 'Overdue' as NVARCHAR(40)) as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 3 and MAIN.\"CalendarDate\" < INTERVALS.INTERVAL3MINUSDATE\nunion all select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\t'I. Overdue by' || ' ' || cast (:P_NETDUEINTERVAL2INDAYS + 1 as NVARCHAR(20)) || ' ' || '-' || ' ' || cast (:P_NETDUEINTERVAL3INDAYS as NVARCHAR(20)) as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 3 and MAIN.\"CalendarDate\" >= INTERVALS.INTERVAL3MINUSDATE and MAIN.\"CalendarDate\" < INTERVALS.INTERVAL2MINUSDATE\nunion all select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\t'H. Overdue by' || ' ' || cast (:P_NETDUEINTERVAL1INDAYS + 1 as NVARCHAR(20)) || ' ' || '-' || ' ' || cast (:P_NETDUEINTERVAL2INDAYS as NVARCHAR(20)) as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 3 and MAIN.\"CalendarDate\" >= INTERVALS.INTERVAL2MINUSDATE and MAIN.\"CalendarDate\" < INTERVALS.INTERVAL1MINUSDATE\nunion all select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\t'G. Less than' || ' ' || cast (:P_NETDUEINTERVAL1INDAYS as NVARCHAR(20)) || ' ' || 'Overdue' as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 3 and MAIN.\"CalendarDate\" >= INTERVALS.INTERVAL1MINUSDATE and MAIN.\"CalendarDate\" < INTERVALS.KEYDATE\nunion all select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\tcast ('F. Due on Key Date' as NVARCHAR(40)) as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 3 and MAIN.\"CalendarDate\" = INTERVALS.KEYDATE\nunion all select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\t'E. Due within' || ' ' || cast (:P_NETDUEINTERVAL1INDAYS as NVARCHAR(20)) as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 3 and MAIN.\"CalendarDate\" > INTERVALS.KEYDATE and MAIN.\"CalendarDate\" <= INTERVALS.INTERVAL1PLUSDATE\nunion all select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\t'D. Due between' || ' ' || cast (:P_NETDUEINTERVAL1INDAYS + 1 as NVARCHAR(20)) || ' ' || '-' || ' ' || cast (:P_NETDUEINTERVAL2INDAYS as NVARCHAR(20)) as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 3 and MAIN.\"CalendarDate\" > INTERVALS.INTERVAL1PLUSDATE and MAIN.\"CalendarDate\" <= INTERVALS.INTERVAL2PLUSDATE\nunion all select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\t'C. Due between' || ' ' || cast (:P_NETDUEINTERVAL2INDAYS + 1 as NVARCHAR(20)) || ' ' || '-' || ' ' || cast (:P_NETDUEINTERVAL3INDAYS as NVARCHAR(20)) as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 3 and MAIN.\"CalendarDate\" > INTERVALS.INTERVAL2PLUSDATE and MAIN.\"CalendarDate\" <= INTERVALS.INTERVAL3PLUSDATE\nunion all select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\t'B. Due in over' || ' ' || cast (:P_NETDUEINTERVAL3INDAYS as NVARCHAR(20)) as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 3 and MAIN.\"CalendarDate\" > INTERVALS.INTERVAL3PLUSDATE;",
+      "@Analytics.dbViewType": "TABLE_FUNCTION",
+      "@EndUserText.label": "SNAP: 3 Interval Net Due Buckets"
+    },
+    "ZSNAP_F01G_NETDUEINTERVAL4": {
+      "kind": "entity",
+      "elements": {
+        "NETDUEDATE": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 8
+        },
+        "NETDUEINTERVALTEXT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 40
+        }
+      },
+      "@DataWarehouse.businessDefinition.description": "SNAP: 4 Interval Net Due Buckets",
+      "@DataWarehouse.businessDefinition.purpose": "",
+      "@DataWarehouse.businessDefinition.contact": "Egan Bosch",
+      "@DataWarehouse.businessDefinition.responsibleTeam": "Artisan Edge, Inc.",
+      "_meta": {
+        "dependencies": {
+          "folderAssignment": "Folder_YBEQBWWQ"
+        }
+      },
+      "params": {
+        "P_KEYDATE": {
+          "@EndUserText.label": "Open Items As Of",
+          "type": "cds.Date"
+        },
+        "P_NETDUEINTERVAL1INDAYS": {
+          "@Consumption.defaultValue": "30",
+          "@EndUserText.label": "Net Due Interval 1 in Days",
+          "default": "30",
+          "type": "cds.Integer"
+        },
+        "P_NETDUEINTERVAL2INDAYS": {
+          "@Consumption.defaultValue": "60",
+          "@EndUserText.label": "Net Due Interval 2 in Days",
+          "default": "60",
+          "type": "cds.Integer"
+        },
+        "P_NETDUEINTERVAL3INDAYS": {
+          "@Consumption.defaultValue": "90",
+          "@EndUserText.label": "Net Due Interval 3 in Days",
+          "default": "90",
+          "type": "cds.Integer"
+        },
+        "P_NETDUEINTERVAL4INDAYS": {
+          "@Consumption.defaultValue": "180",
+          "@EndUserText.label": "Net Due Interval 4 in Days",
+          "default": "180",
+          "type": "cds.Integer"
+        }
+      },
+      "@ObjectModel.supportedCapabilities": [
+        {
+          "#": "DATA_STRUCTURE"
+        }
+      ],
+      "@ObjectModel.modelingPattern": {
+        "#": "DATA_STRUCTURE"
+      },
+      "@DataWarehouse.consumption.external": false,
+      "@DataWarehouse.businessDefinition.tags": [
+        {
+          "key": "F01",
+          "value": "F01"
+        }
+      ],
+      "@DataWarehouse.tableFunction.script": "return select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\tcast ('L. More than' || ' ' || cast (:P_NETDUEINTERVAL4INDAYS as NVARCHAR(20)) || ' ' || 'Overdue' as NVARCHAR(40)) as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 4 and MAIN.\"CalendarDate\" < INTERVALS.INTERVAL4MINUSDATE\nunion all select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\t'K. Overdue by' || ' ' || cast (:P_NETDUEINTERVAL3INDAYS + 1 as NVARCHAR(20)) || ' ' || '-' || ' ' || cast (:P_NETDUEINTERVAL4INDAYS as NVARCHAR(20)) as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 4 and MAIN.\"CalendarDate\" >= INTERVALS.INTERVAL4MINUSDATE and MAIN.\"CalendarDate\" < INTERVALS.INTERVAL3MINUSDATE\nunion all select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\t'J. Overdue by' || ' ' || cast (:P_NETDUEINTERVAL2INDAYS + 1 as NVARCHAR(20)) || ' ' || '-' || ' ' || cast (:P_NETDUEINTERVAL3INDAYS as NVARCHAR(20)) as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 4 and MAIN.\"CalendarDate\" >= INTERVALS.INTERVAL3MINUSDATE and MAIN.\"CalendarDate\" < INTERVALS.INTERVAL2MINUSDATE\nunion all select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\t'I. Overdue by' || ' ' || cast (:P_NETDUEINTERVAL1INDAYS + 1 as NVARCHAR(20)) || ' ' || '-' || ' ' || cast (:P_NETDUEINTERVAL2INDAYS as NVARCHAR(20)) as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 4 and MAIN.\"CalendarDate\" >= INTERVALS.INTERVAL2MINUSDATE and MAIN.\"CalendarDate\" < INTERVALS.INTERVAL1MINUSDATE\nunion all select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\t'H. Less than' || ' ' || cast (:P_NETDUEINTERVAL1INDAYS as NVARCHAR(20)) || ' ' || 'Overdue' as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 4 and MAIN.\"CalendarDate\" >= INTERVALS.INTERVAL1MINUSDATE and MAIN.\"CalendarDate\" < INTERVALS.KEYDATE\nunion all select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\tcast ('G. Due on Key Date' as NVARCHAR(40)) as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 4 and MAIN.\"CalendarDate\" = INTERVALS.KEYDATE\nunion all select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\t'F. Due within' || ' ' || cast (:P_NETDUEINTERVAL1INDAYS as NVARCHAR(20)) as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 4 and MAIN.\"CalendarDate\" > INTERVALS.KEYDATE and MAIN.\"CalendarDate\" <= INTERVALS.INTERVAL1PLUSDATE\nunion all select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\t'E. Due between' || ' ' || cast (:P_NETDUEINTERVAL1INDAYS + 1 as NVARCHAR(20)) || ' ' || '-' || ' ' || cast (:P_NETDUEINTERVAL2INDAYS as NVARCHAR(20)) as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 4 and MAIN.\"CalendarDate\" > INTERVALS.INTERVAL1PLUSDATE and MAIN.\"CalendarDate\" <= INTERVALS.INTERVAL2PLUSDATE\nunion all select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\t'D. Due between' || ' ' || cast (:P_NETDUEINTERVAL2INDAYS + 1 as NVARCHAR(20)) || ' ' || '-' || ' ' || cast (:P_NETDUEINTERVAL3INDAYS as NVARCHAR(20)) as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 4 and MAIN.\"CalendarDate\" > INTERVALS.INTERVAL2PLUSDATE and MAIN.\"CalendarDate\" <= INTERVALS.INTERVAL3PLUSDATE\nunion all select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\t'C. Due between' || ' ' || cast (:P_NETDUEINTERVAL3INDAYS + 1 as NVARCHAR(20)) || ' ' || '-' || ' ' || cast (:P_NETDUEINTERVAL4INDAYS as NVARCHAR(20)) as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 4 and MAIN.\"CalendarDate\" > INTERVALS.INTERVAL3PLUSDATE and MAIN.\"CalendarDate\" <= INTERVALS.INTERVAL4PLUSDATE\nunion all select\n\tMAIN.\"CalendarDate\" as NETDUEDATE,\n\t'B. Due in over' || ' ' || cast (:P_NETDUEINTERVAL4INDAYS as NVARCHAR(20)) as NETDUEINTERVALTEXT\nfrom I_CALENDARDATE as MAIN\ninner join ZSNAP_F01G_INTERVALSIZING (\n\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t:P_NETDUEINTERVAL1INDAYS,\n\t:P_NETDUEINTERVAL2INDAYS,\n\t:P_NETDUEINTERVAL3INDAYS,\n\t:P_NETDUEINTERVAL4INDAYS\n) as INTERVALS on INTERVALS.NUMBEROFINTERVALS = 4 and MAIN.\"CalendarDate\" > INTERVALS.INTERVAL4PLUSDATE;",
+      "@Analytics.dbViewType": "TABLE_FUNCTION",
+      "@EndUserText.label": "SNAP: 4 Interval Net Due Buckets"
+    }
+  },
+  "version": {
+    "csn": "1.0"
+  },
+  "meta": {
+    "creator": "Artisan Edge Catalyst v7.3.1"
+  },
+  "$version": "1.0"
+}

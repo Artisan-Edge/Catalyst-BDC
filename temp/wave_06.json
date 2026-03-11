@@ -1,0 +1,1044 @@
+{
+  "definitions": {
+    "ZSNAP_F01S_107": {
+      "kind": "entity",
+      "elements": {
+        "COMPANYCODE": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "FISCALYEAR": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "ACCOUNTINGDOCUMENT": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 10
+        },
+        "LEDGERGLLINEITEM": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 6
+        },
+        "ACCOUNTINGDOCUMENTITEM": {
+          "key": false,
+          "type": "cds.String",
+          "length": 3
+        },
+        "DOCUMENTITEMTEXT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 50
+        },
+        "ACCOUNTINGDOCUMENTCATEGORY": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "ACCOUNTINGDOCUMENTTYPE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 2
+        },
+        "INVOICEREFERENCE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "INVOICEREFERENCETYPE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "INVOICEITEMREFERENCE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 3
+        },
+        "INVOICEREFERENCEFISCALYEAR": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "DEBITCREDITCODE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "CLEARINGJOURNALENTRY": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "CLEARINGJOURNALENTRYFISCALYEAR": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "CHARTOFACCOUNTS": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "CONTROLLINGAREA": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "FISCALYEARVARIANT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 2
+        },
+        "FINANCIALACCOUNTTYPE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "CLEARINGDATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "POSTINGDATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "DOCUMENTDATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "DUECALCULATIONBASEDATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "CASHDISCOUNT1DAYS": {
+          "key": false,
+          "type": "cds.Decimal",
+          "precision": 3,
+          "scale": 0
+        },
+        "CASHDISCOUNT1PERCENT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 21
+        },
+        "CASHDISCOUNT1DATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "CASHDISCOUNT2DAYS": {
+          "key": false,
+          "type": "cds.Decimal",
+          "precision": 3,
+          "scale": 0
+        },
+        "CASHDISCOUNT2PERCENT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 21
+        },
+        "CASHDISCOUNT2DATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "DISCOUNTISAVAILABLE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "CASHDISCOUNTMISSED": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "PAYMENTTERMS": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PAYMENTBLOCKINGREASON": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "PAYMENTMETHOD": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "ISUSEDINPAYMENTTRANSACTION": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "TREASURYCONTRACTTYPE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "POSTINGKEY": {
+          "key": false,
+          "type": "cds.String",
+          "length": 2
+        },
+        "CLEARINGDATEVSDUEDATEOFFSET": {
+          "key": false,
+          "type": "cds.Decimal",
+          "precision": 10,
+          "scale": 0
+        },
+        "PAYMENTTIMINGCATEGORY": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "NETDUEARREARSDAYSINT": {
+          "key": false,
+          "type": "cds.Integer"
+        },
+        "NETDUEARREARSDAYS": {
+          "key": false,
+          "type": "cds.String",
+          "length": 15
+        },
+        "DAYSOVERDUEINT": {
+          "key": false,
+          "type": "cds.Integer"
+        },
+        "DAYSOVERDUE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 15
+        },
+        "NETDUEDATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "SUPPLIER": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "PARTNERCOMPANY": {
+          "key": false,
+          "type": "cds.String",
+          "length": 6
+        },
+        "GLACCOUNT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "SPECIALGLCODE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "COSTCENTER": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "PROFITCENTER": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "FUNCTIONALAREA": {
+          "key": false,
+          "type": "cds.String",
+          "length": 16
+        },
+        "BUSINESSAREA": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "SEGMENT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "PURCHASINGDOCUMENT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "ASSIGNMENTREFERENCE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 18
+        },
+        "NETDUEINTERVALTEXT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 40
+        },
+        "ISCLEARED": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "ISOVERDUE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "AMOUNTINTRANSACTIONCURRENCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "TRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT1INTC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "TRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT2INTC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "TRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "AVAILABLEDISCOUNTINTC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "TRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "MISSEDDISCOUNTINTC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "TRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CLAIMEDDISCOUNTINTC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "TRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "OPENAMTINTRANSACTIONCURRENCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "TRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "PYCLEAREDINTRANSACTIONCURRENCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "TRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "TRANSACTIONCURRENCY": {
+          "key": false,
+          "@Semantics.currencyCode": true,
+          "type": "cds.String",
+          "length": 5
+        },
+        "AMOUNTINBALTC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "BALANCETRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT1INBALTC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "BALANCETRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT2INBALTC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "BALANCETRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "AVAILABLEDISCOUNTINBALTC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "BALANCETRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "MISSEDDISCOUNTINBALTC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "BALANCETRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CLAIMEDDISCOUNTINBALTC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "BALANCETRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "OPENAMTINBALTC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "BALANCETRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "PYCLEAREDINBALTC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "BALANCETRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "BALANCETRANSACTIONCURRENCY": {
+          "key": false,
+          "@Semantics.currencyCode": true,
+          "type": "cds.String",
+          "length": 5
+        },
+        "AMOUNTINCOMPANYCODECURRENCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "COMPANYCODECURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT1INCC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "COMPANYCODECURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT2INCC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "COMPANYCODECURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "AVAILABLEDISCOUNTINCC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "COMPANYCODECURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "MISSEDDISCOUNTINCC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "COMPANYCODECURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CLAIMEDDISCOUNTINCC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "COMPANYCODECURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "OPENAMTINCOMPANYCODECURRENCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "COMPANYCODECURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "PYCLEAREDINCOMPANYCODECURRENCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "COMPANYCODECURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "COMPANYCODECURRENCY": {
+          "key": false,
+          "@Semantics.currencyCode": true,
+          "type": "cds.String",
+          "length": 5
+        },
+        "AMOUNTINGLOBALCURRENCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "GLOBALCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT1INGC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "GLOBALCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT2INGC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "GLOBALCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "AVAILABLEDISCOUNTINGC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "GLOBALCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "MISSEDDISCOUNTINGC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "GLOBALCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CLAIMEDDISCOUNTINGC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "GLOBALCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "OPENAMTINGLOBALCURRENCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "GLOBALCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "PYCLEAREDINGLOBALCURRENCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "GLOBALCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "GLOBALCURRENCY": {
+          "key": false,
+          "@Semantics.currencyCode": true,
+          "type": "cds.String",
+          "length": 5
+        },
+        "AMOUNTINDISPLAYCURRENCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "DISPLAYCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT1INDC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "DISPLAYCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT2INDC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "DISPLAYCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "AVAILABLEDISCOUNTINDC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "DISPLAYCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "MISSEDDISCOUNTINDC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "DISPLAYCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CLAIMEDDISCOUNTINDC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "DISPLAYCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "OPENAMTINDISPLAYCURRENCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "DISPLAYCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "PYCLEAREDINDISPLAYCURRENCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "DISPLAYCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "DISPLAYCURRENCY": {
+          "key": false,
+          "@Semantics.currencyCode": true,
+          "type": "cds.String",
+          "length": 5
+        }
+      },
+      "@DataWarehouse.businessDefinition.description": "Final open items processing layer. Filters for items open as of P_KeyDate and calculates human-readable aging bucket text labels (e.g., \"0-30 Days\") from net due interval parameters.",
+      "@DataWarehouse.businessDefinition.purpose": "Filters for open items as of key date and derives aging bucket text labels",
+      "@DataWarehouse.businessDefinition.contact": "Egan Bosch",
+      "@DataWarehouse.businessDefinition.responsibleTeam": "Artisan Edge, Inc.",
+      "_meta": {
+        "dependencies": {
+          "folderAssignment": "Folder_YBEQBWWQ"
+        }
+      },
+      "params": {
+        "P_SIGNAGE": {
+          "@Consumption.defaultValue": "R",
+          "@EndUserText.label": "Signage",
+          "@Consumption.valueHelpDefinition": [
+            {
+              "entity": {
+                "name": "ZSNAP_F01C_P_SIGNAGE",
+                "element": "P_SIGNAGE"
+              }
+            }
+          ],
+          "default": "R",
+          "type": "cds.String",
+          "length": 1
+        },
+        "P_KEYDATE": {
+          "@EndUserText.label": "Open Items As Of",
+          "type": "cds.Date"
+        },
+        "P_NETDUEINTERVAL1INDAYS": {
+          "@Consumption.defaultValue": "30",
+          "@EndUserText.label": "Net Due Interval 1 in Days",
+          "default": "30",
+          "type": "cds.Integer"
+        },
+        "P_NETDUEINTERVAL2INDAYS": {
+          "@Consumption.defaultValue": "60",
+          "@EndUserText.label": "Net Due Interval 2 in Days",
+          "default": "60",
+          "type": "cds.Integer"
+        },
+        "P_NETDUEINTERVAL3INDAYS": {
+          "@Consumption.defaultValue": "90",
+          "@EndUserText.label": "Net Due Interval 3 in Days",
+          "default": "90",
+          "type": "cds.Integer"
+        },
+        "P_NETDUEINTERVAL4INDAYS": {
+          "@Consumption.defaultValue": "180",
+          "@EndUserText.label": "Net Due Interval 4 in Days",
+          "default": "180",
+          "type": "cds.Integer"
+        },
+        "P_DISPLAYCURRENCY": {
+          "@Consumption.defaultValue": "USD",
+          "@EndUserText.label": "Display Currency",
+          "default": "USD",
+          "type": "cds.String",
+          "length": 5
+        },
+        "P_EXCHANGERATETYPE": {
+          "@Consumption.defaultValue": "M",
+          "@EndUserText.label": "Exchange Rate Type",
+          "default": "M",
+          "type": "cds.String",
+          "length": 4
+        }
+      },
+      "@ObjectModel.supportedCapabilities": [
+        {
+          "#": "DATA_STRUCTURE"
+        }
+      ],
+      "@ObjectModel.modelingPattern": {
+        "#": "DATA_STRUCTURE"
+      },
+      "@DataWarehouse.consumption.external": false,
+      "@DataWarehouse.businessDefinition.tags": [
+        {
+          "key": "F01",
+          "value": "F01"
+        }
+      ],
+      "@DataWarehouse.tableFunction.script": "return select\n\tmain.COMPANYCODE,\n\tmain.FISCALYEAR,\n\tmain.ACCOUNTINGDOCUMENT,\n\tmain.LEDGERGLLINEITEM,\n\tmain.ACCOUNTINGDOCUMENTITEM,\n\tmain.DOCUMENTITEMTEXT,\n\tmain.ACCOUNTINGDOCUMENTCATEGORY,\n\tmain.ACCOUNTINGDOCUMENTTYPE,\n\tmain.INVOICEREFERENCE,\n\tmain.INVOICEREFERENCETYPE,\n\tmain.INVOICEITEMREFERENCE,\n\tmain.INVOICEREFERENCEFISCALYEAR,\n\tmain.DEBITCREDITCODE,\n\tmain.CLEARINGJOURNALENTRY,\n\tmain.CLEARINGJOURNALENTRYFISCALYEAR,\n\tmain.CHARTOFACCOUNTS,\n\tmain.CONTROLLINGAREA,\n\tmain.FISCALYEARVARIANT,\n\tmain.FINANCIALACCOUNTTYPE,\n\tmain.CLEARINGDATE,\n\tmain.POSTINGDATE,\n\tmain.DOCUMENTDATE,\n\tmain.DUECALCULATIONBASEDATE,\n\tmain.CASHDISCOUNT1DAYS,\n\tmain.CASHDISCOUNT1PERCENT,\n\tmain.CASHDISCOUNT1DATE,\n\tmain.CASHDISCOUNT2DAYS,\n\tmain.CASHDISCOUNT2PERCENT,\n\tmain.CASHDISCOUNT2DATE,\n\tmain.DISCOUNTISAVAILABLE,\n\tmain.CASHDISCOUNTMISSED,\n\tmain.PAYMENTTERMS,\n\tmain.PAYMENTBLOCKINGREASON,\n\tmain.PAYMENTMETHOD,\n\tmain.ISUSEDINPAYMENTTRANSACTION,\n\tmain.TREASURYCONTRACTTYPE,\n\tmain.POSTINGKEY,\n\tmain.CLEARINGDATEVSDUEDATEOFFSET,\n\tmain.PAYMENTTIMINGCATEGORY,\n\tmain.NETDUEARREARSDAYSINT,\n\tmain.NETDUEARREARSDAYS,\n\tmain.DAYSOVERDUEINT,\n\tcast (cast (DAYSOVERDUEINT as NVARCHAR(15)) as NVARCHAR(15)) as DAYSOVERDUE,\n\tmain.NETDUEDATE,\n\tmain.SUPPLIER,\n\tmain.PARTNERCOMPANY,\n\tmain.GLACCOUNT,\n\tmain.SPECIALGLCODE,\n\tmain.COSTCENTER,\n\tmain.PROFITCENTER,\n\tmain.FUNCTIONALAREA,\n\tmain.BUSINESSAREA,\n\tmain.SEGMENT,\n\tmain.PURCHASINGDOCUMENT,\n\tmain.ASSIGNMENTREFERENCE,\n\tmain.NETDUEINTERVALTEXT,\n\tmain.ISCLEARED,\n\tmain.ISOVERDUE,\n\t\n\t/*@Semantics.amount.currencyCode: 'TransactionCurrency'*/\n\tmain.AMOUNTINTRANSACTIONCURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'TransactionCurrency'*/\n\tmain.CASHDISCOUNT1INTC,\n\t\n\t/*@Semantics.amount.currencyCode: 'TransactionCurrency'*/\n\tmain.CASHDISCOUNT2INTC,\n\t\n\t/*@Semantics.amount.currencyCode: 'TransactionCurrency'*/\n\tmain.AVAILABLEDISCOUNTINTC,\n\t\n\t/*@Semantics.amount.currencyCode: 'TransactionCurrency'*/\n\tmain.MISSEDDISCOUNTINTC,\n\t\n\t/*@Semantics.amount.currencyCode: 'TransactionCurrency'*/\n\tmain.CLAIMEDDISCOUNTINTC,\n\t\n\t/*@Semantics.amount.currencyCode: 'TransactionCurrency'*/\n\tmain.OPENAMTINTRANSACTIONCURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'TransactionCurrency'*/\n\tmain.PYCLEAREDINTRANSACTIONCURRENCY,\n\tmain.TRANSACTIONCURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'BalanceTransactionCurrency'*/\n\tmain.AMOUNTINBALTC,\n\t\n\t/*@Semantics.amount.currencyCode: 'BalanceTransactionCurrency'*/\n\tmain.CASHDISCOUNT1INBALTC,\n\t\n\t/*@Semantics.amount.currencyCode: 'BalanceTransactionCurrency'*/\n\tmain.CASHDISCOUNT2INBALTC,\n\t\n\t/*@Semantics.amount.currencyCode: 'BalanceTransactionCurrency'*/\n\tmain.AVAILABLEDISCOUNTINBALTC,\n\t\n\t/*@Semantics.amount.currencyCode: 'BalanceTransactionCurrency'*/\n\tmain.MISSEDDISCOUNTINBALTC,\n\t\n\t/*@Semantics.amount.currencyCode: 'BalanceTransactionCurrency'*/\n\tmain.CLAIMEDDISCOUNTINBALTC,\n\t\n\t/*@Semantics.amount.currencyCode: 'BalanceTransactionCurrency'*/\n\tmain.OPENAMTINBALTC,\n\t\n\t/*@Semantics.amount.currencyCode: 'BalanceTransactionCurrency'*/\n\tmain.PYCLEAREDINBALTC,\n\tmain.BALANCETRANSACTIONCURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'CompanyCodeCurrency'*/\n\tmain.AMOUNTINCOMPANYCODECURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'CompanyCodeCurrency'*/\n\tmain.CASHDISCOUNT1INCC,\n\t\n\t/*@Semantics.amount.currencyCode: 'CompanyCodeCurrency'*/\n\tmain.CASHDISCOUNT2INCC,\n\t\n\t/*@Semantics.amount.currencyCode: 'CompanyCodeCurrency'*/\n\tmain.AVAILABLEDISCOUNTINCC,\n\t\n\t/*@Semantics.amount.currencyCode: 'CompanyCodeCurrency'*/\n\tmain.MISSEDDISCOUNTINCC,\n\t\n\t/*@Semantics.amount.currencyCode: 'CompanyCodeCurrency'*/\n\tmain.CLAIMEDDISCOUNTINCC,\n\t\n\t/*@Semantics.amount.currencyCode: 'CompanyCodeCurrency'*/\n\tmain.OPENAMTINCOMPANYCODECURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'CompanyCodeCurrency'*/\n\tmain.PYCLEAREDINCOMPANYCODECURRENCY,\n\tmain.COMPANYCODECURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'GlobalCurrency'*/\n\tmain.AMOUNTINGLOBALCURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'GlobalCurrency'*/\n\tmain.CASHDISCOUNT1INGC,\n\t\n\t/*@Semantics.amount.currencyCode: 'GlobalCurrency'*/\n\tmain.CASHDISCOUNT2INGC,\n\t\n\t/*@Semantics.amount.currencyCode: 'GlobalCurrency'*/\n\tmain.AVAILABLEDISCOUNTINGC,\n\t\n\t/*@Semantics.amount.currencyCode: 'GlobalCurrency'*/\n\tmain.MISSEDDISCOUNTINGC,\n\t\n\t/*@Semantics.amount.currencyCode: 'GlobalCurrency'*/\n\tmain.CLAIMEDDISCOUNTINGC,\n\t\n\t/*@Semantics.amount.currencyCode: 'GlobalCurrency'*/\n\tmain.OPENAMTINGLOBALCURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'GlobalCurrency'*/\n\tmain.PYCLEAREDINGLOBALCURRENCY,\n\tmain.GLOBALCURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'DisplayCurrency'*/\n\tmain.AMOUNTINDISPLAYCURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'DisplayCurrency'*/\n\tmain.CASHDISCOUNT1INDC,\n\t\n\t/*@Semantics.amount.currencyCode: 'DisplayCurrency'*/\n\tmain.CASHDISCOUNT2INDC,\n\t\n\t/*@Semantics.amount.currencyCode: 'DisplayCurrency'*/\n\tmain.AVAILABLEDISCOUNTINDC,\n\t\n\t/*@Semantics.amount.currencyCode: 'DisplayCurrency'*/\n\tmain.MISSEDDISCOUNTINDC,\n\t\n\t/*@Semantics.amount.currencyCode: 'DisplayCurrency'*/\n\tmain.CLAIMEDDISCOUNTINDC,\n\t\n\t/*@Semantics.amount.currencyCode: 'DisplayCurrency'*/\n\tmain.OPENAMTINDISPLAYCURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'DisplayCurrency'*/\n\tmain.PYCLEAREDINDISPLAYCURRENCY,\n\tmain.DISPLAYCURRENCY\nfrom (\n\tselect\n\t\tMAIN.COMPANYCODE,\n\t\tMAIN.FISCALYEAR,\n\t\tMAIN.ACCOUNTINGDOCUMENT,\n\t\tMAIN.LEDGERGLLINEITEM,\n\t\tMAIN.ACCOUNTINGDOCUMENTITEM,\n\t\tMAIN.DOCUMENTITEMTEXT,\n\t\tMAIN.ACCOUNTINGDOCUMENTCATEGORY,\n\t\tMAIN.ACCOUNTINGDOCUMENTTYPE,\n\t\tMAIN.INVOICEREFERENCE,\n\t\tMAIN.INVOICEREFERENCETYPE,\n\t\tMAIN.INVOICEITEMREFERENCE,\n\t\tMAIN.INVOICEREFERENCEFISCALYEAR,\n\t\tMAIN.DEBITCREDITCODE,\n\t\tMAIN.CLEARINGJOURNALENTRY,\n\t\tMAIN.CLEARINGJOURNALENTRYFISCALYEAR,\n\t\tMAIN.CHARTOFACCOUNTS,\n\t\tMAIN.CONTROLLINGAREA,\n\t\tMAIN.FISCALYEARVARIANT,\n\t\tMAIN.FINANCIALACCOUNTTYPE,\n\t\tMAIN.CLEARINGDATE,\n\t\tMAIN.POSTINGDATE,\n\t\tMAIN.DOCUMENTDATE,\n\t\tMAIN.DUECALCULATIONBASEDATE,\n\t\tMAIN.CASHDISCOUNT1DAYS,\n\t\tMAIN.CASHDISCOUNT1PERCENT,\n\t\tMAIN.CASHDISCOUNT1DATE,\n\t\tMAIN.CASHDISCOUNT2DAYS,\n\t\tMAIN.CASHDISCOUNT2PERCENT,\n\t\tMAIN.CASHDISCOUNT2DATE,\n\t\tMAIN.DISCOUNTISAVAILABLE,\n\t\tMAIN.CASHDISCOUNTMISSED,\n\t\tMAIN.PAYMENTTERMS,\n\t\tMAIN.PAYMENTBLOCKINGREASON,\n\t\tMAIN.PAYMENTMETHOD,\n\t\tMAIN.ISUSEDINPAYMENTTRANSACTION,\n\t\tMAIN.TREASURYCONTRACTTYPE,\n\t\tMAIN.POSTINGKEY,\n\t\tMAIN.CLEARINGDATEVSDUEDATEOFFSET,\n\t\tMAIN.PAYMENTTIMINGCATEGORY,\n\t\tMAIN.NETDUEARREARSDAYS as NETDUEARREARSDAYSINT,\n\t\tcast (MAIN.NETDUEARREARSDAYS as NVARCHAR(15)) as NETDUEARREARSDAYS,\n\t\tcase\n\t\t\twhen MAIN.NETDUEARREARSDAYS > 0 then MAIN.NETDUEARREARSDAYS\n\t\t\telse 0\n\t\tend as DAYSOVERDUEINT,\n\t\tMAIN.NETDUEDATE,\n\t\tMAIN.SUPPLIER,\n\t\tMAIN.PARTNERCOMPANY,\n\t\tMAIN.GLACCOUNT,\n\t\tMAIN.SPECIALGLCODE,\n\t\tMAIN.COSTCENTER,\n\t\tMAIN.PROFITCENTER,\n\t\tMAIN.FUNCTIONALAREA,\n\t\tMAIN.BUSINESSAREA,\n\t\tMAIN.SEGMENT,\n\t\tMAIN.PURCHASINGDOCUMENT,\n\t\tMAIN.ASSIGNMENTREFERENCE,\n\t\tNETDUEINTERVALDERIVE.NETDUEINTERVALTEXT,\n\t\tMAIN.ISCLEARED,\n\t\tcase\n\t\t\twhen MAIN.NETDUEARREARSDAYS < 0 then cast ('' as NVARCHAR(1))\n\t\t\telse 'X'\n\t\tend as ISOVERDUE,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'TransactionCurrency'*/\n\t\tMAIN.AMOUNTINTRANSACTIONCURRENCY,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'TransactionCurrency'*/\n\t\tMAIN.CASHDISCOUNT1INTC,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'TransactionCurrency'*/\n\t\tMAIN.CASHDISCOUNT2INTC,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'TransactionCurrency'*/\n\t\tMAIN.AVAILABLEDISCOUNTINTC,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'TransactionCurrency'*/\n\t\tMAIN.MISSEDDISCOUNTINTC,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'TransactionCurrency'*/\n\t\tMAIN.CLAIMEDDISCOUNTINTC,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'TransactionCurrency'*/\n\t\tMAIN.OPENAMTINTRANSACTIONCURRENCY,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'TransactionCurrency'*/\n\t\tMAIN.PYCLEAREDINTRANSACTIONCURRENCY,\n\t\tMAIN.TRANSACTIONCURRENCY,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'BalanceTransactionCurrency'*/\n\t\tMAIN.AMOUNTINBALTC,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'BalanceTransactionCurrency'*/\n\t\tMAIN.CASHDISCOUNT1INBALTC,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'BalanceTransactionCurrency'*/\n\t\tMAIN.CASHDISCOUNT2INBALTC,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'BalanceTransactionCurrency'*/\n\t\tMAIN.AVAILABLEDISCOUNTINBALTC,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'BalanceTransactionCurrency'*/\n\t\tMAIN.MISSEDDISCOUNTINBALTC,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'BalanceTransactionCurrency'*/\n\t\tMAIN.CLAIMEDDISCOUNTINBALTC,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'BalanceTransactionCurrency'*/\n\t\tMAIN.OPENAMTINBALTC,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'BalanceTransactionCurrency'*/\n\t\tMAIN.PYCLEAREDINBALTC,\n\t\tMAIN.BALANCETRANSACTIONCURRENCY,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'CompanyCodeCurrency'*/\n\t\tMAIN.AMOUNTINCOMPANYCODECURRENCY,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'CompanyCodeCurrency'*/\n\t\tMAIN.CASHDISCOUNT1INCC,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'CompanyCodeCurrency'*/\n\t\tMAIN.CASHDISCOUNT2INCC,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'CompanyCodeCurrency'*/\n\t\tMAIN.AVAILABLEDISCOUNTINCC,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'CompanyCodeCurrency'*/\n\t\tMAIN.MISSEDDISCOUNTINCC,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'CompanyCodeCurrency'*/\n\t\tMAIN.CLAIMEDDISCOUNTINCC,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'CompanyCodeCurrency'*/\n\t\tMAIN.OPENAMTINCOMPANYCODECURRENCY,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'CompanyCodeCurrency'*/\n\t\tMAIN.PYCLEAREDINCOMPANYCODECURRENCY,\n\t\tMAIN.COMPANYCODECURRENCY,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'GlobalCurrency'*/\n\t\tMAIN.AMOUNTINGLOBALCURRENCY,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'GlobalCurrency'*/\n\t\tMAIN.CASHDISCOUNT1INGC,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'GlobalCurrency'*/\n\t\tMAIN.CASHDISCOUNT2INGC,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'GlobalCurrency'*/\n\t\tMAIN.AVAILABLEDISCOUNTINGC,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'GlobalCurrency'*/\n\t\tMAIN.MISSEDDISCOUNTINGC,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'GlobalCurrency'*/\n\t\tMAIN.CLAIMEDDISCOUNTINGC,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'GlobalCurrency'*/\n\t\tMAIN.OPENAMTINGLOBALCURRENCY,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'GlobalCurrency'*/\n\t\tMAIN.PYCLEAREDINGLOBALCURRENCY,\n\t\tMAIN.GLOBALCURRENCY,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'DisplayCurrency'*/\n\t\tMAIN.AMOUNTINDISPLAYCURRENCY,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'DisplayCurrency'*/\n\t\tMAIN.CASHDISCOUNT1INDC,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'DisplayCurrency'*/\n\t\tMAIN.CASHDISCOUNT2INDC,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'DisplayCurrency'*/\n\t\tMAIN.AVAILABLEDISCOUNTINDC,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'DisplayCurrency'*/\n\t\tMAIN.MISSEDDISCOUNTINDC,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'DisplayCurrency'*/\n\t\tMAIN.CLAIMEDDISCOUNTINDC,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'DisplayCurrency'*/\n\t\tMAIN.OPENAMTINDISPLAYCURRENCY,\n\t\t\n\t\t/*@Semantics.amount.currencyCode: 'DisplayCurrency'*/\n\t\tMAIN.PYCLEAREDINDISPLAYCURRENCY,\n\t\tMAIN.DISPLAYCURRENCY\n\tfrom ZSNAP_F01S_105(:P_SIGNAGE, :P_KEYDATE, :P_DISPLAYCURRENCY, :P_EXCHANGERATETYPE, :P_NETDUEINTERVAL1INDAYS, :P_NETDUEINTERVAL2INDAYS, :P_NETDUEINTERVAL3INDAYS, :P_NETDUEINTERVAL4INDAYS) as MAIN\n\tleft outer join ZSNAP_F01G_NETDUEINTERVAL (\n\t\tTO_VARCHAR (:P_KEYDATE, 'YYYYMMDD'),\n\t\t:P_NETDUEINTERVAL1INDAYS,\n\t\t:P_NETDUEINTERVAL2INDAYS,\n\t\t:P_NETDUEINTERVAL3INDAYS,\n\t\t:P_NETDUEINTERVAL4INDAYS\n\t) as NETDUEINTERVALDERIVE on MAIN.NETDUEDATE = NETDUEINTERVALDERIVE.NETDUEDATE\n) as main;",
+      "@Analytics.dbViewType": "TABLE_FUNCTION",
+      "@EndUserText.label": "SNAP F01: Open Items Net Due Arrears 2"
+    },
+    "ZSNAP_F01S_F72105": {
+      "kind": "entity",
+      "elements": {
+        "ACCOUNTINGDOCUMENT": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 10
+        },
+        "COMPANYCODE": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "FISCALYEAR": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "LEDGER": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 2
+        },
+        "LEDGERGLLINEITEM": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 6
+        },
+        "SOURCELEDGER": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 2
+        },
+        "ACCOUNTINGDOCUMENTTYPE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 2
+        },
+        "ACCOUNTINGDOCUMENTCATEGORY": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "ACCOUNTINGDOCUMENTITEM": {
+          "key": false,
+          "type": "cds.String",
+          "length": 3
+        },
+        "CLEARINGJOURNALENTRY": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "CLEARINGJOURNALENTRYFISCALYEAR": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "CLEARINGDATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "SPECIALGLCODE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "BUSINESSAREA": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "CHARTOFACCOUNTS": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "CONTROLLINGAREA": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "COSTCENTER": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "DEBITCREDITCODE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "FINANCIALACCOUNTTYPE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "FUNCTIONALAREA": {
+          "key": false,
+          "type": "cds.String",
+          "length": 16
+        },
+        "GLACCOUNT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "CORPORATEGROUPACCOUNT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "CORPORATEGROUPCHARTOFACCOUNTS": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PROFITCENTER": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "SIGNAGE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "FISCALYEARPERIOD": {
+          "key": false,
+          "type": "cds.String",
+          "length": 7
+        },
+        "FISCALYEARVARIANT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 2
+        },
+        "SUPPLIER": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "SUPPLIERACCOUNTGROUP": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "SPECIALPERIOD": {
+          "key": false,
+          "type": "cds.String",
+          "length": 3
+        },
+        "FISCALPERIODENDDATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "ENDINGBALANCEAMTINTRANSCRCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "TRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "TRANSACTIONCURRENCY": {
+          "key": false,
+          "@Semantics.currencyCode": true,
+          "type": "cds.String",
+          "length": 5
+        },
+        "ENDINGBALANCEAMTINCOCODECRCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "COMPANYCODECURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "COMPANYCODECURRENCY": {
+          "key": false,
+          "@Semantics.currencyCode": true,
+          "type": "cds.String",
+          "length": 5
+        },
+        "ENDINGBALANCEAMTINGLOBALCRCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "GLOBALCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "GLOBALCURRENCY": {
+          "key": false,
+          "@Semantics.currencyCode": true,
+          "type": "cds.String",
+          "length": 5
+        }
+      },
+      "@DataWarehouse.businessDefinition.description": "SNAP F72: Additional Field Derivation",
+      "@DataWarehouse.businessDefinition.purpose": "",
+      "@DataWarehouse.businessDefinition.contact": "Egan Bosch",
+      "@DataWarehouse.businessDefinition.responsibleTeam": "Artisan Edge, Inc.",
+      "_meta": {
+        "dependencies": {
+          "folderAssignment": "Folder_YBEQBWWQ"
+        }
+      },
+      "params": {
+        "P_SFROMFISCALYEAR": {
+          "@EndUserText.label": "P_SFromFiscalYear",
+          "type": "cds.String",
+          "length": 4
+        },
+        "P_STOFISCALYEARPERIOD": {
+          "@EndUserText.label": "P_SToFiscalYearPeriod",
+          "type": "cds.String",
+          "length": 7
+        },
+        "P_SIGNAGE": {
+          "@Consumption.defaultValue": "R",
+          "@EndUserText.label": "Signage",
+          "default": "R",
+          "type": "cds.String",
+          "length": 1
+        }
+      },
+      "@ObjectModel.supportedCapabilities": [
+        {
+          "#": "DATA_STRUCTURE"
+        }
+      ],
+      "@ObjectModel.modelingPattern": {
+        "#": "DATA_STRUCTURE"
+      },
+      "@DataWarehouse.consumption.external": false,
+      "@DataWarehouse.businessDefinition.tags": [
+        {
+          "key": "F01",
+          "value": "F01"
+        }
+      ],
+      "@DataWarehouse.tableFunction.script": "return select\n\tMAIN.ACCOUNTINGDOCUMENT,\n\tMAIN.COMPANYCODE,\n\tMAIN.FISCALYEAR,\n\tMAIN.LEDGER,\n\tMAIN.LEDGERGLLINEITEM,\n\tMAIN.SOURCELEDGER,\n\tMAIN.ACCOUNTINGDOCUMENTTYPE,\n\tMAIN.ACCOUNTINGDOCUMENTCATEGORY,\n\tMAIN.ACCOUNTINGDOCUMENTITEM,\n\tMAIN.CLEARINGJOURNALENTRY,\n\tMAIN.CLEARINGJOURNALENTRYFISCALYEAR,\n\tMAIN.CLEARINGDATE,\n\tMAIN.SPECIALGLCODE,\n\tMAIN.BUSINESSAREA,\n\tMAIN.CHARTOFACCOUNTS,\n\tMAIN.CONTROLLINGAREA,\n\tMAIN.COSTCENTER,\n\tMAIN.DEBITCREDITCODE,\n\tMAIN.FINANCIALACCOUNTTYPE,\n\tMAIN.FUNCTIONALAREA,\n\tMAIN.GLACCOUNT,\n\t_GLACCOUNTINCHARTOFACCOUNTS.CORPORATEGROUPACCOUNT,\n\t_GLACCOUNTINCHARTOFACCOUNTS.CORPORATEGROUPCHARTOFACCOUNTS,\n\tMAIN.PROFITCENTER,\n\tMAIN.SIGNAGE,\n\tMAIN.FISCALYEARPERIOD,\n\tMAIN.FISCALYEARVARIANT,\n\tMAIN.SUPPLIER,\n\t_SUPPLIER.SUPPLIERACCOUNTGROUP,\n\tMAIN.SPECIALPERIOD,\n\tMAIN.FISCALPERIODENDDATE,\n\t\n\t/*@Semantics.amount.currencyCode: 'TransactionCurrency'*/\n\tcase\n\t\twhen MAIN.SIGNAGE = 'A' then MAIN.ENDINGBALANCEAMTINTRANSCRCY\n\t\telse -MAIN.ENDINGBALANCEAMTINTRANSCRCY\n\tend as ENDINGBALANCEAMTINTRANSCRCY,\n\tMAIN.TRANSACTIONCURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'CompanyCodeCurrency'*/\n\tcase\n\t\twhen MAIN.SIGNAGE = 'A' then MAIN.ENDINGBALANCEAMTINCOCODECRCY\n\t\telse -MAIN.ENDINGBALANCEAMTINCOCODECRCY\n\tend as ENDINGBALANCEAMTINCOCODECRCY,\n\tMAIN.COMPANYCODECURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'GlobalCurrency'*/\n\tcase\n\t\twhen MAIN.SIGNAGE = 'A' then MAIN.ENDINGBALANCEAMTINGLOBALCRCY\n\t\telse -MAIN.ENDINGBALANCEAMTINGLOBALCRCY\n\tend as ENDINGBALANCEAMTINGLOBALCRCY,\n\tMAIN.GLOBALCURRENCY\nfrom ZSNAP_F01S_F72103(:P_SFROMFISCALYEAR, :P_STOFISCALYEARPERIOD, :P_SIGNAGE) as MAIN\nleft outer join ZSNAP_F01G_GLACCOUNTINCHARTOFACCOUNTS as _GLACCOUNTINCHARTOFACCOUNTS on MAIN.CHARTOFACCOUNTS = _GLACCOUNTINCHARTOFACCOUNTS.CHARTOFACCOUNTS and MAIN.GLACCOUNT = _GLACCOUNTINCHARTOFACCOUNTS.GLACCOUNT\nleft outer join ZSNAP_F01G_SUPPLIER as _SUPPLIER on MAIN.SUPPLIER = _SUPPLIER.SUPPLIER;",
+      "@Analytics.dbViewType": "TABLE_FUNCTION",
+      "@EndUserText.label": "SNAP F72: Additional Field Derivation"
+    }
+  },
+  "version": {
+    "csn": "1.0"
+  },
+  "meta": {
+    "creator": "Artisan Edge Catalyst v7.3.1"
+  },
+  "$version": "1.0"
+}

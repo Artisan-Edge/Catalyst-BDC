@@ -1,0 +1,1323 @@
+{
+  "definitions": {
+    "ZSNAP_F01S_052": {
+      "kind": "entity",
+      "elements": {
+        "COMPANYCODE": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "FISCALYEAR": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "ACCOUNTINGDOCUMENT": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 10
+        },
+        "LEDGERGLLINEITEM": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 6
+        },
+        "ACCOUNTINGDOCUMENTITEM": {
+          "key": false,
+          "type": "cds.String",
+          "length": 3
+        },
+        "DOCUMENTITEMTEXT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 50
+        },
+        "ACCOUNTINGDOCUMENTCATEGORY": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "ACCOUNTINGDOCUMENTTYPE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 2
+        },
+        "CONTROLLINGAREA": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "CHARTOFACCOUNTS": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "FISCALYEARVARIANT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 2
+        },
+        "INVOICEREFERENCE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "INVOICEITEMREFERENCE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 3
+        },
+        "INVOICEREFERENCEFISCALYEAR": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "CLEARINGJOURNALENTRY": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "CLEARINGJOURNALENTRYFISCALYEAR": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "DEBITCREDITCODE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "CLEARINGDATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "POSTINGDATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "DOCUMENTDATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "DUECALCULATIONBASEDATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "CASHDISCOUNT1DAYS": {
+          "key": false,
+          "type": "cds.Decimal",
+          "precision": 3,
+          "scale": 0
+        },
+        "CASHDISCOUNT1PERCENT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 21
+        },
+        "DISCOUNTISAVAILABLE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "CASHDISCOUNT1DATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "CASHDISCOUNT2DAYS": {
+          "key": false,
+          "type": "cds.Decimal",
+          "precision": 3,
+          "scale": 0
+        },
+        "CASHDISCOUNT2PERCENT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 21
+        },
+        "CASHDISCOUNT2DATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "PAYMENTBLOCKINGREASON": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "PAYMENTMETHOD": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "ISUSEDINPAYMENTTRANSACTION": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "TREASURYCONTRACTTYPE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "FINANCIALACCOUNTTYPE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "SUPPLIER": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "INVOICEREFERENCETYPE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "NETDUEDATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "USEREFERENCEDINVOICEDATES": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "SPECIALGLCODE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "GLACCOUNT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "COSTCENTER": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "PROFITCENTER": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "FUNCTIONALAREA": {
+          "key": false,
+          "type": "cds.String",
+          "length": 16
+        },
+        "BUSINESSAREA": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PARTNERCOMPANY": {
+          "key": false,
+          "type": "cds.String",
+          "length": 6
+        },
+        "SEGMENT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "PURCHASINGDOCUMENT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "ASSIGNMENTREFERENCE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 18
+        },
+        "PAYMENTTERMS": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "POSTINGKEY": {
+          "key": false,
+          "type": "cds.String",
+          "length": 2
+        },
+        "AMOUNTINTRANSACTIONCURRENCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "TRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT1INTC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "TRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT2INTC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "TRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "TRANSACTIONCURRENCY": {
+          "key": false,
+          "@Semantics.currencyCode": true,
+          "type": "cds.String",
+          "length": 5
+        },
+        "AMOUNTINBALTC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "BALANCETRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT1INBALTC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "BALANCETRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT2INBALTC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "BALANCETRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "BALANCETRANSACTIONCURRENCY": {
+          "key": false,
+          "@Semantics.currencyCode": true,
+          "type": "cds.String",
+          "length": 5
+        },
+        "AMOUNTINCOMPANYCODECURRENCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "COMPANYCODECURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT1INCC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "COMPANYCODECURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT2INCC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "COMPANYCODECURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "COMPANYCODECURRENCY": {
+          "key": false,
+          "@Semantics.currencyCode": true,
+          "type": "cds.String",
+          "length": 5
+        },
+        "AMOUNTINGLOBALCURRENCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "GLOBALCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT1INGC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "GLOBALCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "CASHDISCOUNT2INGC": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "GLOBALCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "GLOBALCURRENCY": {
+          "key": false,
+          "@Semantics.currencyCode": true,
+          "type": "cds.String",
+          "length": 5
+        }
+      },
+      "@DataWarehouse.businessDefinition.description": "Computes base discount amounts by multiplying invoice amounts by discount percentages. These raw discount values feed downstream available, missed, and claimed discount calculations.",
+      "@DataWarehouse.businessDefinition.purpose": "Calculates raw CashDiscount1/2 amounts in all currency types from discount multipliers",
+      "@DataWarehouse.businessDefinition.contact": "Egan Bosch",
+      "@DataWarehouse.businessDefinition.responsibleTeam": "Artisan Edge, Inc.",
+      "_meta": {
+        "dependencies": {
+          "folderAssignment": "Folder_YBEQBWWQ"
+        }
+      },
+      "params": {
+        "P_SIGNAGE": {
+          "@Consumption.defaultValue": "R",
+          "@EndUserText.label": "Signage",
+          "@Consumption.valueHelpDefinition": [
+            {
+              "entity": {
+                "name": "ZSNAP_F01C_P_SIGNAGE",
+                "element": "P_SIGNAGE"
+              }
+            }
+          ],
+          "default": "R",
+          "type": "cds.String",
+          "length": 1
+        },
+        "P_KEYDATE": {
+          "@EndUserText.label": "Open Items As Of",
+          "type": "cds.Date"
+        }
+      },
+      "@ObjectModel.supportedCapabilities": [
+        {
+          "#": "DATA_STRUCTURE"
+        }
+      ],
+      "@ObjectModel.modelingPattern": {
+        "#": "DATA_STRUCTURE"
+      },
+      "@DataWarehouse.consumption.external": false,
+      "@DataWarehouse.businessDefinition.tags": [
+        {
+          "key": "F01",
+          "value": "F01"
+        }
+      ],
+      "@DataWarehouse.tableFunction.script": "return select\n\tMAIN.COMPANYCODE,\n\tMAIN.FISCALYEAR,\n\tMAIN.ACCOUNTINGDOCUMENT,\n\tMAIN.LEDGERGLLINEITEM,\n\tMAIN.ACCOUNTINGDOCUMENTITEM,\n\tMAIN.DOCUMENTITEMTEXT,\n\tMAIN.ACCOUNTINGDOCUMENTCATEGORY,\n\tMAIN.ACCOUNTINGDOCUMENTTYPE,\n\tMAIN.CONTROLLINGAREA,\n\tMAIN.CHARTOFACCOUNTS,\n\tMAIN.FISCALYEARVARIANT,\n\tMAIN.INVOICEREFERENCE,\n\tMAIN.INVOICEITEMREFERENCE,\n\tMAIN.INVOICEREFERENCEFISCALYEAR,\n\tMAIN.CLEARINGJOURNALENTRY,\n\tMAIN.CLEARINGJOURNALENTRYFISCALYEAR,\n\tMAIN.DEBITCREDITCODE,\n\tMAIN.CLEARINGDATE,\n\tMAIN.POSTINGDATE,\n\tMAIN.DOCUMENTDATE,\n\tMAIN.DUECALCULATIONBASEDATE,\n\tMAIN.CASHDISCOUNT1DAYS,\n\tMAIN.CASHDISCOUNT1PERCENT,\n\tMAIN.DISCOUNTISAVAILABLE,\n\tMAIN.CASHDISCOUNT1DATE,\n\tMAIN.CASHDISCOUNT2DAYS,\n\tMAIN.CASHDISCOUNT2PERCENT,\n\tMAIN.CASHDISCOUNT2DATE,\n\tMAIN.PAYMENTBLOCKINGREASON,\n\tMAIN.PAYMENTMETHOD,\n\tMAIN.ISUSEDINPAYMENTTRANSACTION,\n\tMAIN.TREASURYCONTRACTTYPE,\n\tMAIN.FINANCIALACCOUNTTYPE,\n\tMAIN.SUPPLIER,\n\tMAIN.INVOICEREFERENCETYPE,\n\tMAIN.NETDUEDATE,\n\tMAIN.USEREFERENCEDINVOICEDATES,\n\tMAIN.SPECIALGLCODE,\n\tMAIN.GLACCOUNT,\n\tMAIN.COSTCENTER,\n\tMAIN.PROFITCENTER,\n\tMAIN.FUNCTIONALAREA,\n\tMAIN.BUSINESSAREA,\n\tMAIN.PARTNERCOMPANY,\n\tMAIN.SEGMENT,\n\tMAIN.PURCHASINGDOCUMENT,\n\tMAIN.ASSIGNMENTREFERENCE,\n\tMAIN.PAYMENTTERMS,\n\tMAIN.POSTINGKEY,\n\t\n\t/*@Semantics.amount.currencyCode: 'TransactionCurrency'*/\n\tMAIN.AMOUNTINTRANSACTIONCURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'TransactionCurrency'*/\n\tcast (cast (MAIN.AMOUNTINTRANSACTIONCURRENCY as DECIMAL(23,2)) * MAIN.CASHDISCOUNT1MULTIPLIER as DECIMAL(23,2)) as CASHDISCOUNT1INTC,\n\t\n\t/*@Semantics.amount.currencyCode: 'TransactionCurrency'*/\n\tcast (cast (MAIN.AMOUNTINTRANSACTIONCURRENCY as DECIMAL(23,2)) * MAIN.CASHDISCOUNT2MULTIPLIER as DECIMAL(23,2)) as CASHDISCOUNT2INTC,\n\tMAIN.TRANSACTIONCURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'BalanceTransactionCurrency'*/\n\tMAIN.AMOUNTINBALTC,\n\t\n\t/*@Semantics.amount.currencyCode: 'BalanceTransactionCurrency'*/\n\tcast (cast (MAIN.AMOUNTINBALTC as DECIMAL(23,2)) * MAIN.CASHDISCOUNT1MULTIPLIER as DECIMAL(23,2)) as CASHDISCOUNT1INBALTC,\n\t\n\t/*@Semantics.amount.currencyCode: 'BalanceTransactionCurrency'*/\n\tcast (cast (MAIN.AMOUNTINBALTC as DECIMAL(23,2)) * MAIN.CASHDISCOUNT2MULTIPLIER as DECIMAL(23,2)) as CASHDISCOUNT2INBALTC,\n\tMAIN.BALANCETRANSACTIONCURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'CompanyCodeCurrency'*/\n\tMAIN.AMOUNTINCOMPANYCODECURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'CompanyCodeCurrency'*/\n\tcast (cast (MAIN.AMOUNTINCOMPANYCODECURRENCY as DECIMAL(23,2)) * MAIN.CASHDISCOUNT1MULTIPLIER as DECIMAL(23,2)) as CASHDISCOUNT1INCC,\n\t\n\t/*@Semantics.amount.currencyCode: 'CompanyCodeCurrency'*/\n\tcast (cast (MAIN.AMOUNTINCOMPANYCODECURRENCY as DECIMAL(23,2)) * MAIN.CASHDISCOUNT2MULTIPLIER as DECIMAL(23,2)) as CASHDISCOUNT2INCC,\n\tMAIN.COMPANYCODECURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'GlobalCurrency'*/\n\tMAIN.AMOUNTINGLOBALCURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'GlobalCurrency'*/\n\tcast (cast (MAIN.AMOUNTINGLOBALCURRENCY as DECIMAL(23,2)) * MAIN.CASHDISCOUNT1MULTIPLIER as DECIMAL(23,2)) as CASHDISCOUNT1INGC,\n\t\n\t/*@Semantics.amount.currencyCode: 'GlobalCurrency'*/\n\tcast (cast (MAIN.AMOUNTINGLOBALCURRENCY as DECIMAL(23,2)) * MAIN.CASHDISCOUNT2MULTIPLIER as DECIMAL(23,2)) as CASHDISCOUNT2INGC,\n\tMAIN.GLOBALCURRENCY\nfrom ZSNAP_F01S_050(:P_SIGNAGE, :P_KEYDATE) as MAIN;",
+      "@Analytics.dbViewType": "TABLE_FUNCTION",
+      "@EndUserText.label": "SNAP F01: Discount Calculations"
+    },
+    "ZSNAP_F01S_F72050": {
+      "kind": "entity",
+      "elements": {
+        "ACCOUNTINGDOCUMENT": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 10
+        },
+        "COMPANYCODE": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "FISCALYEAR": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "LEDGER": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 2
+        },
+        "LEDGERGLLINEITEM": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 6
+        },
+        "SOURCELEDGER": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 2
+        },
+        "ACCOUNTINGDOCUMENTTYPE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 2
+        },
+        "ACCOUNTINGDOCUMENTCATEGORY": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "ACCOUNTINGDOCUMENTITEM": {
+          "key": false,
+          "type": "cds.String",
+          "length": 3
+        },
+        "CLEARINGJOURNALENTRY": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "CLEARINGJOURNALENTRYFISCALYEAR": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "CLEARINGDATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "SPECIALGLCODE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "BUSINESSAREA": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "CHARTOFACCOUNTS": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "CONTROLLINGAREA": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "COSTCENTER": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "DEBITCREDITCODE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "FINANCIALACCOUNTTYPE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "FUNCTIONALAREA": {
+          "key": false,
+          "type": "cds.String",
+          "length": 16
+        },
+        "GLACCOUNT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "PROFITCENTER": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "SUPPLIER": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "SPECIALPERIOD": {
+          "key": false,
+          "type": "cds.String",
+          "length": 3
+        },
+        "FISCALYEARPERIOD": {
+          "key": false,
+          "type": "cds.String",
+          "length": 7
+        },
+        "FISCALYEARVARIANT": {
+          "key": false,
+          "@Semantics.fiscal.yearVariant": true,
+          "type": "cds.String",
+          "length": 2
+        },
+        "ENDINGBALANCEAMTINTRANSCRCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "TRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "TRANSACTIONCURRENCY": {
+          "key": false,
+          "@Semantics.currencyCode": true,
+          "type": "cds.String",
+          "length": 5
+        },
+        "ENDINGBALANCEAMTINCOCODECRCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "COMPANYCODECURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "COMPANYCODECURRENCY": {
+          "key": false,
+          "@Semantics.currencyCode": true,
+          "type": "cds.String",
+          "length": 5
+        },
+        "ENDINGBALANCEAMTINGLOBALCRCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "GLOBALCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "GLOBALCURRENCY": {
+          "key": false,
+          "@Semantics.currencyCode": true,
+          "type": "cds.String",
+          "length": 5
+        }
+      },
+      "@DataWarehouse.businessDefinition.description": "SNAP F72: Financial Balances Basis",
+      "@DataWarehouse.businessDefinition.purpose": "",
+      "@DataWarehouse.businessDefinition.contact": "Egan Bosch",
+      "@DataWarehouse.businessDefinition.responsibleTeam": "Artisan Edge, Inc.",
+      "_meta": {
+        "dependencies": {
+          "folderAssignment": "Folder_YBEQBWWQ"
+        }
+      },
+      "params": {
+        "P_SFROMFISCALYEAR": {
+          "@EndUserText.label": "P_SFromFiscalYear",
+          "type": "cds.String",
+          "length": 4
+        },
+        "P_STOFISCALYEARPERIOD": {
+          "@EndUserText.label": "P_SToFiscalYearPeriod",
+          "type": "cds.String",
+          "length": 7
+        }
+      },
+      "@ObjectModel.supportedCapabilities": [
+        {
+          "#": "DATA_STRUCTURE"
+        }
+      ],
+      "@ObjectModel.modelingPattern": {
+        "#": "DATA_STRUCTURE"
+      },
+      "@DataWarehouse.consumption.external": false,
+      "@DataWarehouse.businessDefinition.tags": [
+        {
+          "key": "F01",
+          "value": "F01"
+        }
+      ],
+      "@DataWarehouse.tableFunction.script": "return select\n\tMAIN.ACCOUNTINGDOCUMENT,\n\tMAIN.COMPANYCODE,\n\tMAIN.FISCALYEAR,\n\tMAIN.LEDGER,\n\tMAIN.LEDGERGLLINEITEM,\n\tMAIN.SOURCELEDGER,\n\tMAIN.ACCOUNTINGDOCUMENTTYPE,\n\tMAIN.ACCOUNTINGDOCUMENTCATEGORY,\n\tMAIN.ACCOUNTINGDOCUMENTITEM,\n\tMAIN.CLEARINGJOURNALENTRY,\n\tMAIN.CLEARINGJOURNALENTRYFISCALYEAR,\n\tMAIN.CLEARINGDATE,\n\tMAIN.SPECIALGLCODE,\n\tMAIN.BUSINESSAREA,\n\tMAIN.CHARTOFACCOUNTS,\n\tMAIN.CONTROLLINGAREA,\n\tMAIN.COSTCENTER,\n\tMAIN.DEBITCREDITCODE,\n\tMAIN.FINANCIALACCOUNTTYPE,\n\tMAIN.FUNCTIONALAREA,\n\tMAIN.GLACCOUNT,\n\tMAIN.PROFITCENTER,\n\tMAIN.SUPPLIER,\n\tMAIN.FISCALPERIOD as SPECIALPERIOD,\n\tMAIN.FISCALYEARPERIOD,\n\t\n\t/*@Semantics.fiscal.yearVariant: true*/\n\tMAIN.FISCALYEARVARIANT,\n\t\n\t/*@Semantics.amount.currencyCode: 'TransactionCurrency'*/\n\tcast (0 as DECIMAL(23,2)) as ENDINGBALANCEAMTINTRANSCRCY,\n\tMAIN.TRANSACTIONCURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'CompanyCodeCurrency'*/\n\tcast (0 as DECIMAL(23,2)) as ENDINGBALANCEAMTINCOCODECRCY,\n\tMAIN.COMPANYCODECURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'GlobalCurrency'*/\n\tcast (0 as DECIMAL(23,2)) as ENDINGBALANCEAMTINGLOBALCRCY,\n\tMAIN.GLOBALCURRENCY\nfrom ZSNAP_F01G_GLACCOUNTLINEITEM as MAIN\nwhere MAIN.FISCALYEARPERIOD <= :P_STOFISCALYEARPERIOD\n\tand MAIN.FISCALYEAR >= :P_SFROMFISCALYEAR\n\tand MAIN.ACCOUNTINGDOCUMENTCATEGORY <> 'J'\n\tand MAIN.FISCALPERIOD <> '000';",
+      "@Analytics.dbViewType": "TABLE_FUNCTION",
+      "@EndUserText.label": "SNAP F72: Financial Balances Basis"
+    },
+    "ZSNAP_F01S_F72055": {
+      "kind": "entity",
+      "elements": {
+        "ACCOUNTINGDOCUMENT": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 10
+        },
+        "COMPANYCODE": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "FISCALYEAR": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "LEDGER": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 2
+        },
+        "LEDGERGLLINEITEM": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 6
+        },
+        "SOURCELEDGER": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 2
+        },
+        "ACCOUNTINGDOCUMENTTYPE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 2
+        },
+        "ACCOUNTINGDOCUMENTCATEGORY": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "ACCOUNTINGDOCUMENTITEM": {
+          "key": false,
+          "type": "cds.String",
+          "length": 3
+        },
+        "CLEARINGJOURNALENTRY": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "CLEARINGJOURNALENTRYFISCALYEAR": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "CLEARINGDATE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 8
+        },
+        "SPECIALGLCODE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "BUSINESSAREA": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "CHARTOFACCOUNTS": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "CONTROLLINGAREA": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        },
+        "COSTCENTER": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "DEBITCREDITCODE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "FINANCIALACCOUNTTYPE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "FUNCTIONALAREA": {
+          "key": false,
+          "type": "cds.String",
+          "length": 16
+        },
+        "GLACCOUNT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "ISSTARTINGBALANCERELEVANT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 1
+        },
+        "PROFITCENTER": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "FISCALPERIOD": {
+          "key": false,
+          "type": "cds.String",
+          "length": 3
+        },
+        "FISCALYEARVARIANT": {
+          "key": false,
+          "type": "cds.String",
+          "length": 2
+        },
+        "SUPPLIER": {
+          "key": false,
+          "type": "cds.String",
+          "length": 10
+        },
+        "AMOUNTINTRANSACTIONCURRENCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "TRANSACTIONCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "TRANSACTIONCURRENCY": {
+          "key": false,
+          "@Semantics.currencyCode": true,
+          "type": "cds.String",
+          "length": 5
+        },
+        "AMOUNTINCOMPANYCODECURRENCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "COMPANYCODECURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "COMPANYCODECURRENCY": {
+          "key": false,
+          "@Semantics.currencyCode": true,
+          "type": "cds.String",
+          "length": 5
+        },
+        "AMOUNTINGLOBALCURRENCY": {
+          "key": false,
+          "@Semantics.amount.currencyCode": {
+            "=": "GLOBALCURRENCY"
+          },
+          "type": "cds.Decimal",
+          "precision": 23,
+          "scale": 2
+        },
+        "GLOBALCURRENCY": {
+          "key": false,
+          "@Semantics.currencyCode": true,
+          "type": "cds.String",
+          "length": 5
+        }
+      },
+      "@DataWarehouse.businessDefinition.description": "SNAP F72: Balance Derivation Basis",
+      "@DataWarehouse.businessDefinition.purpose": "",
+      "@DataWarehouse.businessDefinition.contact": "Egan Bosch",
+      "@DataWarehouse.businessDefinition.responsibleTeam": "Artisan Edge, Inc.",
+      "_meta": {
+        "dependencies": {
+          "folderAssignment": "Folder_YBEQBWWQ"
+        }
+      },
+      "params": {
+        "P_SFROMFISCALYEAR": {
+          "@EndUserText.label": "P_SFromFiscalYear",
+          "type": "cds.String",
+          "length": 4
+        },
+        "P_STOFISCALYEARPERIOD": {
+          "@EndUserText.label": "P_SToFiscalYearPeriod",
+          "type": "cds.String",
+          "length": 7
+        }
+      },
+      "@ObjectModel.supportedCapabilities": [
+        {
+          "#": "DATA_STRUCTURE"
+        }
+      ],
+      "@ObjectModel.modelingPattern": {
+        "#": "DATA_STRUCTURE"
+      },
+      "@DataWarehouse.consumption.external": false,
+      "@DataWarehouse.businessDefinition.tags": [
+        {
+          "key": "F01",
+          "value": "F01"
+        }
+      ],
+      "@DataWarehouse.tableFunction.script": "return select\n\tMAIN.ACCOUNTINGDOCUMENT,\n\tMAIN.COMPANYCODE,\n\tMAIN.FISCALYEAR,\n\tMAIN.LEDGER,\n\tMAIN.LEDGERGLLINEITEM,\n\tMAIN.SOURCELEDGER,\n\tMAIN.ACCOUNTINGDOCUMENTTYPE,\n\tMAIN.ACCOUNTINGDOCUMENTCATEGORY,\n\tMAIN.ACCOUNTINGDOCUMENTITEM,\n\tMAIN.CLEARINGJOURNALENTRY,\n\tMAIN.CLEARINGJOURNALENTRYFISCALYEAR,\n\tMAIN.CLEARINGDATE,\n\tMAIN.SPECIALGLCODE,\n\tMAIN.BUSINESSAREA,\n\tMAIN.CHARTOFACCOUNTS,\n\tMAIN.CONTROLLINGAREA,\n\tMAIN.COSTCENTER,\n\tMAIN.DEBITCREDITCODE,\n\tMAIN.FINANCIALACCOUNTTYPE,\n\tMAIN.FUNCTIONALAREA,\n\tMAIN.GLACCOUNT,\n\tcase MAIN.ACCOUNTINGDOCUMENTCATEGORY\n\t\twhen 'J' then case MAIN.FISCALPERIOD\n\t\t\twhen '000' then cast ('X' as NVARCHAR(1))\n\t\t\telse cast ('' as NVARCHAR(1))\n\t\tend\n\t\telse 'X'\n\tend as ISSTARTINGBALANCERELEVANT,\n\tMAIN.PROFITCENTER,\n\tcase _FISCALYEARPERIOD.ISSPECIALPERIOD\n\t\twhen 'X' then _FISCALYEARPERIOD_FISCALPERIODSTARTDATE.FISCALPERIOD\n\t\telse MAIN.FISCALPERIOD\n\tend as FISCALPERIOD,\n\tMAIN.FISCALYEARVARIANT,\n\tMAIN.SUPPLIER,\n\t\n\t/*@Semantics.amount.currencyCode: 'TransactionCurrency'*/\n\tcast (MAIN.AMOUNTINTRANSACTIONCURRENCY as DECIMAL(23,2)) as AMOUNTINTRANSACTIONCURRENCY,\n\tMAIN.TRANSACTIONCURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'CompanyCodeCurrency'*/\n\tcast (MAIN.AMOUNTINCOMPANYCODECURRENCY as DECIMAL(23,2)) as AMOUNTINCOMPANYCODECURRENCY,\n\tMAIN.COMPANYCODECURRENCY,\n\t\n\t/*@Semantics.amount.currencyCode: 'GlobalCurrency'*/\n\tcast (MAIN.AMOUNTINGLOBALCURRENCY as DECIMAL(23,2)) as AMOUNTINGLOBALCURRENCY,\n\tMAIN.GLOBALCURRENCY\nfrom ZSNAP_F01G_GLACCOUNTLINEITEM as MAIN\nleft outer join ZSNAP_F01G_FISCALYEARPERIOD as _FISCALYEARPERIOD on MAIN.FISCALYEARVARIANT = _FISCALYEARPERIOD.FISCALYEARVARIANT and MAIN.FISCALYEARPERIOD = _FISCALYEARPERIOD.FISCALYEARPERIOD\nleft outer join ZSNAP_F01G_FISCALCALENDARDATE as _FISCALYEARPERIOD_FISCALPERIODSTARTDATE on TO_VARCHAR (_FISCALYEARPERIOD.FISCALPERIODSTARTDATE, 'YYYYMMDD') = TO_VARCHAR (_FISCALYEARPERIOD_FISCALPERIODSTARTDATE.CALENDARDATE, 'YYYYMMDD') and _FISCALYEARPERIOD.FISCALYEARVARIANT = _FISCALYEARPERIOD_FISCALPERIODSTARTDATE.FISCALYEARVARIANT\nwhere MAIN.FISCALYEARPERIOD <= :P_STOFISCALYEARPERIOD\n\tand MAIN.FISCALYEAR >= :P_SFROMFISCALYEAR;",
+      "@Analytics.dbViewType": "TABLE_FUNCTION",
+      "@EndUserText.label": "SNAP F72: Balance Derivation Basis"
+    },
+    "ZSNAP_F01G_INTERVALSIZING": {
+      "kind": "entity",
+      "elements": {
+        "KEYDATE": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.Date"
+        },
+        "INTERVAL1PLUSDATE": {
+          "key": false,
+          "type": "cds.Date"
+        },
+        "INTERVAL1MINUSDATE": {
+          "key": false,
+          "type": "cds.Date"
+        },
+        "INTERVAL2PLUSDATE": {
+          "key": false,
+          "type": "cds.Date"
+        },
+        "INTERVAL2MINUSDATE": {
+          "key": false,
+          "type": "cds.Date"
+        },
+        "INTERVAL3PLUSDATE": {
+          "key": false,
+          "type": "cds.Date"
+        },
+        "INTERVAL3MINUSDATE": {
+          "key": false,
+          "type": "cds.Date"
+        },
+        "INTERVAL4PLUSDATE": {
+          "key": false,
+          "type": "cds.Date"
+        },
+        "INTERVAL4MINUSDATE": {
+          "key": false,
+          "type": "cds.Date"
+        },
+        "NUMBEROFINTERVALS": {
+          "key": false,
+          "type": "cds.Decimal",
+          "precision": 1,
+          "scale": 0
+        }
+      },
+      "@DataWarehouse.businessDefinition.description": "SNAP: Net Due Interval by Date",
+      "@DataWarehouse.businessDefinition.purpose": "",
+      "@DataWarehouse.businessDefinition.contact": "Egan Bosch",
+      "@DataWarehouse.businessDefinition.responsibleTeam": "Artisan Edge, Inc.",
+      "_meta": {
+        "dependencies": {
+          "folderAssignment": "Folder_YBEQBWWQ"
+        }
+      },
+      "params": {
+        "P_KEYDATE": {
+          "@EndUserText.label": "Open Items As Of",
+          "type": "cds.Date"
+        },
+        "P_NETDUEINTERVAL1INDAYS": {
+          "@Consumption.defaultValue": "30",
+          "@EndUserText.label": "Net Due Interval 1 in Days",
+          "default": "30",
+          "type": "cds.Integer"
+        },
+        "P_NETDUEINTERVAL2INDAYS": {
+          "@Consumption.defaultValue": "60",
+          "@EndUserText.label": "Net Due Interval 2 in Days",
+          "default": "60",
+          "type": "cds.Integer"
+        },
+        "P_NETDUEINTERVAL3INDAYS": {
+          "@Consumption.defaultValue": "90",
+          "@EndUserText.label": "Net Due Interval 3 in Days",
+          "default": "90",
+          "type": "cds.Integer"
+        },
+        "P_NETDUEINTERVAL4INDAYS": {
+          "@Consumption.defaultValue": "180",
+          "@EndUserText.label": "Net Due Interval 4 in Days",
+          "default": "180",
+          "type": "cds.Integer"
+        }
+      },
+      "@ObjectModel.supportedCapabilities": [
+        {
+          "#": "DATA_STRUCTURE"
+        }
+      ],
+      "@ObjectModel.modelingPattern": {
+        "#": "DATA_STRUCTURE"
+      },
+      "@DataWarehouse.consumption.external": false,
+      "@DataWarehouse.businessDefinition.tags": [
+        {
+          "key": "F01",
+          "value": "F01"
+        }
+      ],
+      "@DataWarehouse.tableFunction.script": "return select\n\tMAIN.KEYDATE,\n\tMAIN.INTERVAL1PLUSDATE,\n\tMAIN.INTERVAL1MINUSDATE,\n\tMAIN.INTERVAL2PLUSDATE,\n\tMAIN.INTERVAL2MINUSDATE,\n\tMAIN.INTERVAL3PLUSDATE,\n\tMAIN.INTERVAL3MINUSDATE,\n\tMAIN.INTERVAL4PLUSDATE,\n\tMAIN.INTERVAL4MINUSDATE,\n\tcase\n\t\twhen MAIN.NETDUEINTERVAL1INDAYS = 0 then 0\n\t\twhen MAIN.NETDUEINTERVAL2INDAYS = 0 then 1\n\t\twhen MAIN.NETDUEINTERVAL3INDAYS = 0 then 2\n\t\twhen MAIN.NETDUEINTERVAL4INDAYS = 0 then 3\n\t\telse 4\n\tend as NUMBEROFINTERVALS\nfrom ZSNAP_F01G_PARAMETERMATERIALIZATION(:P_KEYDATE, :P_NETDUEINTERVAL1INDAYS, :P_NETDUEINTERVAL2INDAYS, :P_NETDUEINTERVAL3INDAYS, :P_NETDUEINTERVAL4INDAYS) as MAIN;",
+      "@Analytics.dbViewType": "TABLE_FUNCTION",
+      "@EndUserText.label": "SNAP: Net Due Interval by Date"
+    },
+    "ZSNAP_F01G_SUPPLIERRECONACCOUNT": {
+      "kind": "entity",
+      "elements": {
+        "RECONCILIATIONACCOUNT": {
+          "key": true,
+          "notNull": true,
+          "@ObjectModel.text.association": {
+            "=": "_TEXT"
+          },
+          "@AnalyticsDetails.query.display": {
+            "#": "KEY_TEXT"
+          },
+          "@EndUserText.label": "G/L Account",
+          "type": "cds.String",
+          "length": 10
+        },
+        "CHARTOFACCOUNTS": {
+          "key": true,
+          "notNull": true,
+          "@ObjectModel.foreignKey.association": {
+            "=": "_CHARTOFACCOUNTS"
+          },
+          "@EndUserText.label": "Chart of Accounts",
+          "type": "cds.String",
+          "length": 4
+        },
+        "ISBALANCESHEETACCOUNT": {
+          "key": false,
+          "@EndUserText.label": "Is Balance Sheet Account",
+          "type": "cds.String",
+          "length": 1
+        },
+        "GLACCOUNTGROUP": {
+          "key": false,
+          "@ObjectModel.text.association": {
+            "=": "_GLACCOUNTGROUPTEXT"
+          },
+          "@EndUserText.label": "Account Group",
+          "type": "cds.String",
+          "length": 4
+        },
+        "CORPORATEGROUPCHARTOFACCOUNTS": {
+          "key": false,
+          "@EndUserText.label": "Group Chart of Accts",
+          "type": "cds.String",
+          "length": 4
+        },
+        "CORPORATEGROUPACCOUNT": {
+          "key": false,
+          "@EndUserText.label": "Group Account Number",
+          "type": "cds.String",
+          "length": 10
+        },
+        "PROFITLOSSACCOUNTTYPE": {
+          "key": false,
+          "@EndUserText.label": "P&L statmt acct type",
+          "type": "cds.String",
+          "length": 2
+        },
+        "SAMPLEGLACCOUNT": {
+          "key": false,
+          "@EndUserText.label": "Sample Account",
+          "type": "cds.String",
+          "length": 10
+        },
+        "ACCOUNTISMARKEDFORDELETION": {
+          "key": false,
+          "@EndUserText.label": "Mark for Deletion",
+          "type": "cds.String",
+          "length": 1
+        },
+        "ACCOUNTISBLOCKEDFORCREATION": {
+          "key": false,
+          "@EndUserText.label": "Blocked for Creation",
+          "type": "cds.String",
+          "length": 1
+        },
+        "ACCOUNTISBLOCKEDFORPOSTING": {
+          "key": false,
+          "@EndUserText.label": "Blocked for Posting",
+          "type": "cds.String",
+          "length": 1
+        },
+        "ACCOUNTISBLOCKEDFORPLANNING": {
+          "key": false,
+          "@EndUserText.label": "Blocked for Planning",
+          "type": "cds.String",
+          "length": 1
+        },
+        "PARTNERCOMPANY": {
+          "key": false,
+          "@EndUserText.label": "Trading Partner No.",
+          "type": "cds.String",
+          "length": 6
+        },
+        "FUNCTIONALAREA": {
+          "key": false,
+          "@EndUserText.label": "Functional Area",
+          "type": "cds.String",
+          "length": 16
+        },
+        "CREATIONDATE": {
+          "key": false,
+          "@EndUserText.label": "Created On",
+          "type": "cds.Date"
+        },
+        "CREATEDBYUSER": {
+          "key": false,
+          "@EndUserText.label": "Created by",
+          "type": "cds.String",
+          "length": 12
+        },
+        "LASTCHANGEDATETIME": {
+          "key": false,
+          "@EndUserText.label": "Time Stamp",
+          "type": "cds.Decimal",
+          "precision": 15,
+          "scale": 0
+        },
+        "GLACCOUNTTYPE": {
+          "key": false,
+          "@EndUserText.label": "G/L Account Type",
+          "type": "cds.String",
+          "length": 1
+        },
+        "GLACCOUNTSUBTYPE": {
+          "key": false,
+          "@EndUserText.label": "G/L Account Subtype",
+          "type": "cds.String",
+          "length": 1
+        },
+        "GLACCOUNTEXTERNAL": {
+          "key": false,
+          "@EndUserText.label": "G/L Account External ID",
+          "type": "cds.String",
+          "length": 10
+        },
+        "BANKRECONCILIATIONACCOUNT": {
+          "key": false,
+          "@EndUserText.label": "Reconciliation Account",
+          "type": "cds.String",
+          "length": 10
+        },
+        "_TEXT": {
+          "type": "cds.Association",
+          "@EndUserText.label": "Supplier Reconciliation Account -> General Ledger Account - Text",
+          "target": "ZSNAP_F01G_GLACCOUNTTEXT",
+          "on": [
+            {
+              "ref": [
+                "CHARTOFACCOUNTS"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "_TEXT",
+                "CHARTOFACCOUNTS"
+              ]
+            },
+            "and",
+            {
+              "ref": [
+                "RECONCILIATIONACCOUNT"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "_TEXT",
+                "GLACCOUNT"
+              ]
+            }
+          ]
+        },
+        "_CHARTOFACCOUNTS": {
+          "type": "cds.Association",
+          "@EndUserText.label": "Supplier Reconciliation Account -> Chart Of Accounts",
+          "target": "ZSNAP_F01G_CHARTOFACCOUNTS",
+          "on": [
+            {
+              "ref": [
+                "CHARTOFACCOUNTS"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "_CHARTOFACCOUNTS",
+                "CHARTOFACCOUNTS"
+              ]
+            }
+          ]
+        },
+        "_GLACCOUNTGROUPTEXT": {
+          "type": "cds.Association",
+          "@EndUserText.label": "Supplier Reconciliation Account -> G/L Account Group - Text",
+          "target": "ZSNAP_F01G_GLACCOUNTGROUPTEXT",
+          "on": [
+            {
+              "ref": [
+                "GLACCOUNTGROUP"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "_GLACCOUNTGROUPTEXT",
+                "GLACCOUNTGROUP"
+              ]
+            },
+            "and",
+            {
+              "ref": [
+                "CHARTOFACCOUNTS"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "_GLACCOUNTGROUPTEXT",
+                "CHARTOFACCOUNTS"
+              ]
+            }
+          ]
+        }
+      },
+      "@DataWarehouse.businessDefinition.description": "Supplier Reconciliation Account",
+      "@DataWarehouse.businessDefinition.purpose": "",
+      "@DataWarehouse.businessDefinition.contact": "Egan Bosch",
+      "@DataWarehouse.businessDefinition.responsibleTeam": "Artisan Edge, Inc.",
+      "_meta": {
+        "dependencies": {
+          "folderAssignment": "Folder_YBEQBWWQ"
+        }
+      },
+      "@ObjectModel.supportedCapabilities": [
+        {
+          "#": "ANALYTICAL_DIMENSION"
+        }
+      ],
+      "@ObjectModel.modelingPattern": {
+        "#": "ANALYTICAL_DIMENSION"
+      },
+      "@DataWarehouse.consumption.external": true,
+      "@DataWarehouse.businessDefinition.tags": [
+        {
+          "key": "F01",
+          "value": "F01"
+        }
+      ],
+      "@DataWarehouse.tableFunction.script": "return select\n\t/*@AnalyticsDetails.query.display: #KEY_TEXT\n\t@EndUserText.label: 'G/L Account'*/\n\tMAIN.RECONCILIATIONACCOUNT,\n\t\n\t/*@EndUserText.label: 'Chart of Accounts'*/\n\tMAIN.CHARTOFACCOUNTS,\n\t\n\t/*@EndUserText.label: 'Is Balance Sheet Account'*/\n\tMAIN.ISBALANCESHEETACCOUNT,\n\t\n\t/*@EndUserText.label: 'Account Group'*/\n\tMAIN.GLACCOUNTGROUP,\n\t\n\t/*@EndUserText.label: 'Group Chart of Accts'*/\n\tMAIN.CORPORATEGROUPCHARTOFACCOUNTS,\n\t\n\t/*@EndUserText.label: 'Group Account Number'*/\n\tMAIN.CORPORATEGROUPACCOUNT,\n\t\n\t/*@EndUserText.label: 'P&L statmt acct type'*/\n\tMAIN.PROFITLOSSACCOUNTTYPE,\n\t\n\t/*@EndUserText.label: 'Sample Account'*/\n\tMAIN.SAMPLEGLACCOUNT,\n\t\n\t/*@EndUserText.label: 'Mark for Deletion'*/\n\tMAIN.ACCOUNTISMARKEDFORDELETION,\n\t\n\t/*@EndUserText.label: 'Blocked for Creation'*/\n\tMAIN.ACCOUNTISBLOCKEDFORCREATION,\n\t\n\t/*@EndUserText.label: 'Blocked for Posting'*/\n\tMAIN.ACCOUNTISBLOCKEDFORPOSTING,\n\t\n\t/*@EndUserText.label: 'Blocked for Planning'*/\n\tMAIN.ACCOUNTISBLOCKEDFORPLANNING,\n\t\n\t/*@EndUserText.label: 'Trading Partner No.'*/\n\tMAIN.PARTNERCOMPANY,\n\t\n\t/*@EndUserText.label: 'Functional Area'*/\n\tMAIN.FUNCTIONALAREA,\n\t\n\t/*@EndUserText.label: 'Created On'*/\n\tTO_DATE (MAIN.CREATIONDATE, 'YYYYMMDD') as CREATIONDATE,\n\t\n\t/*@EndUserText.label: 'Created by'*/\n\tMAIN.CREATEDBYUSER,\n\t\n\t/*@EndUserText.label: 'Time Stamp'*/\n\tMAIN.LASTCHANGEDATETIME,\n\t\n\t/*@EndUserText.label: 'G/L Account Type'*/\n\tMAIN.GLACCOUNTTYPE,\n\t\n\t/*@EndUserText.label: 'G/L Account Subtype'*/\n\tMAIN.GLACCOUNTSUBTYPE,\n\t\n\t/*@EndUserText.label: 'G/L Account External ID'*/\n\tMAIN.GLACCOUNTEXTERNAL,\n\t\n\t/*@EndUserText.label: 'Reconciliation Account'*/\n\tMAIN.BANKRECONCILIATIONACCOUNT\nfrom ZSNAP_F01G_P_RECONACCOUNT as MAIN\nwhere MAIN.RECONACCOUNTTYPE = 'K';",
+      "@Analytics.dbViewType": "TABLE_FUNCTION",
+      "@ObjectModel.representativeKey": {
+        "=": "RECONCILIATIONACCOUNT"
+      },
+      "@DataWarehouse.compoundKeySequence": [
+        {
+          "=": "CHARTOFACCOUNTS"
+        },
+        {
+          "=": "RECONCILIATIONACCOUNT"
+        }
+      ],
+      "@EndUserText.label": "Supplier Reconciliation Account"
+    },
+    "ZSNAP_F01M_INTERCOMPANYSUPPLIER": {
+      "kind": "entity",
+      "elements": {
+        "SUPPLIER": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.String",
+          "length": 10
+        },
+        "TRADINGPARTNER": {
+          "key": false,
+          "type": "cds.String",
+          "length": 6
+        },
+        "SUPPLIERISINTERCOMPANY": {
+          "key": false,
+          "@EndUserText.label": "Is Intercompany Flag",
+          "type": "cds.String",
+          "length": 1
+        },
+        "PARTNERCOMPANYCODE": {
+          "key": false,
+          "type": "cds.String",
+          "length": 4
+        }
+      },
+      "@DataWarehouse.businessDefinition.description": "SNAP: Intercompany Supplier",
+      "@DataWarehouse.businessDefinition.purpose": "",
+      "@DataWarehouse.businessDefinition.contact": "Egan Bosch",
+      "@DataWarehouse.businessDefinition.responsibleTeam": "Artisan Edge, Inc.",
+      "_meta": {
+        "dependencies": {
+          "folderAssignment": "Folder_YBEQBWWQ"
+        }
+      },
+      "@ObjectModel.supportedCapabilities": [
+        {
+          "#": "DATA_STRUCTURE"
+        }
+      ],
+      "@ObjectModel.modelingPattern": {
+        "#": "DATA_STRUCTURE"
+      },
+      "@DataWarehouse.consumption.external": false,
+      "@DataWarehouse.businessDefinition.tags": [
+        {
+          "key": "F01",
+          "value": "F01"
+        }
+      ],
+      "@DataWarehouse.tableFunction.script": "return select\n\tMAIN.SUPPLIER,\n\tMAIN.TRADINGPARTNER,\n\t\n\t/*@EndUserText.label: 'Is Intercompany Flag'*/\n\tcase MAIN.TRADINGPARTNER\n\t\twhen '' then cast ('' as NVARCHAR(1))\n\t\telse 'X'\n\tend as SUPPLIERISINTERCOMPANY,\n\tCOALESCE (_TRADINGPARTNERCOMPANYCODE.COMPANYCODE, RIGHT (MAIN.TRADINGPARTNER, 4)) as PARTNERCOMPANYCODE\nfrom ZSNAP_F01G_SUPPLIER as MAIN\nleft outer join ZSNAP_F01G_COMPANYCODE as _TRADINGPARTNERCOMPANYCODE on MAIN.TRADINGPARTNER = _TRADINGPARTNERCOMPANYCODE.COMPANY and MAIN.TRADINGPARTNER <> '';",
+      "@Analytics.dbViewType": "TABLE_FUNCTION",
+      "@EndUserText.label": "SNAP: Intercompany Supplier"
+    }
+  },
+  "version": {
+    "csn": "1.0"
+  },
+  "meta": {
+    "creator": "Artisan Edge Catalyst v7.3.1"
+  },
+  "$version": "1.0"
+}
