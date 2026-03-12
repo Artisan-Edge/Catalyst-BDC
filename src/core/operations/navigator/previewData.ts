@@ -10,6 +10,7 @@ const DEFAULT_SKIP = 0;
 
 export interface DataPreviewOptions {
     select?: string[];
+    filter?: string;
     top?: number;
     skip?: number;
 }
@@ -68,6 +69,10 @@ function buildPreviewPath(spaceName: string, viewName: string, options?: DataPre
 
     if (options?.select && options.select.length > 0) {
         params.push(`$select=${options.select.join(',')}`);
+    }
+
+    if (options?.filter) {
+        params.push(`$filter=${encodeURIComponent(options.filter)}`);
     }
 
     return `/dwaas-core/data-access/instant/${spaceName}/${viewName}/${viewName}?${params.join('&')}`;

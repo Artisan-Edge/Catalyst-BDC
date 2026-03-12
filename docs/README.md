@@ -8,6 +8,7 @@ Programmatic Datasphere object management via direct HTTP API.
 - [Getting Started](#getting-started)
 - [Writing Scripts](#writing-scripts)
 - [BdcClient API](#bdcclient-api)
+- [Data Preview](#data-preview)
 - [CSN Files](#csn-files)
 - [Error Handling](#error-handling)
 - [Architecture](#architecture)
@@ -155,8 +156,114 @@ interface BdcConfig {
 | `deleteReplicationFlow` | `(objectName) => AsyncResult<string>` | Deletes a replication flow via DELETE. |
 | `runReplicationFlow` | `(flowName) => AsyncResult<RunReplicationFlowResult>` | Triggers a replication flow run. |
 | `objectExists` | `(objectType, name) => AsyncResult<boolean>` | Checks if an object exists (GET + 200 check). |
+| `previewData` | `(viewName, options?) => AsyncResult<DataPreviewResult>` | Fetches data rows from a deployed view via OData. |
+| `getViewColumns` | `(viewName) => AsyncResult<ViewColumn[]>` | Fetches column metadata (name, type, key) from a view's OData `$metadata`. |
 
 All methods return `AsyncResult<T>` which is `Promise<[T, null] | [null, Error]>`.
+
+---
+
+## Data Preview
+
+Query data from deployed views and local tables via OData. Views must have an "Active" deployment status.
+
+### Getting column metadata
+
+Use `getViewColumns` to discover available columns before querying:
+
+```typescript
+const [columns, colErr] = await client.getViewColumns('MY_VIEW');
+if (colErr) { console.error(colErr.message); return; }
+
+for (const col of columns) {
+    console.log(`${col.name} (${col.type})${col.isKey ? ' [KEY]' : ''}`);
+}
+```
+
+Each `ViewColumn` contains:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `name` | `string` | Column name (e.g. `COMPANYCODE`) |
+| `type` | `string` | OData type (e.g. `Edm.String`, `Edm.Decimal`) |
+| `maxLength` | `number \| null` | Max string length |
+| `precision` | `number \| null` | Decimal precision |
+| `scale` | `number \| null` | Decimal scale |
+| `isKey` | `boolean` | Whether the column is part of the entity key |
+
+### Fetching rows
+
+```typescript
+const [result, previewErr] = await client.previewData('MY_VIEW', {
+    top: 100,       // max rows to return (default: 200)
+    skip: 0,        // offset for pagination (default: 0)
+});
+if (previewErr) { console.error(previewErr.message); return; }
+
+console.log(`Got ${result.rows.length} rows`);
+for (const row of result.rows) {
+    console.log(row);  // Record<string, unknown>
+}
+```
+
+### Selecting specific columns
+
+```typescript
+const [result, err] = await client.previewData('MY_VIEW', {
+    select: ['COMPANYCODE', 'FISCALYEAR', 'AMOUNT'],
+    top: 50,
+});
+```
+
+### Filtering with `$filter`
+
+The `filter` option accepts an OData `$filter` expression string:
+
+```typescript
+// Equality
+const [result, err] = await client.previewData('MY_VIEW', {
+    filter: "COMPANYCODE eq '1010'",
+});
+
+// Multiple conditions
+const [result, err] = await client.previewData('MY_VIEW', {
+    filter: "COMPANYCODE eq '1010' and FISCALYEAR eq '2025'",
+});
+
+// Comparisons
+const [result, err] = await client.previewData('MY_VIEW', {
+    filter: "AMOUNT gt 1000",
+});
+
+// Combined with select
+const [result, err] = await client.previewData('MY_VIEW', {
+    select: ['COMPANYCODE', 'GLACCOUNT', 'AMOUNT'],
+    filter: "ACCOUNTINGDOCUMENTTYPE eq 'SA' and FISCALYEAR eq '2025'",
+    top: 500,
+});
+```
+
+Common OData filter operators:
+
+| Operator | Example | Description |
+|----------|---------|-------------|
+| `eq` | `FIELD eq 'value'` | Equals |
+| `ne` | `FIELD ne 'value'` | Not equals |
+| `gt` | `FIELD gt 100` | Greater than |
+| `ge` | `FIELD ge 100` | Greater than or equal |
+| `lt` | `FIELD lt 100` | Less than |
+| `le` | `FIELD le 100` | Less than or equal |
+| `and` | `A eq '1' and B eq '2'` | Logical AND |
+| `or` | `A eq '1' or A eq '2'` | Logical OR |
+
+### DataPreviewResult
+
+```typescript
+interface DataPreviewResult {
+    rows: Record<string, unknown>[];  // data rows (OData metadata stripped)
+    count: number | null;             // total count if available
+}
+```
 
 ---
 
