@@ -21,16 +21,6 @@ const testTableCsn: CsnFile = {
     $version: '1.0',
 };
 
-const updatedTableCsn: CsnFile = {
-    ...testTableCsn,
-    definitions: {
-        [TEST_TABLE_NAME]: {
-            ...testTableCsn.definitions![TEST_TABLE_NAME]!,
-            '@EndUserText.label': 'Catalyst Test Table (Updated)',
-        },
-    },
-};
-
 describe('local table CRUD lifecycle', () => {
     let client: BdcClient;
 
@@ -47,11 +37,12 @@ describe('local table CRUD lifecycle', () => {
         await safeDelete(client, 'local-table', TEST_TABLE_NAME);
     }, 60_000);
 
-    test('createLocalTable', async () => {
-        const [result, createErr] = await client.createLocalTable(testTableCsn, TEST_TABLE_NAME);
-        if (createErr) console.error('createLocalTable failed:', createErr.message);
-        expect(createErr).toBeNull();
+    test('importCsn (create local table)', async () => {
+        const [result, importErr] = await client.importCsn(testTableCsn);
+        if (importErr) console.error('importCsn failed:', importErr.message);
+        expect(importErr).toBeNull();
         expect(result).not.toBeNull();
+        expect(result!.objectIds.length).toBeGreaterThan(0);
     }, 60_000);
 
     test('readLocalTable', async () => {
@@ -68,21 +59,6 @@ describe('local table CRUD lifecycle', () => {
         expect(exists).toBe(true);
     }, 30_000);
 
-    test('updateLocalTable', async () => {
-        const [result, updateErr] = await client.updateLocalTable(updatedTableCsn, TEST_TABLE_NAME);
-        if (updateErr) console.error('updateLocalTable failed:', updateErr.message);
-        expect(updateErr).toBeNull();
-        expect(result).not.toBeNull();
-    }, 60_000);
-
-    test('upsertLocalTable (update path)', async () => {
-        const [result, upsertErr] = await client.upsertLocalTable(testTableCsn, TEST_TABLE_NAME);
-        if (upsertErr) console.error('upsertLocalTable (update) failed:', upsertErr.message);
-        expect(upsertErr).toBeNull();
-        expect(result).not.toBeNull();
-        expect(result!.action).toBe('updated');
-    }, 60_000);
-
     test('deleteLocalTable', async () => {
         const [result, deleteErr] = await client.deleteLocalTable(TEST_TABLE_NAME);
         if (deleteErr) console.error('deleteLocalTable failed:', deleteErr.message);
@@ -94,12 +70,4 @@ describe('local table CRUD lifecycle', () => {
         expect(existsErr).toBeNull();
         expect(exists).toBe(false);
     }, 30_000);
-
-    test('upsertLocalTable (create path)', async () => {
-        const [result, upsertErr] = await client.upsertLocalTable(testTableCsn, TEST_TABLE_NAME);
-        if (upsertErr) console.error('upsertLocalTable (create) failed:', upsertErr.message);
-        expect(upsertErr).toBeNull();
-        expect(result).not.toBeNull();
-        expect(result!.action).toBe('created');
-    }, 60_000);
 });

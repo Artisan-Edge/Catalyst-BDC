@@ -17,7 +17,9 @@ Programmatic Datasphere object management via direct HTTP API.
 
 ## Overview
 
-Catalyst-BDC is a TypeScript library for automated Datasphere object management. It communicates directly with the Datasphere REST API (no CLI dependency). It handles native OAuth browser login, CSRF token management, automatic token refresh, and CRUD operations for views, local tables, replication flows, and analytic models.
+Catalyst-BDC is a TypeScript library for automated Datasphere object management. It communicates directly with the Datasphere REST API (no CLI dependency). It handles native OAuth browser login, CSRF token management, automatic token refresh, and import/read/delete operations for views, local tables, replication flows, and analytic models.
+
+All write operations use the `/deepsea/repository/` import API — the same endpoint the Datasphere UI uses. This supports multi-definition CSN files in a single request, handles circular references between objects, and automatically deploys after import.
 
 ---
 
@@ -67,22 +69,19 @@ bun scripts/myScript.ts
 A script follows this pattern:
 
 1. Import `dotenv/config` to load `.env` variables
-2. Read the CSN file from disk
+2. Read the CSN file(s) from disk
 3. Create a `BdcClient` via `createClient(config)`
 4. Call `client.login()` to authenticate (opens browser for OAuth)
-5. Call the desired operation (`createView`, `upsertView`, `upsertLocalTable`, etc.)
+5. Call `client.importCsn(csn)` to import and deploy
 6. Handle the Result tuple — check the error before using the data
 
-### Full example — uploading a view
+### Full example — importing views
 
 ```typescript
 import 'dotenv/config';
 import { readFileSync } from 'node:fs';
 import { createClient } from '../src';
 import type { CsnFile, BdcConfig } from '../src';
-
-const CSN_PATH = 'C:/path/to/my-view.json';
-const VIEW_NAME = 'MY_VIEW_NAME';  // must match a key in csn.definitions
 
 const config: BdcConfig = {
     host: process.env['DSP_HOST']!,
@@ -92,8 +91,7 @@ const config: BdcConfig = {
 };
 
 async function main(): Promise<void> {
-    const raw = readFileSync(CSN_PATH, 'utf-8');
-    const csn: CsnFile = JSON.parse(raw);
+    const csn: CsnFile = JSON.parse(readFileSync('my-views.json', 'utf-8'));
 
     const [client, clientErr] = createClient(config);
     if (clientErr) {
@@ -107,14 +105,13 @@ async function main(): Promise<void> {
         process.exit(1);
     }
 
-    const [result, createErr] = await client.createView(csn, VIEW_NAME);
-    if (createErr) {
-        console.error('Failed to create view:', createErr.message);
+    const [result, importErr] = await client.importCsn(csn);
+    if (importErr) {
+        console.error('Import failed:', importErr.message);
         process.exit(1);
     }
 
-    console.log('View created successfully.');
-    console.log(result);
+    console.log(`Imported ${result.objectIds.length} objects.`);
 }
 
 main();
@@ -147,28 +144,16 @@ interface BdcConfig {
 | Method | Signature | Description |
 |--------|-----------|-------------|
 | `login` | `() => AsyncResult<OAuthTokens>` | Native OAuth browser flow. Returns tokens. |
-| `createAnalyticModel` | `(csn, objectName) => AsyncResult<string>` | Creates an analytic model via POST. |
+| `importCsn` | `(csn) => AsyncResult<ImportCsnResult>` | Imports a CSN (single or multi-definition) via `/deepsea/` API, then deploys. |
 | `readAnalyticModel` | `(objectName) => AsyncResult<string>` | Reads an analytic model definition via GET. |
-| `updateAnalyticModel` | `(csn, objectName) => AsyncResult<string>` | Updates an analytic model via PUT. |
-| `deleteAnalyticModel` | `(objectName) => AsyncResult<string>` | Deletes an analytic model via DELETE. |
-| `upsertAnalyticModel` | `(csn, objectName) => AsyncResult<UpsertAnalyticModelResult>` | Creates or updates an analytic model. |
-| `createView` | `(csn, objectName) => AsyncResult<string>` | Creates a view via POST. |
 | `readView` | `(objectName) => AsyncResult<string>` | Reads a view definition via GET. |
-| `updateView` | `(csn, objectName) => AsyncResult<string>` | Updates a view via PUT. |
+| `readLocalTable` | `(objectName) => AsyncResult<string>` | Reads a local table definition via GET. |
+| `readReplicationFlow` | `(objectName) => AsyncResult<string>` | Reads a replication flow definition via GET. |
+| `deleteAnalyticModel` | `(objectName) => AsyncResult<string>` | Deletes an analytic model via DELETE. |
 | `deleteView` | `(objectName) => AsyncResult<string>` | Deletes a view via DELETE. |
-| `upsertView` | `(csn, objectName) => AsyncResult<UpsertViewResult>` | Creates or updates a view. |
-| `createLocalTable` | `(csn, objectName) => AsyncResult<string>` | Creates a local table. |
-| `readLocalTable` | `(objectName) => AsyncResult<string>` | Reads a local table definition. |
-| `updateLocalTable` | `(csn, objectName) => AsyncResult<string>` | Updates a local table. |
-| `deleteLocalTable` | `(objectName) => AsyncResult<string>` | Deletes a local table. |
-| `upsertLocalTable` | `(csn, objectName) => AsyncResult<UpsertLocalTableResult>` | Creates or updates a local table. |
-| `createReplicationFlow` | `(csn, objectName) => AsyncResult<string>` | Creates a replication flow. |
-| `readReplicationFlow` | `(objectName) => AsyncResult<string>` | Reads a replication flow definition. |
-| `updateReplicationFlow` | `(csn, objectName) => AsyncResult<string>` | Updates a replication flow. |
-| `deleteReplicationFlow` | `(objectName) => AsyncResult<string>` | Deletes a replication flow. |
-| `upsertReplicationFlow` | `(csn, objectName) => AsyncResult<UpsertReplicationFlowResult>` | Creates or updates a replication flow. |
+| `deleteLocalTable` | `(objectName) => AsyncResult<string>` | Deletes a local table via DELETE. |
+| `deleteReplicationFlow` | `(objectName) => AsyncResult<string>` | Deletes a replication flow via DELETE. |
 | `runReplicationFlow` | `(flowName) => AsyncResult<RunReplicationFlowResult>` | Triggers a replication flow run. |
-| `importCsn` | `(csn) => AsyncResult<string>` | Imports a multi-definition CSN via `/deepsea/` API. Resolves space UUID automatically. |
 | `objectExists` | `(objectType, name) => AsyncResult<boolean>` | Checks if an object exists (GET + 200 check). |
 
 All methods return `AsyncResult<T>` which is `Promise<[T, null] | [null, Error]>`.
@@ -183,7 +168,7 @@ CSN (Core Schema Notation) files are JSON exports from SAP Datasphere. They cont
 
 ```typescript
 interface CsnFile {
-    definitions?: Record<string, CsnEntity>;              // views, local tables
+    definitions?: Record<string, CsnEntity>;              // views, local tables, analytic models
     replicationflows?: Record<string, CsnReplicationFlow>; // replication flows
     version?: { csn: string };
     meta?: { creator: string };
@@ -191,10 +176,10 @@ interface CsnFile {
 }
 ```
 
-- **Views and local tables** are stored under `definitions`. Each key is the object's technical name.
-- **Replication flows** are stored under `replicationflows`. Each key is the flow's technical name.
-- A CSN file can contain multiple definitions, but the Datasphere API only accepts **one object per request**. The library handles extraction automatically — you pass the full CSN and the object name, and it extracts the single definition before uploading.
-- Missing dependencies are allowed — the `allowMissingDependencies=true` query parameter is always set.
+- **Views, local tables, and analytic models** are stored under `definitions`
+- **Replication flows** are stored under `replicationflows`
+- A CSN file can contain **multiple definitions** — `importCsn` sends them all in a single request
+- Multiple CSN files can be merged by combining their `definitions` objects before importing
 
 ---
 
@@ -210,14 +195,13 @@ type AsyncResult<T> = Promise<Result<T>>;
 Every fallible operation returns a Result. Always check the error before using the data:
 
 ```typescript
-const [result, error] = await client.createView(csn, 'MyView');
+const [result, error] = await client.importCsn(csn);
 if (error) {
-    // error is Error — handle it
     console.error(error.message);
     return;
 }
 // result is guaranteed non-null here
-console.log(result);
+console.log(`Imported ${result.objectIds.length} objects`);
 ```
 
 ---
@@ -229,9 +213,8 @@ src/
 ├── types/           # Result tuples, BdcConfig (Zod), CSN types, object type registry, requestor
 ├── core/
 │   ├── auth/        # Native OAuth browser flow (performOAuthLogin)
-│   ├── csn/         # extractObject, validateCsnFile, resolveDependencies
 │   ├── http/        # checkResponse, buildDatasphereUrl, CSRF/token management
-│   ├── operations/  # CRUD operations for views, tables, flows (one function per file)
+│   ├── operations/  # Read, delete, import, run (one function per file)
 │   └── utils/       # debug logging, safe JSON parsing
 ├── client/          # BdcClient interface + createClient factory (self-referencing DatasphereRequestor)
 └── index.ts         # Public barrel exports

@@ -22,16 +22,6 @@ const testViewCsn: CsnFile = {
     $version: '1.0',
 };
 
-const updatedViewCsn: CsnFile = {
-    ...testViewCsn,
-    definitions: {
-        [TEST_VIEW_NAME]: {
-            ...testViewCsn.definitions![TEST_VIEW_NAME]!,
-            '@EndUserText.label': 'Catalyst Test View (Updated)',
-        },
-    },
-};
-
 describe('view CRUD lifecycle', () => {
     let client: BdcClient;
 
@@ -49,11 +39,12 @@ describe('view CRUD lifecycle', () => {
         await safeDelete(client, 'view', TEST_VIEW_NAME);
     }, 60_000);
 
-    test('createView', async () => {
-        const [result, createErr] = await client.createView(testViewCsn, TEST_VIEW_NAME);
-        if (createErr) console.error('createView failed:', createErr.message);
-        expect(createErr).toBeNull();
+    test('importCsn (create view)', async () => {
+        const [result, importErr] = await client.importCsn(testViewCsn);
+        if (importErr) console.error('importCsn failed:', importErr.message);
+        expect(importErr).toBeNull();
         expect(result).not.toBeNull();
+        expect(result!.objectIds.length).toBeGreaterThan(0);
     }, 60_000);
 
     test('readView', async () => {
@@ -70,21 +61,6 @@ describe('view CRUD lifecycle', () => {
         expect(exists).toBe(true);
     }, 30_000);
 
-    test('updateView', async () => {
-        const [result, updateErr] = await client.updateView(updatedViewCsn, TEST_VIEW_NAME);
-        if (updateErr) console.error('updateView failed:', updateErr.message);
-        expect(updateErr).toBeNull();
-        expect(result).not.toBeNull();
-    }, 60_000);
-
-    test('upsertView (update path)', async () => {
-        const [result, upsertErr] = await client.upsertView(testViewCsn, TEST_VIEW_NAME);
-        if (upsertErr) console.error('upsertView (update) failed:', upsertErr.message);
-        expect(upsertErr).toBeNull();
-        expect(result).not.toBeNull();
-        expect(result!.action).toBe('updated');
-    }, 60_000);
-
     test('deleteView', async () => {
         const [result, deleteErr] = await client.deleteView(TEST_VIEW_NAME);
         if (deleteErr) console.error('deleteView failed:', deleteErr.message);
@@ -96,12 +72,4 @@ describe('view CRUD lifecycle', () => {
         expect(existsErr).toBeNull();
         expect(exists).toBe(false);
     }, 30_000);
-
-    test('upsertView (create path)', async () => {
-        const [result, upsertErr] = await client.upsertView(testViewCsn, TEST_VIEW_NAME);
-        if (upsertErr) console.error('upsertView (create) failed:', upsertErr.message);
-        expect(upsertErr).toBeNull();
-        expect(result).not.toBeNull();
-        expect(result!.action).toBe('created');
-    }, 60_000);
 });

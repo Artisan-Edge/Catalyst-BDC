@@ -36,20 +36,13 @@ describe('replication flow CRUD lifecycle', () => {
         }
     }, 180_000);
 
-    test('create prerequisite local tables', async () => {
-        for (const tableName of targetTableNames) {
-            const [result, tableErr] = await client.createLocalTable(csn, tableName);
-            if (tableErr) console.error(`createLocalTable "${tableName}" failed:`, tableErr.message);
-            expect(tableErr).toBeNull();
-        }
-    }, 120_000);
-
-    test('createReplicationFlow', async () => {
-        const [result, createErr] = await client.createReplicationFlow(csn, flowName);
-        if (createErr) console.error('createReplicationFlow failed:', createErr.message);
-        expect(createErr).toBeNull();
+    test('importCsn (create tables + flow)', async () => {
+        const [result, importErr] = await client.importCsn(csn);
+        if (importErr) console.error('importCsn failed:', importErr.message);
+        expect(importErr).toBeNull();
         expect(result).not.toBeNull();
-    }, 60_000);
+        expect(result!.objectIds.length).toBeGreaterThan(0);
+    }, 120_000);
 
     test('readReplicationFlow', async () => {
         const [result, readErr] = await client.readReplicationFlow(flowName);
@@ -63,14 +56,6 @@ describe('replication flow CRUD lifecycle', () => {
         expect(existsErr).toBeNull();
         expect(exists).toBe(true);
     }, 30_000);
-
-    test('upsertReplicationFlow (update path)', async () => {
-        const [result, upsertErr] = await client.upsertReplicationFlow(csn, flowName);
-        if (upsertErr) console.error('upsertReplicationFlow (update) failed:', upsertErr.message);
-        expect(upsertErr).toBeNull();
-        expect(result).not.toBeNull();
-        expect(result!.action).toBe('updated');
-    }, 60_000);
 
     test('runReplicationFlow', async () => {
         const [result, runErr] = await client.runReplicationFlow(flowName);

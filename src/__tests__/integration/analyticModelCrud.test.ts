@@ -21,16 +21,6 @@ const testModelCsn: CsnFile = {
     $version: '1.0',
 };
 
-const updatedModelCsn: CsnFile = {
-    ...testModelCsn,
-    definitions: {
-        [TEST_MODEL_NAME]: {
-            ...testModelCsn.definitions![TEST_MODEL_NAME]!,
-            '@EndUserText.label': 'Catalyst Test Analytic Model (Updated)',
-        },
-    },
-};
-
 describe('analytic model CRUD lifecycle', () => {
     let client: BdcClient;
 
@@ -48,11 +38,12 @@ describe('analytic model CRUD lifecycle', () => {
         await safeDelete(client, 'analytic-model', TEST_MODEL_NAME);
     }, 60_000);
 
-    test('createAnalyticModel', async () => {
-        const [result, createErr] = await client.createAnalyticModel(testModelCsn, TEST_MODEL_NAME);
-        if (createErr) console.error('createAnalyticModel failed:', createErr.message);
-        expect(createErr).toBeNull();
+    test('importCsn (create analytic model)', async () => {
+        const [result, importErr] = await client.importCsn(testModelCsn);
+        if (importErr) console.error('importCsn failed:', importErr.message);
+        expect(importErr).toBeNull();
         expect(result).not.toBeNull();
+        expect(result!.objectIds.length).toBeGreaterThan(0);
     }, 60_000);
 
     test('readAnalyticModel', async () => {
@@ -69,21 +60,6 @@ describe('analytic model CRUD lifecycle', () => {
         expect(exists).toBe(true);
     }, 30_000);
 
-    test('updateAnalyticModel', async () => {
-        const [result, updateErr] = await client.updateAnalyticModel(updatedModelCsn, TEST_MODEL_NAME);
-        if (updateErr) console.error('updateAnalyticModel failed:', updateErr.message);
-        expect(updateErr).toBeNull();
-        expect(result).not.toBeNull();
-    }, 60_000);
-
-    test('upsertAnalyticModel (update path)', async () => {
-        const [result, upsertErr] = await client.upsertAnalyticModel(testModelCsn, TEST_MODEL_NAME);
-        if (upsertErr) console.error('upsertAnalyticModel (update) failed:', upsertErr.message);
-        expect(upsertErr).toBeNull();
-        expect(result).not.toBeNull();
-        expect(result!.action).toBe('updated');
-    }, 60_000);
-
     test('deleteAnalyticModel', async () => {
         const [result, deleteErr] = await client.deleteAnalyticModel(TEST_MODEL_NAME);
         if (deleteErr) console.error('deleteAnalyticModel failed:', deleteErr.message);
@@ -95,12 +71,4 @@ describe('analytic model CRUD lifecycle', () => {
         expect(existsErr).toBeNull();
         expect(exists).toBe(false);
     }, 30_000);
-
-    test('upsertAnalyticModel (create path)', async () => {
-        const [result, upsertErr] = await client.upsertAnalyticModel(testModelCsn, TEST_MODEL_NAME);
-        if (upsertErr) console.error('upsertAnalyticModel (create) failed:', upsertErr.message);
-        expect(upsertErr).toBeNull();
-        expect(result).not.toBeNull();
-        expect(result!.action).toBe('created');
-    }, 60_000);
 });

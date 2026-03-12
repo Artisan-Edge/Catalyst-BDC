@@ -34,69 +34,52 @@ function resolveNames(mode: UploadMode, nameArgs: string[]): string[] {
     return nameArgs;
 }
 
-async function createFlow(client: BdcClient, fileName: string): Promise<void> {
-    const flowCsn = JSON.parse(readFileSync(path.join(FLOWS_DIR, fileName), "utf-8")) as CsnFile;
-    const flowNames = Object.keys(flowCsn.replicationflows ?? {});
-    if (flowNames.length === 0) {
-        console.error(`No replication flows found in ${fileName}`);
-        process.exit(1);
-    }
-    const actualFlowName = flowNames[0]!;
-
-    console.log(`[FLOW] Creating replication flow ${actualFlowName}`);
-    const [flowResult, flowErr] = await client.createReplicationFlow(flowCsn, actualFlowName);
-    if (flowErr) {
-        console.error(`  ERROR: ${flowErr.message}`);
-        process.exit(1);
-    }
-    console.log(flowResult);
+function loadCsn(dir: string, name: string): CsnFile {
+    const fileName = name.endsWith(".json") ? name : `${name}.json`;
+    return JSON.parse(readFileSync(path.join(dir, fileName), "utf-8")) as CsnFile;
 }
 
 async function uploadFlow(client: BdcClient, name: string): Promise<void> {
-    const fileName = name.endsWith(".json") ? name : `${name}.json`;
+    // Merge the local table CSN and flow CSN into one import
+    const tableCsn = loadCsn(LOCAL_TABLES_DIR, name);
+    const flowCsn = loadCsn(FLOWS_DIR, name);
 
-    const tableCsn = JSON.parse(readFileSync(path.join(LOCAL_TABLES_DIR, fileName), "utf-8")) as CsnFile;
-    const tableName = Object.keys(tableCsn.definitions ?? {}).find((n) => n.toLowerCase().endsWith("_delta"));
-    if (!tableName) {
-        console.error(`No delta table definition found in ${fileName}`);
+    const merged: CsnFile = {
+        ...flowCsn,
+        definitions: { ...tableCsn.definitions },
+    };
+
+    console.log(`[FLOW] Importing table + flow for ${name}`);
+    const [result, importErr] = await client.importCsn(merged);
+    if (importErr) {
+        console.error(`  ERROR: ${importErr.message}`);
         process.exit(1);
     }
-
-    // Create delta local table (regular table is auto-created by the replication flow)
-    console.log(`[TABLE] Creating local table ${tableName}`);
-    const [tableResult, tableErr] = await client.createLocalTable(tableCsn, tableName);
-    if (tableErr) {
-        console.error(`  ERROR: ${tableErr.message}`);
-        process.exit(1);
-    }
-    console.log(tableResult);
-
-    await createFlow(client, fileName);
+    console.log(`  Imported ${result.objectIds.length} objects`);
 }
 
 async function uploadFlowOnly(client: BdcClient, name: string): Promise<void> {
-    const fileName = name.endsWith(".json") ? name : `${name}.json`;
-    await createFlow(client, fileName);
+    const flowCsn = loadCsn(FLOWS_DIR, name);
+
+    console.log(`[FLOW] Importing flow for ${name}`);
+    const [result, importErr] = await client.importCsn(flowCsn);
+    if (importErr) {
+        console.error(`  ERROR: ${importErr.message}`);
+        process.exit(1);
+    }
+    console.log(`  Imported ${result.objectIds.length} objects`);
 }
 
 async function uploadView(client: BdcClient, name: string): Promise<void> {
-    const fileName = name.endsWith(".json") ? name : `${name}.json`;
+    const viewCsn = loadCsn(VIEWS_DIR, name);
 
-    const viewCsn = JSON.parse(readFileSync(path.join(VIEWS_DIR, fileName), "utf-8")) as CsnFile;
-    const viewNames = Object.keys(viewCsn.definitions ?? {});
-    if (viewNames.length === 0) {
-        console.error(`No view definitions found in ${fileName}`);
+    console.log(`[VIEW] Importing view ${name}`);
+    const [result, importErr] = await client.importCsn(viewCsn);
+    if (importErr) {
+        console.error(`  ERROR: ${importErr.message}`);
         process.exit(1);
     }
-    const actualViewName = viewNames[0]!;
-
-    console.log(`[VIEW] Creating view ${actualViewName}`);
-    const [viewResult, viewErr] = await client.createView(viewCsn, actualViewName);
-    if (viewErr) {
-        console.error(`  ERROR: ${viewErr.message}`);
-        process.exit(1);
-    }
-    console.log(viewResult);
+    console.log(`  Imported ${result.objectIds.length} objects`);
 }
 
 async function main(): Promise<void> {
@@ -109,7 +92,7 @@ async function main(): Promise<void> {
         console.error("Usage: bun scripts/upload.ts <flow|flow-only|view> <name|*> [name...]");
         console.error("Examples:");
         console.error('  bun scripts/upload.ts flow "*"                  # all flows (table + flow)');
-        console.error("  bun scripts/upload.ts flow I_BusinessArea       # creates delta table + replication flow");
+        console.error("  bun scripts/upload.ts flow I_BusinessArea       # imports delta table + replication flow");
         console.error('  bun scripts/upload.ts flow-only "*"             # all flows, no table creation');
         console.error("  bun scripts/upload.ts flow-only I_BusinessArea");
         console.error('  bun scripts/upload.ts view "*"                  # all views');

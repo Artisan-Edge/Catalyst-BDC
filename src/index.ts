@@ -19,12 +19,8 @@ export { refreshAccessToken, fetchCsrf } from './core/http/session';
 export { checkResponse, buildDatasphereUrl } from './core/http/helpers';
 
 // Import (multi-definition CSN via /deepsea/ API)
-export { resolveSpaceId, importCsn, deployObjects } from './core/operations/import';
+export { resolveSpaceId, importCsn, deployObjects, pollForObjectGuids } from './core/operations/import';
 export type { ImportCsnResult } from './core/operations/import';
 
 // Operation result types
-export type { UpsertAnalyticModelResult } from './core/operations/analytic-model/upsert';
-export type { UpsertLocalTableResult } from './core/operations/local-table/upsert';
-export type { UpsertReplicationFlowResult } from './core/operations/replication-flow/upsert';
 export type { RunReplicationFlowResult } from './core/operations/replication-flow/run';
-export type { UpsertViewResult } from './core/operations/sql-view/upsert';

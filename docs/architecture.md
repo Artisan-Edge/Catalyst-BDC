@@ -33,18 +33,14 @@ src/
 │   ├── http/            # HTTP helpers
 │   │   ├── helpers.ts   # checkResponse(), buildDatasphereUrl()
 │   │   └── session.ts   # refreshAccessToken(), fetchCsrf()
-│   ├── csn/             # CSN file manipulation
-│   │   ├── extract.ts   # extractObject() — isolates single object
-│   │   ├── validate.ts  # validateCsnFile() — structural checks
-│   │   └── resolveDeps.ts  # resolveDependencies() — pre-dep names
 │   ├── operations/      # Business logic (one function per file)
 │   │   ├── login.ts     # OAuth login via performOAuthLogin
 │   │   ├── objectExists.ts  # GET + check 200 vs 404
-│   │   ├── analytic-model/  # create, read, update, delete, upsert
-│   │   ├── sql-view/    # create, read, update, delete, upsert
-│   │   ├── local-table/ # create, read, update, delete, upsert
-│   │   ├── replication-flow/  # create, read, update, delete, upsert, run
-│   │   └── import/      # resolveSpaceId, importCsn (multi-definition via /deepsea/)
+│   │   ├── analytic-model/  # read, delete
+│   │   ├── sql-view/        # read, delete
+│   │   ├── local-table/     # read, delete
+│   │   ├── replication-flow/  # read, delete, run
+│   │   └── import/      # resolveSpaceId, importCsn, deployObjects
 │   └── index.ts
 ├── client/              # Public API surface
 │   ├── client.ts        # BdcClient interface + BdcClientImpl (self-referencing requestor)
@@ -63,8 +59,7 @@ types/            ← zod only
 core/utils/       ← (leaf)
 core/auth/        ← types/, core/utils/
 core/http/        ← types/, core/utils/
-core/csn/         ← types/
-core/operations/  ← types/, core/auth/, core/http/, core/csn/, core/utils/
+core/operations/  ← types/, core/http/, core/utils/
 client/           ← types/, core/operations/, core/http/, core/utils/
 index.ts          ← client/, types/, core/
 ```
@@ -86,7 +81,7 @@ interface DatasphereRequestor {
 this.requestor = { request: this.request.bind(this) };
 ```
 
-This pattern (from Catalyst-Relay's `AdtRequestor`) allows:
+This pattern allows:
 - Automatic token refresh on expiry
 - CSRF auto-retry on 403
 - Operations to be tested with custom requestors
@@ -98,21 +93,20 @@ All fallible operations return `Result<T, Error>` — no thrown exceptions:
 ```typescript
 type Result<T, E extends Error = Error> = [T, null] | [null, E];
 
-const [data, error] = await client.createView(csn, 'MyView');
+const [result, error] = await client.importCsn(csn);
 if (error) { /* handle */ }
-// data is guaranteed non-null
+// result is guaranteed non-null
 ```
 
-### CRUD Endpoint Mapping
+### Endpoint Mapping
 
-| Operation | Method | Path | Query Params |
-|-----------|--------|------|-------------|
-| create | POST | `/dwaas-core/api/v1/spaces/{space}/{endpoint}` | `saveAnyway=true&allowMissingDependencies=true&deploy=true` |
-| read | GET | `/dwaas-core/api/v1/spaces/{space}/{endpoint}/{name}` | — |
-| update | PUT | `/dwaas-core/api/v1/spaces/{space}/{endpoint}/{name}` | `saveAnyway=true&allowMissingDependencies=true&deploy=true` |
-| delete | DELETE | `/dwaas-core/api/v1/spaces/{space}/{endpoint}/{name}` | `deleteAnyway=true` |
-| run | POST | `/dwaas-core/replicationflow/space/{space}/flows/{name}/run` | — |
-| import | POST | `/deepsea/repository/{spaceName}/objects/` | Body: `{ content, saveAction: "import", async: true, space_id }` |
+| Operation | Method | Path |
+|-----------|--------|------|
+| import | POST | `/deepsea/repository/{space}/objects/` |
+| deploy | POST | `/dwaas-core/deploy/{space}/objects` |
+| read | GET | `/dwaas-core/api/v1/spaces/{space}/{endpoint}/{name}` |
+| delete | DELETE | `/dwaas-core/api/v1/spaces/{space}/{endpoint}/{name}` |
+| run | POST | `/dwaas-core/replicationflow/space/{space}/flows/{name}/run` |
 
 ### One Function Per File
 
@@ -131,32 +125,19 @@ interface BdcClient {
     readonly config: BdcConfig;
     login(): AsyncResult<OAuthTokens>;
 
-    createAnalyticModel(csn, objectName): AsyncResult<string>;
     readAnalyticModel(objectName): AsyncResult<string>;
-    updateAnalyticModel(csn, objectName): AsyncResult<string>;
-    deleteAnalyticModel(objectName): AsyncResult<string>;
-    upsertAnalyticModel(csn, objectName): AsyncResult<UpsertAnalyticModelResult>;
-
-    createView(csn, objectName): AsyncResult<string>;
     readView(objectName): AsyncResult<string>;
-    updateView(csn, objectName): AsyncResult<string>;
-    deleteView(objectName): AsyncResult<string>;
-    upsertView(csn, objectName): AsyncResult<UpsertViewResult>;
-
-    createLocalTable(csn, objectName): AsyncResult<string>;
     readLocalTable(objectName): AsyncResult<string>;
-    updateLocalTable(csn, objectName): AsyncResult<string>;
-    deleteLocalTable(objectName): AsyncResult<string>;
-    upsertLocalTable(csn, objectName): AsyncResult<UpsertLocalTableResult>;
-
-    createReplicationFlow(csn, objectName): AsyncResult<string>;
     readReplicationFlow(objectName): AsyncResult<string>;
-    updateReplicationFlow(csn, objectName): AsyncResult<string>;
+
+    deleteAnalyticModel(objectName): AsyncResult<string>;
+    deleteView(objectName): AsyncResult<string>;
+    deleteLocalTable(objectName): AsyncResult<string>;
     deleteReplicationFlow(objectName): AsyncResult<string>;
-    upsertReplicationFlow(csn, objectName): AsyncResult<UpsertReplicationFlowResult>;
+
     runReplicationFlow(flowName): AsyncResult<RunReplicationFlowResult>;
 
-    importCsn(csn): AsyncResult<string>;
+    importCsn(csn): AsyncResult<ImportCsnResult>;
 
     objectExists(objectType, technicalName): AsyncResult<boolean>;
 }
@@ -190,16 +171,16 @@ OAuth accepts either inline credentials or a path to a JSON options file.
 
 ## Request Lifecycle
 
-A typical `createView` call:
+A typical `importCsn` call:
 
 1. **Ensure access token** — check cached token expiry, refresh if needed
 2. **Ensure CSRF** — fetch from `/api/v1/csrf` if not cached
-3. **Extract object** — `extractObject()` isolates single definition from CSN
-4. **Build URL** — `buildDatasphereUrl()` constructs full URL with query params
-5. **POST** — send CSN payload as JSON body with auth + CSRF headers
-6. **CSRF retry** — if 403, invalidate CSRF cache, fetch new token, retry once
-7. **Check response** — `checkResponse()` extracts body text or returns error
-8. **Return Result** — success tuple with response body, or error tuple
+3. **Resolve space UUID** — `GET /deepsea/repository/{space}/designObjects` (cached after first call)
+4. **POST import** — send CSN to `/deepsea/repository/{space}/objects/` with `{ data: { content, saveAction, space_id } }`
+5. **CSRF retry** — if 403, invalidate CSRF cache, fetch new token, retry once
+6. **Parse response** — extract object GUIDs from `{ id: { NAME: { id: GUID } } }`
+7. **Deploy** — `POST /dwaas-core/deploy/{space}/objects` with `{ folderGuid, objectIds, spaceName }`
+8. **Return Result** — success tuple with `ImportCsnResult`, or error tuple
 
 Login follows a different path: native OAuth authorization code flow via local HTTP callback server.
 

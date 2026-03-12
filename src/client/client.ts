@@ -6,38 +6,23 @@ import type { DatasphereRequestor, DatasphereRequestOptions } from '../types/req
 import type { DatasphereObjectTypeName } from '../types/objectTypes';
 import type { OAuthTokens } from '../core/auth/oauth';
 import { loadCachedTokens, saveCachedTokens } from '../core/auth/tokenCache';
-import type { UpsertAnalyticModelResult } from '../core/operations/analytic-model/upsert';
-import type { UpsertLocalTableResult } from '../core/operations/local-table/upsert';
-import type { UpsertReplicationFlowResult } from '../core/operations/replication-flow/upsert';
 import type { RunReplicationFlowResult } from '../core/operations/replication-flow/run';
-import type { UpsertViewResult } from '../core/operations/sql-view/upsert';
+import type { ImportCsnResult } from '../core/operations/import/importCsn';
 import { login as coreLogin } from '../core/operations/login';
-import { createAnalyticModel as coreCreateAnalyticModel } from '../core/operations/analytic-model/create';
 import { readAnalyticModel as coreReadAnalyticModel } from '../core/operations/analytic-model/read';
-import { updateAnalyticModel as coreUpdateAnalyticModel } from '../core/operations/analytic-model/update';
 import { deleteAnalyticModel as coreDeleteAnalyticModel } from '../core/operations/analytic-model/delete';
-import { upsertAnalyticModel as coreUpsertAnalyticModel } from '../core/operations/analytic-model/upsert';
-import { createView as coreCreateView } from '../core/operations/sql-view/create';
 import { readView as coreReadView } from '../core/operations/sql-view/read';
-import { updateView as coreUpdateView } from '../core/operations/sql-view/update';
 import { deleteView as coreDeleteView } from '../core/operations/sql-view/delete';
-import { upsertView as coreUpsertView } from '../core/operations/sql-view/upsert';
-import { createLocalTable as coreCreateLocalTable } from '../core/operations/local-table/create';
 import { readLocalTable as coreReadLocalTable } from '../core/operations/local-table/read';
-import { updateLocalTable as coreUpdateLocalTable } from '../core/operations/local-table/update';
 import { deleteLocalTable as coreDeleteLocalTable } from '../core/operations/local-table/delete';
-import { upsertLocalTable as coreUpsertLocalTable } from '../core/operations/local-table/upsert';
-import { createReplicationFlow as coreCreateReplicationFlow } from '../core/operations/replication-flow/create';
 import { readReplicationFlow as coreReadReplicationFlow } from '../core/operations/replication-flow/read';
-import { updateReplicationFlow as coreUpdateReplicationFlow } from '../core/operations/replication-flow/update';
 import { deleteReplicationFlow as coreDeleteReplicationFlow } from '../core/operations/replication-flow/delete';
-import { upsertReplicationFlow as coreUpsertReplicationFlow } from '../core/operations/replication-flow/upsert';
 import { runReplicationFlow as coreRunReplicationFlow } from '../core/operations/replication-flow/run';
 import { objectExists as coreObjectExists } from '../core/operations/objectExists';
 import { resolveSpaceId as coreResolveSpaceId } from '../core/operations/import/resolveSpaceId';
 import { importCsn as coreImportCsn } from '../core/operations/import/importCsn';
-import type { ImportCsnResult } from '../core/operations/import/importCsn';
 import { deployObjects as coreDeployObjects } from '../core/operations/import/deployObjects';
+import { pollForObjectGuids as corePollForObjectGuids } from '../core/operations/import/pollForObjectGuids';
 import { refreshAccessToken, fetchCsrf, TOKEN_EXPIRY_BUFFER_SEC } from '../core/http/session';
 import { buildDatasphereUrl } from '../core/http/helpers';
 import { debug } from '../core/utils/logging';
@@ -60,33 +45,19 @@ export interface BdcClient {
     readonly config: BdcConfig;
     login(): AsyncResult<OAuthTokens>;
 
-    // Analytic model
-    createAnalyticModel(csn: CsnFile, objectName: string): AsyncResult<string>;
+    // Read
     readAnalyticModel(objectName: string): AsyncResult<string>;
-    updateAnalyticModel(csn: CsnFile, objectName: string): AsyncResult<string>;
-    deleteAnalyticModel(objectName: string): AsyncResult<string>;
-    upsertAnalyticModel(csn: CsnFile, objectName: string): AsyncResult<UpsertAnalyticModelResult>;
-
-    // SQL view
-    createView(csn: CsnFile, objectName: string): AsyncResult<string>;
     readView(objectName: string): AsyncResult<string>;
-    updateView(csn: CsnFile, objectName: string): AsyncResult<string>;
-    deleteView(objectName: string): AsyncResult<string>;
-    upsertView(csn: CsnFile, objectName: string): AsyncResult<UpsertViewResult>;
-
-    // Local table
-    createLocalTable(csn: CsnFile, objectName: string): AsyncResult<string>;
     readLocalTable(objectName: string): AsyncResult<string>;
-    updateLocalTable(csn: CsnFile, objectName: string): AsyncResult<string>;
+    readReplicationFlow(objectName: string): AsyncResult<string>;
+
+    // Delete
+    deleteAnalyticModel(objectName: string): AsyncResult<string>;
+    deleteView(objectName: string): AsyncResult<string>;
     deleteLocalTable(objectName: string): AsyncResult<string>;
-    upsertLocalTable(csn: CsnFile, objectName: string): AsyncResult<UpsertLocalTableResult>;
+    deleteReplicationFlow(objectName: string): AsyncResult<string>;
 
     // Replication flow
-    createReplicationFlow(csn: CsnFile, objectName: string): AsyncResult<string>;
-    readReplicationFlow(objectName: string): AsyncResult<string>;
-    updateReplicationFlow(csn: CsnFile, objectName: string): AsyncResult<string>;
-    deleteReplicationFlow(objectName: string): AsyncResult<string>;
-    upsertReplicationFlow(csn: CsnFile, objectName: string): AsyncResult<UpsertReplicationFlowResult>;
     runReplicationFlow(flowName: string): AsyncResult<RunReplicationFlowResult>;
 
     // Import (multi-definition CSN via /deepsea/ API)
@@ -290,90 +261,41 @@ export class BdcClientImpl implements BdcClient {
         return ok(tokens);
     }
 
-    // Analytic model
-    async createAnalyticModel(csn: CsnFile, objectName: string): AsyncResult<string> {
-        return coreCreateAnalyticModel(this.requestor, this.config.space, csn, objectName);
-    }
-
+    // Read
     async readAnalyticModel(objectName: string): AsyncResult<string> {
         return coreReadAnalyticModel(this.requestor, this.config.space, objectName);
-    }
-
-    async updateAnalyticModel(csn: CsnFile, objectName: string): AsyncResult<string> {
-        return coreUpdateAnalyticModel(this.requestor, this.config.space, csn, objectName);
-    }
-
-    async deleteAnalyticModel(objectName: string): AsyncResult<string> {
-        return coreDeleteAnalyticModel(this.requestor, this.config.space, objectName);
-    }
-
-    async upsertAnalyticModel(csn: CsnFile, objectName: string): AsyncResult<UpsertAnalyticModelResult> {
-        return coreUpsertAnalyticModel(this.requestor, this.config.space, csn, objectName);
-    }
-
-    // SQL view
-    async createView(csn: CsnFile, objectName: string): AsyncResult<string> {
-        return coreCreateView(this.requestor, this.config.space, csn, objectName);
     }
 
     async readView(objectName: string): AsyncResult<string> {
         return coreReadView(this.requestor, this.config.space, objectName);
     }
 
-    async updateView(csn: CsnFile, objectName: string): AsyncResult<string> {
-        return coreUpdateView(this.requestor, this.config.space, csn, objectName);
-    }
-
-    async deleteView(objectName: string): AsyncResult<string> {
-        return coreDeleteView(this.requestor, this.config.space, objectName);
-    }
-
-    async upsertView(csn: CsnFile, objectName: string): AsyncResult<UpsertViewResult> {
-        return coreUpsertView(this.requestor, this.config.space, csn, objectName);
-    }
-
-    // Local table
-    async createLocalTable(csn: CsnFile, objectName: string): AsyncResult<string> {
-        return coreCreateLocalTable(this.requestor, this.config.space, csn, objectName);
-    }
-
     async readLocalTable(objectName: string): AsyncResult<string> {
         return coreReadLocalTable(this.requestor, this.config.space, objectName);
-    }
-
-    async updateLocalTable(csn: CsnFile, objectName: string): AsyncResult<string> {
-        return coreUpdateLocalTable(this.requestor, this.config.space, csn, objectName);
-    }
-
-    async deleteLocalTable(objectName: string): AsyncResult<string> {
-        return coreDeleteLocalTable(this.requestor, this.config.space, objectName);
-    }
-
-    async upsertLocalTable(csn: CsnFile, objectName: string): AsyncResult<UpsertLocalTableResult> {
-        return coreUpsertLocalTable(this.requestor, this.config.space, csn, objectName);
-    }
-
-    // Replication flow
-    async createReplicationFlow(csn: CsnFile, objectName: string): AsyncResult<string> {
-        return coreCreateReplicationFlow(this.requestor, this.config.space, csn, objectName);
     }
 
     async readReplicationFlow(objectName: string): AsyncResult<string> {
         return coreReadReplicationFlow(this.requestor, this.config.space, objectName);
     }
 
-    async updateReplicationFlow(csn: CsnFile, objectName: string): AsyncResult<string> {
-        return coreUpdateReplicationFlow(this.requestor, this.config.space, csn, objectName);
+    // Delete
+    async deleteAnalyticModel(objectName: string): AsyncResult<string> {
+        return coreDeleteAnalyticModel(this.requestor, this.config.space, objectName);
+    }
+
+    async deleteView(objectName: string): AsyncResult<string> {
+        return coreDeleteView(this.requestor, this.config.space, objectName);
+    }
+
+    async deleteLocalTable(objectName: string): AsyncResult<string> {
+        return coreDeleteLocalTable(this.requestor, this.config.space, objectName);
     }
 
     async deleteReplicationFlow(objectName: string): AsyncResult<string> {
         return coreDeleteReplicationFlow(this.requestor, this.config.space, objectName);
     }
 
-    async upsertReplicationFlow(csn: CsnFile, objectName: string): AsyncResult<UpsertReplicationFlowResult> {
-        return coreUpsertReplicationFlow(this.requestor, this.config.space, csn, objectName);
-    }
-
+    // Replication flow
     async runReplicationFlow(flowName: string): AsyncResult<RunReplicationFlowResult> {
         return coreRunReplicationFlow(this.requestor, this.config.space, flowName);
     }
@@ -389,9 +311,24 @@ export class BdcClientImpl implements BdcClient {
         const [importResult, importErr] = await coreImportCsn(this.requestor, this.config.space, this.spaceId, csn);
         if (importErr) return err(importErr);
 
+        let objectIds = importResult.objectIds;
+
+        // Async import — Datasphere processes large payloads in the background
+        // and returns no object IDs. Poll designObjects until they appear.
+        if (objectIds.length === 0 && Object.keys(csn.definitions ?? {}).length > 0) {
+            debug('Import returned no object IDs (async background save). Polling for completion...');
+
+            const definitionNames = Object.keys(csn.definitions ?? {});
+            const [pollResult, pollErr] = await corePollForObjectGuids(this.requestor, this.config.space, definitionNames);
+            if (pollErr) return err(pollErr);
+
+            objectIds = pollResult.objectIds;
+            importResult.objectIds = objectIds;
+        }
+
         // Deploy imported objects
-        if (importResult.objectIds.length > 0) {
-            const [, deployErr] = await coreDeployObjects(this.requestor, this.config.space, this.spaceId, importResult.objectIds);
+        if (objectIds.length > 0) {
+            const [, deployErr] = await coreDeployObjects(this.requestor, this.config.space, this.spaceId, objectIds);
             if (deployErr) return err(deployErr);
         }
 

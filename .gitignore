@@ -44,6 +44,7 @@ errors/
 *.html
 *.tgz
 test.output
+temp
 
 # Claude
 settings.local.json

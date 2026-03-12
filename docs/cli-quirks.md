@@ -37,7 +37,7 @@ For multi-definition imports (e.g. views with circular references), use the `/de
 
 ## Replication Flows
 
-Replication flows via CLI do **not** auto-create target local tables (the UI does). Target tables must be created explicitly first. The `createReplicationFlow` operation handles this via the `preDeps` mechanism in `src/types/objectTypes.ts`.
+Replication flows do **not** auto-create target local tables (the UI does). When using the CRUD API, target tables must be created explicitly first. When using `importCsn`, include both the table definitions and the replication flow in the same CSN — the import handles ordering automatically.
 
 ---
 
