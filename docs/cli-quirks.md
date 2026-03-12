@@ -64,9 +64,10 @@ Replication flows do **not** auto-create target local tables (the UI does). When
 ## Folder Assignments
 
 - Folder IDs (e.g. `Folder_VJHFMFLE`) are set via `_meta.dependencies.folderAssignment` in CSN
-- Folder assignment is **write-only** — reading an object back does not return its folder
-- There is no CLI or API endpoint to list folders or resolve folder names to IDs
-- Folder IDs must be discovered via the Datasphere UI
+- Folder assignment is **write-only** via the CRUD API — reading an object back does not return its folder
+- The **search API** (`/deepsea/repository/{space}/search/$all`) returns folder metadata (`folder_id`, `folder_name`, display names) and supports `folder_id:CHILD_OF` for browsing folder contents
+- Folder display names (e.g. "SNAP F01") differ from technical names (e.g. `Folder_YBEQBWWQ`) — the search API provides both
+- Use `BdcClient.listFolders()` to list folders with display names, and `searchObjects({ folderId })` to browse folder contents
 
 ---
 

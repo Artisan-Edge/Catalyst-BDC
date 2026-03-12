@@ -4,10 +4,12 @@ import type { AsyncResult } from '../types/result';
 import { ok, err } from '../types/result';
 import type { DatasphereRequestor, DatasphereRequestOptions } from '../types/requestor';
 import type { DatasphereObjectTypeName } from '../types/objectTypes';
+import type { SearchObject, ListObjectsOptions, SearchOptions, SpaceFolder } from '../types/designObject';
 import type { OAuthTokens } from '../core/auth/oauth';
 import { loadCachedTokens, saveCachedTokens } from '../core/auth/tokenCache';
 import type { RunReplicationFlowResult } from '../core/operations/replication-flow/run';
 import type { ImportCsnResult } from '../core/operations/import/importCsn';
+import type { SearchResult } from '../core/operations/searchObjects';
 import { login as coreLogin } from '../core/operations/login';
 import { readAnalyticModel as coreReadAnalyticModel } from '../core/operations/analytic-model/read';
 import { deleteAnalyticModel as coreDeleteAnalyticModel } from '../core/operations/analytic-model/delete';
@@ -19,6 +21,9 @@ import { readReplicationFlow as coreReadReplicationFlow } from '../core/operatio
 import { deleteReplicationFlow as coreDeleteReplicationFlow } from '../core/operations/replication-flow/delete';
 import { runReplicationFlow as coreRunReplicationFlow } from '../core/operations/replication-flow/run';
 import { objectExists as coreObjectExists } from '../core/operations/objectExists';
+import { listObjects as coreListObjects } from '../core/operations/listObjects';
+import { listFolders as coreListFolders } from '../core/operations/listFolders';
+import { searchObjects as coreSearchObjects } from '../core/operations/searchObjects';
 import { resolveSpaceId as coreResolveSpaceId } from '../core/operations/import/resolveSpaceId';
 import { importCsn as coreImportCsn } from '../core/operations/import/importCsn';
 import { deployObjects as coreDeployObjects } from '../core/operations/import/deployObjects';
@@ -65,6 +70,11 @@ export interface BdcClient {
 
     // Generic
     objectExists(objectType: DatasphereObjectTypeName, technicalName: string): AsyncResult<boolean>;
+
+    // Navigator
+    listObjects(options?: ListObjectsOptions): AsyncResult<SearchObject[]>;
+    listFolders(parentFolderId?: string): AsyncResult<SpaceFolder[]>;
+    searchObjects(options?: SearchOptions): AsyncResult<SearchResult>;
 }
 
 export class BdcClientImpl implements BdcClient {
@@ -338,5 +348,18 @@ export class BdcClientImpl implements BdcClient {
     // Generic
     async objectExists(objectType: DatasphereObjectTypeName, technicalName: string): AsyncResult<boolean> {
         return coreObjectExists(this.requestor, this.config.space, objectType, technicalName);
+    }
+
+    // Navigator
+    async listObjects(options?: ListObjectsOptions): AsyncResult<SearchObject[]> {
+        return coreListObjects(this.requestor, this.config.space, options);
+    }
+
+    async listFolders(parentFolderId?: string): AsyncResult<SpaceFolder[]> {
+        return coreListFolders(this.requestor, this.config.space, parentFolderId);
+    }
+
+    async searchObjects(options?: SearchOptions): AsyncResult<SearchResult> {
+        return coreSearchObjects(this.requestor, this.config.space, options);
     }
 }
