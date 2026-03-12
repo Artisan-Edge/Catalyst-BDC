@@ -1,10 +1,10 @@
-import type { DatasphereRequestor } from '../../types/requestor';
-import type { AsyncResult } from '../../types/result';
-import { ok, err } from '../../types/result';
-import type { SearchObject, SearchOptions } from '../../types/designObject';
-import { SearchResponseSchema } from '../../types/designObject';
-import { safeJsonParse } from '../utils/json';
-import { debug } from '../utils/logging';
+import type { DatasphereRequestor } from '../../../types/requestor';
+import type { AsyncResult } from '../../../types/result';
+import { ok, err } from '../../../types/result';
+import type { SearchObject, SearchOptions } from '../../../types/designObject';
+import { SearchResponseSchema } from '../../../types/designObject';
+import { safeJsonParse } from '../../utils/json';
+import { debug } from '../../utils/logging';
 
 const DEFAULT_TOP = 200;
 

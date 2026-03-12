@@ -1,10 +1,10 @@
-import type { DatasphereRequestor } from '../../types/requestor';
-import type { AsyncResult } from '../../types/result';
-import { ok, err } from '../../types/result';
-import type { SpaceFolder } from '../../types/designObject';
-import { DESIGN_OBJECT_KINDS } from '../../types/designObject';
+import type { DatasphereRequestor } from '../../../types/requestor';
+import type { AsyncResult } from '../../../types/result';
+import { ok, err } from '../../../types/result';
+import type { SpaceFolder } from '../../../types/designObject';
+import { DESIGN_OBJECT_KINDS } from '../../../types/designObject';
 import { searchObjects } from './searchObjects';
-import { debug } from '../utils/logging';
+import { debug } from '../../utils/logging';
 
 export async function listFolders(
     requestor: DatasphereRequestor,

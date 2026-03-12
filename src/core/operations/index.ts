@@ -19,7 +19,5 @@ export { resolveSpaceId, importCsn, deployObjects } from './import';
 export type { ImportCsnResult } from './import';
 
 // Navigator
-export { listObjects } from './listObjects';
-export { listFolders } from './listFolders';
-export { searchObjects } from './searchObjects';
-export type { SearchResult } from './searchObjects';
+export { listObjects, listFolders, searchObjects } from './navigator';
+export type { SearchResult } from './navigator';

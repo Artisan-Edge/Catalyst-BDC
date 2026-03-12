@@ -29,7 +29,7 @@ export type { ImportCsnResult } from './core/operations/import';
 
 // Navigator
 export { listObjects, listFolders, searchObjects } from './core/operations';
-export type { SearchResult } from './core/operations/searchObjects';
+export type { SearchResult } from './core/operations/navigator';
 
 // Operation result types
 export type { RunReplicationFlowResult } from './core/operations/replication-flow/run';
