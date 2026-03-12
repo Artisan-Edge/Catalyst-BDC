@@ -45,6 +45,7 @@ export interface CsnMeta {
 
 export interface CsnFile {
     definitions?: Record<string, CsnEntity>;
+    businessLayerDefinitions?: Record<string, CsnEntity>;
     replicationflows?: Record<string, CsnReplicationFlow>;
     version?: CsnVersion;
     meta?: CsnMeta;
