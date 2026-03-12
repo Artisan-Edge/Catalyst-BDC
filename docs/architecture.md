@@ -43,7 +43,8 @@ src/
 │   │   ├── analytic-model/  # create, read, update, delete, upsert
 │   │   ├── sql-view/    # create, read, update, delete, upsert
 │   │   ├── local-table/ # create, read, update, delete, upsert
-│   │   └── replication-flow/  # create, read, update, delete, upsert, run
+│   │   ├── replication-flow/  # create, read, update, delete, upsert, run
+│   │   └── import/      # resolveSpaceId, importCsn (multi-definition via /deepsea/)
 │   └── index.ts
 ├── client/              # Public API surface
 │   ├── client.ts        # BdcClient interface + BdcClientImpl (self-referencing requestor)
@@ -111,6 +112,7 @@ if (error) { /* handle */ }
 | update | PUT | `/dwaas-core/api/v1/spaces/{space}/{endpoint}/{name}` | `saveAnyway=true&allowMissingDependencies=true&deploy=true` |
 | delete | DELETE | `/dwaas-core/api/v1/spaces/{space}/{endpoint}/{name}` | `deleteAnyway=true` |
 | run | POST | `/dwaas-core/replicationflow/space/{space}/flows/{name}/run` | — |
+| import | POST | `/deepsea/repository/{spaceName}/objects/` | Body: `{ content, saveAction: "import", async: true, space_id }` |
 
 ### One Function Per File
 
@@ -153,6 +155,8 @@ interface BdcClient {
     deleteReplicationFlow(objectName): AsyncResult<string>;
     upsertReplicationFlow(csn, objectName): AsyncResult<UpsertReplicationFlowResult>;
     runReplicationFlow(flowName): AsyncResult<RunReplicationFlowResult>;
+
+    importCsn(csn): AsyncResult<string>;
 
     objectExists(objectType, technicalName): AsyncResult<boolean>;
 }

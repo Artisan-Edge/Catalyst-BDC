@@ -34,6 +34,10 @@ import { deleteReplicationFlow as coreDeleteReplicationFlow } from '../core/oper
 import { upsertReplicationFlow as coreUpsertReplicationFlow } from '../core/operations/replication-flow/upsert';
 import { runReplicationFlow as coreRunReplicationFlow } from '../core/operations/replication-flow/run';
 import { objectExists as coreObjectExists } from '../core/operations/objectExists';
+import { resolveSpaceId as coreResolveSpaceId } from '../core/operations/import/resolveSpaceId';
+import { importCsn as coreImportCsn } from '../core/operations/import/importCsn';
+import type { ImportCsnResult } from '../core/operations/import/importCsn';
+import { deployObjects as coreDeployObjects } from '../core/operations/import/deployObjects';
 import { refreshAccessToken, fetchCsrf, TOKEN_EXPIRY_BUFFER_SEC } from '../core/http/session';
 import { buildDatasphereUrl } from '../core/http/helpers';
 import { debug } from '../core/utils/logging';
@@ -85,6 +89,9 @@ export interface BdcClient {
     upsertReplicationFlow(csn: CsnFile, objectName: string): AsyncResult<UpsertReplicationFlowResult>;
     runReplicationFlow(flowName: string): AsyncResult<RunReplicationFlowResult>;
 
+    // Import (multi-definition CSN via /deepsea/ API)
+    importCsn(csn: CsnFile): AsyncResult<ImportCsnResult>;
+
     // Generic
     objectExists(objectType: DatasphereObjectTypeName, technicalName: string): AsyncResult<boolean>;
 }
@@ -93,6 +100,7 @@ export class BdcClientImpl implements BdcClient {
     readonly config: BdcConfig;
     private tokenCache: TokenCache | null = null;
     private csrfCache: CsrfCache | null = null;
+    private spaceId: string | null = null;
     private requestor: DatasphereRequestor;
 
     constructor(config: BdcConfig) {
@@ -368,6 +376,26 @@ export class BdcClientImpl implements BdcClient {
 
     async runReplicationFlow(flowName: string): AsyncResult<RunReplicationFlowResult> {
         return coreRunReplicationFlow(this.requestor, this.config.space, flowName);
+    }
+
+    // Import
+    async importCsn(csn: CsnFile): AsyncResult<ImportCsnResult> {
+        if (!this.spaceId) {
+            const [resolved, resolveErr] = await coreResolveSpaceId(this.requestor, this.config.space);
+            if (resolveErr) return err(resolveErr);
+            this.spaceId = resolved;
+        }
+
+        const [importResult, importErr] = await coreImportCsn(this.requestor, this.config.space, this.spaceId, csn);
+        if (importErr) return err(importErr);
+
+        // Deploy imported objects
+        if (importResult.objectIds.length > 0) {
+            const [, deployErr] = await coreDeployObjects(this.requestor, this.config.space, this.spaceId, importResult.objectIds);
+            if (deployErr) return err(deployErr);
+        }
+
+        return ok(importResult);
     }
 
     // Generic

@@ -16,3 +16,7 @@ export type { UpsertAnalyticModelResult } from './analytic-model';
 // SQL view
 export { createView, readView, updateView, deleteView, upsertView } from './sql-view';
 export type { UpsertViewResult } from './sql-view';
+
+// Import (multi-definition CSN via /deepsea/ API)
+export { resolveSpaceId, importCsn, deployObjects } from './import';
+export type { ImportCsnResult } from './import';

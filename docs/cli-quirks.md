@@ -29,7 +29,9 @@ The CLI joins all option values with spaces then splits on spaces — **file pat
 
 ## API Constraints
 
-The Datasphere API only accepts **one object per request**. Multi-definition CSN files must be split before sending.
+The CRUD API (`/dwaas-core/api/v1/spaces/{space}/views`) only accepts **one object per request**. Multi-definition CSN files must be split before sending.
+
+For multi-definition imports (e.g. views with circular references), use the `/deepsea/repository/{spaceName}/objects/` endpoint instead. This is the same API the Datasphere UI uses for imports. It accepts a full CSN with multiple definitions in a single request. The `importCsn` operation wraps this endpoint — see `BdcClient.importCsn()`.
 
 ---
 

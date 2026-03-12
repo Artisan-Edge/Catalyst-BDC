@@ -18,6 +18,10 @@ export type { OAuthTokens } from './core/auth/oauth';
 export { refreshAccessToken, fetchCsrf } from './core/http/session';
 export { checkResponse, buildDatasphereUrl } from './core/http/helpers';
 
+// Import (multi-definition CSN via /deepsea/ API)
+export { resolveSpaceId, importCsn, deployObjects } from './core/operations/import';
+export type { ImportCsnResult } from './core/operations/import';
+
 // Operation result types
 export type { UpsertAnalyticModelResult } from './core/operations/analytic-model/upsert';
 export type { UpsertLocalTableResult } from './core/operations/local-table/upsert';

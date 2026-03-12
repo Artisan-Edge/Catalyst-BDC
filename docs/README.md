@@ -168,6 +168,7 @@ interface BdcConfig {
 | `deleteReplicationFlow` | `(objectName) => AsyncResult<string>` | Deletes a replication flow. |
 | `upsertReplicationFlow` | `(csn, objectName) => AsyncResult<UpsertReplicationFlowResult>` | Creates or updates a replication flow. |
 | `runReplicationFlow` | `(flowName) => AsyncResult<RunReplicationFlowResult>` | Triggers a replication flow run. |
+| `importCsn` | `(csn) => AsyncResult<string>` | Imports a multi-definition CSN via `/deepsea/` API. Resolves space UUID automatically. |
 | `objectExists` | `(objectType, name) => AsyncResult<boolean>` | Checks if an object exists (GET + 200 check). |
 
 All methods return `AsyncResult<T>` which is `Promise<[T, null] | [null, Error]>`.
