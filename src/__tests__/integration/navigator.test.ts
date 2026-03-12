@@ -116,4 +116,84 @@ describe('navigator', () => {
         }
         // No nested folders in this space — that's fine
     }, 60_000);
+
+    // Data preview
+
+    test('getViewColumns returns column metadata for an active view', async () => {
+        // Find an active entity to test against
+        const [objects, listErr] = await client.listObjects({
+            kind: DESIGN_OBJECT_KINDS.entity,
+        });
+        expect(listErr).toBeNull();
+        expect(objects).not.toBeNull();
+        expect(objects!.length).toBeGreaterThan(0);
+
+        // Pick the first deployed view
+        const deployed = objects!.find(o => o.deployment_status === 'Active');
+        if (!deployed) return; // No active views — skip
+
+        const [columns, colErr] = await client.getViewColumns(deployed.name);
+        expect(colErr).toBeNull();
+        expect(columns).not.toBeNull();
+        expect(columns!.length).toBeGreaterThan(0);
+
+        for (const col of columns!) {
+            expect(col.name).toBeTruthy();
+            expect(col.type).toBeTruthy();
+            expect(typeof col.isKey).toBe('boolean');
+        }
+    }, 30_000);
+
+    test('previewData returns rows from an active view', async () => {
+        // Find an active entity
+        const [objects, listErr] = await client.listObjects({
+            kind: DESIGN_OBJECT_KINDS.entity,
+        });
+        expect(listErr).toBeNull();
+        expect(objects).not.toBeNull();
+
+        const deployed = objects!.find(o => o.deployment_status === 'Active');
+        if (!deployed) return;
+
+        const [result, previewErr] = await client.previewData(deployed.name, { top: 5 });
+        expect(previewErr).toBeNull();
+        expect(result).not.toBeNull();
+        expect(result!.rows).toBeInstanceOf(Array);
+        expect(result!.rows.length).toBeLessThanOrEqual(5);
+
+        // Rows should not contain OData __metadata
+        for (const row of result!.rows) {
+            expect(row).not.toHaveProperty('__metadata');
+        }
+    }, 30_000);
+
+    test('previewData with $select returns only requested columns', async () => {
+        const [objects] = await client.listObjects({
+            kind: DESIGN_OBJECT_KINDS.entity,
+        });
+        if (!objects || objects.length === 0) return;
+
+        const deployed = objects.find(o => o.deployment_status === 'Active');
+        if (!deployed) return;
+
+        // Get columns first, then select a subset
+        const [columns] = await client.getViewColumns(deployed.name);
+        if (!columns || columns.length < 2) return;
+
+        const selectedCols = columns.slice(0, 2).map(c => c.name);
+        const [result, previewErr] = await client.previewData(deployed.name, {
+            select: selectedCols,
+            top: 3,
+        });
+        expect(previewErr).toBeNull();
+        expect(result).not.toBeNull();
+
+        // Verify only selected columns are present
+        for (const row of result!.rows) {
+            const keys = Object.keys(row);
+            for (const key of keys) {
+                expect(selectedCols).toContain(key);
+            }
+        }
+    }, 30_000);
 });

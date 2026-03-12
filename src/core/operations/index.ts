@@ -21,3 +21,7 @@ export type { ImportCsnResult } from './import';
 // Navigator
 export { listObjects, listFolders, searchObjects } from './navigator';
 export type { SearchResult } from './navigator';
+
+// Data preview
+export { previewData, getViewColumns } from './navigator';
+export type { DataPreviewOptions, DataPreviewResult, ViewColumn } from './navigator';

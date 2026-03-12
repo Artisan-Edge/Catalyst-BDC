@@ -5,6 +5,8 @@ import { ok, err } from '../types/result';
 import type { DatasphereRequestor, DatasphereRequestOptions } from '../types/requestor';
 import type { DatasphereObjectTypeName } from '../types/objectTypes';
 import type { SearchObject, ListObjectsOptions, SearchOptions, SpaceFolder } from '../types/designObject';
+import type { DataPreviewOptions, DataPreviewResult } from '../core/operations/navigator/previewData';
+import type { ViewColumn } from '../core/operations/navigator/getViewColumns';
 import type { OAuthTokens } from '../core/auth/oauth';
 import { loadCachedTokens, saveCachedTokens } from '../core/auth/tokenCache';
 import type { RunReplicationFlowResult } from '../core/operations/replication-flow/run';
@@ -24,6 +26,8 @@ import { objectExists as coreObjectExists } from '../core/operations/objectExist
 import { listObjects as coreListObjects } from '../core/operations/navigator/listObjects';
 import { listFolders as coreListFolders } from '../core/operations/navigator/listFolders';
 import { searchObjects as coreSearchObjects } from '../core/operations/navigator/searchObjects';
+import { previewData as corePreviewData } from '../core/operations/navigator/previewData';
+import { getViewColumns as coreGetViewColumns } from '../core/operations/navigator/getViewColumns';
 import { resolveSpaceId as coreResolveSpaceId } from '../core/operations/import/resolveSpaceId';
 import { importCsn as coreImportCsn } from '../core/operations/import/importCsn';
 import { deployObjects as coreDeployObjects } from '../core/operations/import/deployObjects';
@@ -75,6 +79,10 @@ export interface BdcClient {
     listObjects(options?: ListObjectsOptions): AsyncResult<SearchObject[]>;
     listFolders(parentFolderId?: string): AsyncResult<SpaceFolder[]>;
     searchObjects(options?: SearchOptions): AsyncResult<SearchResult>;
+
+    // Data preview
+    previewData(viewName: string, options?: DataPreviewOptions): AsyncResult<DataPreviewResult>;
+    getViewColumns(viewName: string): AsyncResult<ViewColumn[]>;
 }
 
 export class BdcClientImpl implements BdcClient {
@@ -361,5 +369,14 @@ export class BdcClientImpl implements BdcClient {
 
     async searchObjects(options?: SearchOptions): AsyncResult<SearchResult> {
         return coreSearchObjects(this.requestor, this.config.space, options);
+    }
+
+    // Data preview
+    async previewData(viewName: string, options?: DataPreviewOptions): AsyncResult<DataPreviewResult> {
+        return corePreviewData(this.requestor, this.config.space, viewName, options);
+    }
+
+    async getViewColumns(viewName: string): AsyncResult<ViewColumn[]> {
+        return coreGetViewColumns(this.requestor, this.config.space, viewName);
     }
 }

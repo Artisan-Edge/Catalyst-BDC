@@ -31,5 +31,10 @@ export type { ImportCsnResult } from './core/operations/import';
 export { listObjects, listFolders, searchObjects } from './core/operations';
 export type { SearchResult } from './core/operations/navigator';
 
+// Data preview
+export { previewData, getViewColumns } from './core/operations/navigator';
+export type { DataPreviewOptions, DataPreviewResult } from './core/operations/navigator';
+export type { ViewColumn } from './core/operations/navigator';
+
 // Operation result types
 export type { RunReplicationFlowResult } from './core/operations/replication-flow/run';
