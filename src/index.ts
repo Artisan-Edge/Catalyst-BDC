@@ -39,7 +39,7 @@ export type { ViewColumn } from './core/operations/navigator';
 // Operation result types
 export type { RunReplicationFlowResult } from './core/operations/replication-flow/run';
 
-// [EXPERIMENTAL] INA protocol
+// [EXPERIMENTAL] INA protocol — low-level
 export { getServerInfo as inaGetServerInfo, fetchInaCsrf, getMetadata as inaGetMetadata, queryData as inaQueryData } from './ina';
 export type { InaCsrfToken } from './ina';
 export type {
@@ -48,3 +48,7 @@ export type {
     InaDimensionInfo, InaAttributeInfo, InaCellRow,
     InaGrid, InaAxis, InaDimension, InaAttribute, InaCellsV2, InaMessage,
 } from './ina';
+
+// [EXPERIMENTAL] INA protocol — high-level
+export { listModels as inaListModels, exploreModel as inaExploreModel, simpleQuery as inaSimpleQuery } from './ina';
+export type { InaVariableInfo, InaModelEntry, InaModelDetails, InaSimpleQueryOptions } from './ina';

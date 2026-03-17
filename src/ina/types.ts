@@ -216,10 +216,30 @@ export const InaServerInfoResponseSchema = z.object({
     Services: z.array(z.record(z.unknown())).optional(),
 }).passthrough();
 
+// Variable definition returned in DataSource.Variables
+export const InaVariableDefinitionSchema = z.object({
+    Name: z.string(),
+    Description: z.string().optional(),
+    InputType: z.number().optional(),
+    ValueType: z.string().optional(),
+    DataType: z.number().optional(),
+    DimensionName: z.string().optional(),
+    HasDefaultValues: z.boolean().optional(),
+    DefaultValues: z.array(z.unknown()).optional(),
+    Values: z.unknown().optional(),
+}).passthrough();
+
+export const InaDataSourceResponseSchema = z.object({
+    ObjectName: z.string().optional(),
+    SchemaName: z.string().optional(),
+    InstanceId: z.string().optional(),
+    Variables: z.array(InaVariableDefinitionSchema).optional(),
+}).passthrough();
+
 export const InaResponseSchema = z.object({
     Grids: z.array(InaGridSchema).optional(),
     Messages: z.array(InaMessageSchema).optional(),
-    DataSource: z.record(z.unknown()).optional(),
+    DataSource: InaDataSourceResponseSchema.optional(),
 }).passthrough();
 
 // ---------------------------------------------------------------------------
@@ -313,10 +333,19 @@ export interface InaAttributeInfo {
     dataType?: string;
 }
 
+export interface InaVariableInfo {
+    name: string;
+    description?: string;
+    mandatory: boolean;
+    valueType: 'string' | 'numeric' | 'date' | 'unknown';
+    dimensionName?: string;
+    defaultValues: unknown[];
+}
+
 export interface InaMetadataResult {
     dimensions: InaDimensionInfo[];
     measures: string[];
-    variables: string[];
+    variables: InaVariableInfo[];
     raw: unknown;
 }
 
@@ -331,3 +360,33 @@ export interface InaQueryResult {
     units: Record<string, string>;
     raw: unknown;
 }
+
+// ---------------------------------------------------------------------------
+// High-level discovery & simplified query types
+// ---------------------------------------------------------------------------
+
+export interface InaModelEntry {
+    name: string;
+    businessName: string | null;
+    description: string | null;
+    instanceId: string;
+}
+
+export interface InaModelDetails {
+    name: string;
+    instanceId: string;
+    dimensions: InaDimensionInfo[];
+    measures: string[];
+    variables: InaVariableInfo[];
+    raw: unknown;
+}
+
+export interface InaSimpleQueryOptions {
+    model: string;
+    columns?: string[];
+    measures?: string[];
+    variables?: Record<string, string | number>;
+    filter?: InaFilterSelection;
+    limit?: number;
+}
+

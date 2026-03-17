@@ -8,9 +8,18 @@ import {
     InaResponseSchema,
 } from './types';
 import type {
-    InaDataSource, InaMetadataResult, InaDimensionInfo, InaAttributeInfo, InaVariable,
+    InaDataSource, InaMetadataResult, InaDimensionInfo, InaAttributeInfo, InaVariable, InaVariableInfo,
 } from './types';
 import type { InaCsrfToken } from './fetchInaCsrf';
+
+function mapValueType(raw?: string): InaVariableInfo['valueType'] {
+    if (!raw) return 'unknown';
+    const lower = raw.toLowerCase();
+    if (lower.includes('string') || lower.includes('char')) return 'string';
+    if (lower.includes('num') || lower.includes('int') || lower.includes('dec')) return 'numeric';
+    if (lower.includes('date')) return 'date';
+    return 'unknown';
+}
 
 export async function getMetadata(
     requestor: DatasphereRequestor,
@@ -61,23 +70,35 @@ export async function getMetadata(
     const [parsed, parseErr] = safeJsonParse(body, InaResponseSchema);
     if (parseErr) return err(new Error(`INA getMetadata: ${parseErr.message}`));
 
+    // Extract variable definitions from DataSource (available even when grid has errors)
+    const discoveredVariables: InaVariableInfo[] = (parsed.DataSource?.Variables ?? []).map((v) => ({
+        name: v.Name,
+        description: v.Description,
+        mandatory: v.InputType === 1,
+        valueType: mapValueType(v.ValueType),
+        dimensionName: v.DimensionName,
+        defaultValues: v.DefaultValues ?? [],
+    }));
+
     // Check for error messages (Type 2 = error)
+    // If we got variable definitions, treat variable-related errors as non-fatal
     const errorMessages = parsed.Messages?.filter((m) => m.Type === 2);
     if (errorMessages && errorMessages.length > 0) {
-        const texts = errorMessages.map((m) => m.Text ?? 'Unknown error').join('; ');
-        return err(new Error(`INA getMetadata: ${texts}`));
+        if (discoveredVariables.length === 0) {
+            const texts = errorMessages.map((m) => m.Text ?? 'Unknown error').join('; ');
+            return err(new Error(`INA getMetadata: ${texts}`));
+        }
+        debug(`INA getMetadata: ignoring ${errorMessages.length} variable-related errors (got ${discoveredVariables.length} variable definitions)`);
     }
 
     // Extract dimension and measure info from the grid axes
     const dimensions: InaDimensionInfo[] = [];
     const measures: string[] = [];
-    const discoveredVariables: string[] = [];
 
     const grids = parsed.Grids ?? [];
     for (const grid of grids) {
         for (const axis of grid.Axes ?? []) {
             for (const dim of axis.Dimensions ?? []) {
-                // CustomDimension1 contains the measures
                 if (dim.Name === 'CustomDimension1') {
                     for (const attr of dim.Attributes ?? []) {
                         if (attr.PresentationType === 'Key' && attr.Values) {
@@ -106,7 +127,7 @@ export async function getMetadata(
         }
     }
 
-    debug(`INA getMetadata: ${dimensions.length} dimensions, ${measures.length} measures`);
+    debug(`INA getMetadata: ${dimensions.length} dimensions, ${measures.length} measures, ${discoveredVariables.length} variables`);
 
     return ok({ dimensions, measures, variables: discoveredVariables, raw: parsed });
 }

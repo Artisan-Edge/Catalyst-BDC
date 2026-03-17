@@ -3,6 +3,9 @@ export { getServerInfo } from './getServerInfo';
 export { fetchInaCsrf } from './fetchInaCsrf';
 export { getMetadata } from './getMetadata';
 export { queryData } from './queryData';
+export { listModels } from './listModels';
+export { exploreModel } from './exploreModel';
+export { simpleQuery } from './simpleQuery';
 export type { InaCsrfToken } from './fetchInaCsrf';
 export type {
     InaServerInfo,
@@ -22,4 +25,8 @@ export type {
     InaAttribute,
     InaCellsV2,
     InaMessage,
+    InaVariableInfo,
+    InaModelEntry,
+    InaModelDetails,
+    InaSimpleQueryOptions,
 } from './types';

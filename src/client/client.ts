@@ -16,8 +16,14 @@ import { getServerInfo as coreInaGetServerInfo } from '../ina/getServerInfo';
 import { fetchInaCsrf as coreFetchInaCsrf } from '../ina/fetchInaCsrf';
 import { getMetadata as coreInaGetMetadata } from '../ina/getMetadata';
 import { queryData as coreInaQueryData } from '../ina/queryData';
+import { listModels as coreInaListModels } from '../ina/listModels';
+import { exploreModel as coreInaExploreModel } from '../ina/exploreModel';
+import { simpleQuery as coreInaSimpleQuery } from '../ina/simpleQuery';
 import type { InaCsrfToken } from '../ina/fetchInaCsrf';
-import type { InaServerInfo, InaMetadataResult, InaQueryOptions, InaQueryResult, InaDataSource } from '../ina/types';
+import type {
+    InaServerInfo, InaMetadataResult, InaQueryOptions, InaQueryResult,
+    InaDataSource, InaVariable, InaModelEntry, InaModelDetails, InaSimpleQueryOptions,
+} from '../ina/types';
 import { login as coreLogin } from '../core/operations/login';
 import { readAnalyticModel as coreReadAnalyticModel } from '../core/operations/analytic-model/read';
 import { deleteAnalyticModel as coreDeleteAnalyticModel } from '../core/operations/analytic-model/delete';
@@ -90,10 +96,15 @@ export interface BdcClient {
     previewData(viewName: string, options?: DataPreviewOptions): AsyncResult<DataPreviewResult>;
     getViewColumns(viewName: string): AsyncResult<ViewColumn[]>;
 
-    // [EXPERIMENTAL] INA protocol
+    // [EXPERIMENTAL] INA protocol — low-level
     inaGetServerInfo(): AsyncResult<InaServerInfo>;
     inaGetMetadata(dataSource: InaDataSource, variables?: InaVariable[]): AsyncResult<InaMetadataResult>;
     inaQueryData(options: InaQueryOptions): AsyncResult<InaQueryResult>;
+
+    // [EXPERIMENTAL] INA protocol — high-level
+    inaListModels(options?: { pattern?: string }): AsyncResult<InaModelEntry[]>;
+    inaExploreModel(modelName: string, variables?: InaVariable[]): AsyncResult<InaModelDetails>;
+    inaQuery(options: InaSimpleQueryOptions): AsyncResult<InaQueryResult>;
 }
 
 export class BdcClientImpl implements BdcClient {
@@ -420,5 +431,22 @@ export class BdcClientImpl implements BdcClient {
         const [csrf, csrfErr] = await this.ensureInaCsrf();
         if (csrfErr) return err(csrfErr);
         return coreInaQueryData(this.requestor, csrf, options);
+    }
+
+    // INA high-level
+    async inaListModels(options?: { pattern?: string }): AsyncResult<InaModelEntry[]> {
+        return coreInaListModels(this.requestor, this.config.space, options);
+    }
+
+    async inaExploreModel(modelName: string, variables?: InaVariable[]): AsyncResult<InaModelDetails> {
+        const [csrf, csrfErr] = await this.ensureInaCsrf();
+        if (csrfErr) return err(csrfErr);
+        return coreInaExploreModel(this.requestor, csrf, this.config.space, modelName, variables);
+    }
+
+    async inaQuery(options: InaSimpleQueryOptions): AsyncResult<InaQueryResult> {
+        const [csrf, csrfErr] = await this.ensureInaCsrf();
+        if (csrfErr) return err(csrfErr);
+        return coreInaSimpleQuery(this.requestor, csrf, this.config.space, options);
     }
 }
