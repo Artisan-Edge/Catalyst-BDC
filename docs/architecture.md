@@ -7,8 +7,6 @@ Layered TypeScript library for direct HTTP API communication with SAP Datasphere
 - [Module Hierarchy](#module-hierarchy)
 - [Import Rules](#import-rules)
 - [Key Patterns](#key-patterns)
-- [BdcClient API](#bdcclient-api)
-- [Configuration](#configuration)
 - [Request Lifecycle](#request-lifecycle)
 
 ---
@@ -40,7 +38,15 @@ src/
 │   │   ├── sql-view/        # read, delete
 │   │   ├── local-table/     # read, delete
 │   │   ├── replication-flow/  # read, delete, run
-│   │   └── import/      # resolveSpaceId, importCsn, deployObjects
+│   │   ├── import/      # resolveSpaceId, importCsn, deployObjects
+│   │   └── navigator/   # listObjects, listFolders, searchObjects, previewData, getViewColumns
+│   └── index.ts
+├── ina/                 # [EXPERIMENTAL] INA protocol for analytic model queries
+│   ├── types.ts         # Capabilities list, Zod schemas, request/response types
+│   ├── fetchInaCsrf.ts  # INA-specific CSRF token fetch
+│   ├── getServerInfo.ts # Server connectivity check
+│   ├── getMetadata.ts   # Model metadata (dimensions/measures)
+│   ├── queryData.ts     # Data queries with V2 grid flattening
 │   └── index.ts
 ├── client/              # Public API surface
 │   ├── client.ts        # BdcClient interface + BdcClientImpl (self-referencing requestor)
@@ -60,8 +66,9 @@ core/utils/       ← (leaf)
 core/auth/        ← types/, core/utils/
 core/http/        ← types/, core/utils/
 core/operations/  ← types/, core/http/, core/utils/
-client/           ← types/, core/operations/, core/http/, core/utils/
-index.ts          ← client/, types/, core/
+ina/              ← types/, core/http/, core/utils/ (parallel to core/operations/)
+client/           ← types/, core/operations/, ina/, core/http/, core/utils/
+index.ts          ← client/, types/, core/, ina/
 ```
 
 ---
@@ -107,6 +114,10 @@ if (error) { /* handle */ }
 | read | GET | `/dwaas-core/api/v1/spaces/{space}/{endpoint}/{name}` |
 | delete | DELETE | `/dwaas-core/api/v1/spaces/{space}/{endpoint}/{name}` |
 | run | POST | `/dwaas-core/replicationflow/space/{space}/flows/{name}/run` |
+| preview (OData) | GET | `/dwaas-core/data-access/instant/{space}/{view}` |
+| search | GET | `/dwaas-core/api/v1/spaces/{space}/designObjects` |
+| INA CSRF | GET | `/sap/bc/ina/service/v2/GetServerInfo` |
+| INA query | POST | `/dwaas-core/sap/bc/ina/service/v2/GetResponse` |
 
 ### One Function Per File
 
@@ -115,57 +126,6 @@ Each file in `core/operations/` exports a single function. This keeps each opera
 ### Barrel Exports
 
 Every directory has an `index.ts` that re-exports its contents.
-
----
-
-## BdcClient API
-
-```typescript
-interface BdcClient {
-    readonly config: BdcConfig;
-    login(): AsyncResult<OAuthTokens>;
-
-    readAnalyticModel(objectName): AsyncResult<string>;
-    readView(objectName): AsyncResult<string>;
-    readLocalTable(objectName): AsyncResult<string>;
-    readReplicationFlow(objectName): AsyncResult<string>;
-
-    deleteAnalyticModel(objectName): AsyncResult<string>;
-    deleteView(objectName): AsyncResult<string>;
-    deleteLocalTable(objectName): AsyncResult<string>;
-    deleteReplicationFlow(objectName): AsyncResult<string>;
-
-    runReplicationFlow(flowName): AsyncResult<RunReplicationFlowResult>;
-
-    importCsn(csn): AsyncResult<ImportCsnResult>;
-
-    objectExists(objectType, technicalName): AsyncResult<boolean>;
-}
-```
-
-Created via factory with Zod validation:
-
-```typescript
-const [client, err] = createClient({ host, space, oauth });
-```
-
----
-
-## Configuration
-
-```typescript
-interface BdcConfig {
-    host: string;          // Datasphere tenant URL
-    space: string;         // Space ID
-    verbose?: boolean;     // Enable debug logging
-    oauth: OAuthConfig | { optionsFile: string };  // Required
-    tokens?: TokenConfig;  // Optional: skip login() for CI/headless
-}
-```
-
-OAuth accepts either inline credentials or a path to a JSON options file.
-
-`TokenConfig` allows pre-providing access/refresh tokens for headless environments where a browser login isn't possible.
 
 ---
 
@@ -186,4 +146,4 @@ Login follows a different path: native OAuth authorization code flow via local H
 
 ---
 
-*Last updated: v1.0.0*
+*Last updated: v0.2.1*

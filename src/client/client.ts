@@ -12,6 +12,12 @@ import { loadCachedTokens, saveCachedTokens } from '../core/auth/tokenCache';
 import type { RunReplicationFlowResult } from '../core/operations/replication-flow/run';
 import type { ImportCsnResult } from '../core/operations/import/importCsn';
 import type { SearchResult } from '../core/operations/navigator/searchObjects';
+import { getServerInfo as coreInaGetServerInfo } from '../ina/getServerInfo';
+import { fetchInaCsrf as coreFetchInaCsrf } from '../ina/fetchInaCsrf';
+import { getMetadata as coreInaGetMetadata } from '../ina/getMetadata';
+import { queryData as coreInaQueryData } from '../ina/queryData';
+import type { InaCsrfToken } from '../ina/fetchInaCsrf';
+import type { InaServerInfo, InaMetadataResult, InaQueryOptions, InaQueryResult, InaDataSource } from '../ina/types';
 import { login as coreLogin } from '../core/operations/login';
 import { readAnalyticModel as coreReadAnalyticModel } from '../core/operations/analytic-model/read';
 import { deleteAnalyticModel as coreDeleteAnalyticModel } from '../core/operations/analytic-model/delete';
@@ -83,6 +89,11 @@ export interface BdcClient {
     // Data preview
     previewData(viewName: string, options?: DataPreviewOptions): AsyncResult<DataPreviewResult>;
     getViewColumns(viewName: string): AsyncResult<ViewColumn[]>;
+
+    // [EXPERIMENTAL] INA protocol
+    inaGetServerInfo(): AsyncResult<InaServerInfo>;
+    inaGetMetadata(dataSource: InaDataSource, variables?: InaVariable[]): AsyncResult<InaMetadataResult>;
+    inaQueryData(options: InaQueryOptions): AsyncResult<InaQueryResult>;
 }
 
 export class BdcClientImpl implements BdcClient {
@@ -90,6 +101,7 @@ export class BdcClientImpl implements BdcClient {
     private tokenCache: TokenCache | null = null;
     private csrfCache: CsrfCache | null = null;
     private spaceId: string | null = null;
+    private inaCsrf: InaCsrfToken | null = null;
     private requestor: DatasphereRequestor;
 
     constructor(config: BdcConfig) {
@@ -378,5 +390,35 @@ export class BdcClientImpl implements BdcClient {
 
     async getViewColumns(viewName: string): AsyncResult<ViewColumn[]> {
         return coreGetViewColumns(this.requestor, this.config.space, viewName);
+    }
+
+    // [EXPERIMENTAL] INA protocol
+    private async ensureInaCsrf(): AsyncResult<InaCsrfToken> {
+        if (this.inaCsrf) return ok(this.inaCsrf);
+
+        const [accessToken, tokenErr] = await this.ensureAccessToken();
+        if (tokenErr) return err(tokenErr);
+
+        const [csrf, csrfErr] = await coreFetchInaCsrf(this.config.host, accessToken);
+        if (csrfErr) return err(csrfErr);
+
+        this.inaCsrf = csrf;
+        return ok(csrf);
+    }
+
+    async inaGetServerInfo(): AsyncResult<InaServerInfo> {
+        return coreInaGetServerInfo(this.requestor);
+    }
+
+    async inaGetMetadata(dataSource: InaDataSource, variables?: InaVariable[]): AsyncResult<InaMetadataResult> {
+        const [csrf, csrfErr] = await this.ensureInaCsrf();
+        if (csrfErr) return err(csrfErr);
+        return coreInaGetMetadata(this.requestor, csrf, dataSource, variables);
+    }
+
+    async inaQueryData(options: InaQueryOptions): AsyncResult<InaQueryResult> {
+        const [csrf, csrfErr] = await this.ensureInaCsrf();
+        if (csrfErr) return err(csrfErr);
+        return coreInaQueryData(this.requestor, csrf, options);
     }
 }

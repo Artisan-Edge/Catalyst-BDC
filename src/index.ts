@@ -38,3 +38,13 @@ export type { ViewColumn } from './core/operations/navigator';
 
 // Operation result types
 export type { RunReplicationFlowResult } from './core/operations/replication-flow/run';
+
+// [EXPERIMENTAL] INA protocol
+export { getServerInfo as inaGetServerInfo, fetchInaCsrf, getMetadata as inaGetMetadata, queryData as inaQueryData } from './ina';
+export type { InaCsrfToken } from './ina';
+export type {
+    InaServerInfo, InaMetadataResult, InaQueryOptions, InaQueryResult,
+    InaDataSource, InaDimensionRequest, InaVariable, InaFilterSelection,
+    InaDimensionInfo, InaAttributeInfo, InaCellRow,
+    InaGrid, InaAxis, InaDimension, InaAttribute, InaCellsV2, InaMessage,
+} from './ina';
