@@ -167,6 +167,7 @@ export const InaTupleSchema = z.object({
     MemberIndexes: EncodedArraySchema.optional(),
     ParentIndexes: EncodedArraySchema.optional(),
     DisplayLevel: EncodedArraySchema.optional(),
+    DrillState: EncodedArraySchema.optional(),
 }).passthrough();
 
 export const InaAxisSchema = z.object({
@@ -271,6 +272,15 @@ export interface InaDimensionRequest {
     ResultStructure?: Array<{ Result: string; Visibility: string }>;
     Attributes?: Array<{ Name: string; Obtainability?: string }>;
     Members?: Array<{ MemberName: string }>;
+    Hierarchy?: { Name: string };
+}
+
+export interface InaHierarchyNavigation {
+    DrillMember: {
+        FieldName: string;
+        Member: string;
+    };
+    DrillState: 'Expanded' | 'Collapsed';
 }
 
 export interface InaVariable {
@@ -304,6 +314,7 @@ export interface InaQueryOptions {
     measures?: string[];
     variables?: InaVariable[];
     filter?: InaFilterSelection;
+    hierarchyNavigations?: InaHierarchyNavigation[];
     rowLimit?: number;
     columnLimit?: number;
 }
@@ -387,6 +398,11 @@ export interface InaSimpleQueryOptions {
     measures?: string[];
     variables?: Record<string, string | number>;
     filter?: InaFilterSelection;
+    hierarchy?: {
+        dimension: string;
+        name: string;
+        expanded?: string[];
+    };
     limit?: number;
 }
 

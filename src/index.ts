@@ -44,7 +44,7 @@ export { getServerInfo as inaGetServerInfo, fetchInaCsrf, getMetadata as inaGetM
 export type { InaCsrfToken } from './ina';
 export type {
     InaServerInfo, InaMetadataResult, InaQueryOptions, InaQueryResult,
-    InaDataSource, InaDimensionRequest, InaVariable, InaFilterSelection,
+    InaDataSource, InaDimensionRequest, InaHierarchyNavigation, InaVariable, InaFilterSelection,
     InaDimensionInfo, InaAttributeInfo, InaCellRow,
     InaGrid, InaAxis, InaDimension, InaAttribute, InaCellsV2, InaMessage,
 } from './ina';

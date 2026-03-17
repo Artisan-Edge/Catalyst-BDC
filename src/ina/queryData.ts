@@ -13,6 +13,12 @@ import type { InaCsrfToken } from './fetchInaCsrf';
 const DEFAULT_ROW_LIMIT = 200;
 const DEFAULT_COLUMN_LIMIT = 50;
 
+// Extract short member key from INA path: "[dim].[hier].&[KEY]" → "KEY"
+function extractMemberKey(path: string): string {
+    const match = path.match(/&\[([^\]]+)\]$/);
+    return match ? match[1]! : path;
+}
+
 function buildDimensions(options: InaQueryOptions): InaDimensionRequest[] {
     const dims: InaDimensionRequest[] = [];
 
@@ -76,6 +82,10 @@ function buildPayload(options: InaQueryOptions): unknown {
         };
     }
 
+    if (options.hierarchyNavigations && options.hierarchyNavigations.length > 0) {
+        definition['HierarchyNavigations'] = options.hierarchyNavigations;
+    }
+
     return {
         Analytics: {
             Capabilities: INA_CAPABILITIES,
@@ -110,30 +120,64 @@ function flattenGrid(grid: Record<string, unknown>): {
     const rowAxis = axes.find((a) => a['Type'] === 'Rows');
     const colAxis = axes.find((a) => a['Type'] === 'Columns');
 
-    // Get row tuple element IDs (dimension member values per row)
+    // Get row dimension values and hierarchy metadata from tuples
     const rowDims: Array<{ name: string; values: unknown[] }> = [];
+    let hierarchyLevels: unknown[] = [];
+    let hierarchyDrillStates: unknown[] = [];
+    let hierarchyParentIndexes: unknown[] = [];
+
     if (rowAxis) {
         const dims = (rowAxis['Dimensions'] ?? []) as Array<Record<string, unknown>>;
         const tuples = (rowAxis['Tuples'] ?? []) as Array<Record<string, unknown>>;
         for (const dim of dims) {
             const dimName = dim['Name'] as string;
-            // Get values from the key attribute
             const attrs = (dim['Attributes'] ?? []) as Array<Record<string, unknown>>;
+
+            // Collect all non-empty attributes (name, description, key, etc.)
             const keyAttr = attrs.find((a) => a['IsKey'] === true) ?? attrs[0];
-            const values = (keyAttr?.['Values'] ?? []) as unknown[];
-            rowDims.push({ name: dimName, values });
+            const keyValues = (keyAttr?.['Values'] ?? []) as unknown[];
+            rowDims.push({ name: dimName, values: keyValues });
+
+            for (const attr of attrs) {
+                if (attr === keyAttr) continue;
+                const attrValues = (attr['Values'] ?? []) as unknown[];
+                if (attrValues.length === 0) continue;
+                const attrName = attr['Name'] as string;
+                rowDims.push({ name: attrName, values: attrValues });
+            }
         }
 
-        // If no attribute values, try TupleElementIds
-        const firstDim = rowDims[0];
-        if (firstDim && firstDim.values.length === 0 && tuples.length > 0) {
+        if (tuples.length > 0) {
             const tuple = tuples[0] as Record<string, unknown>;
-            const ids = tuple['TupleElementIds'] as Record<string, unknown> | undefined;
-            if (ids) {
-                const idValues = (ids['Values'] ?? []) as unknown[];
-                if (rowDims.length === 1) {
-                    firstDim.values = idValues;
+
+            // If key attribute is empty, extract short member keys from TupleElementIds
+            const firstDim = rowDims[0];
+            if (firstDim && firstDim.values.length === 0) {
+                const ids = tuple['TupleElementIds'] as Record<string, unknown> | undefined;
+                if (ids) {
+                    const idValues = (ids['Values'] ?? []) as unknown[];
+                    if (rowDims.length > 0) {
+                        firstDim.values = idValues.map((v) => extractMemberKey(String(v)));
+                    }
                 }
+            }
+
+            // Hierarchy level (depth in the tree)
+            const displayLevel = tuple['DisplayLevel'] as Record<string, unknown> | undefined;
+            if (displayLevel) {
+                hierarchyLevels = (displayLevel['Values'] ?? []) as unknown[];
+            }
+
+            // Drill state per row (Expanded, Collapsed, Leaf)
+            const drillState = tuple['DrillState'] as Record<string, unknown> | undefined;
+            if (drillState) {
+                hierarchyDrillStates = (drillState['Values'] ?? []) as unknown[];
+            }
+
+            // Parent index (-1 for root nodes)
+            const parentIndexes = tuple['ParentIndexes'] as Record<string, unknown> | undefined;
+            if (parentIndexes) {
+                hierarchyParentIndexes = (parentIndexes['Values'] ?? []) as unknown[];
             }
         }
     }
@@ -160,6 +204,11 @@ function flattenGrid(grid: Record<string, unknown>): {
     const cellUnits = ((cells?.['Units'] as Record<string, unknown>)?.['Values'] ?? []) as string[];
     const cellMeasures = ((cells?.['CellMeasure'] as Record<string, unknown>)?.['Values'] ?? []) as string[];
 
+    // Check if hierarchy metadata is present
+    const hasHierarchy = hierarchyLevels.length > 0
+        || hierarchyDrillStates.length > 0
+        || hierarchyParentIndexes.length > 0;
+
     // Build row objects
     const rows: InaCellRow[] = [];
     for (let r = 0; r < numRows; r++) {
@@ -168,6 +217,13 @@ function flattenGrid(grid: Record<string, unknown>): {
         // Add dimension values
         for (const dim of rowDims) {
             row[dim.name] = dim.values[r];
+        }
+
+        // Add hierarchy metadata when present
+        if (hasHierarchy) {
+            if (hierarchyLevels[r] !== undefined) row['_level'] = hierarchyLevels[r];
+            if (hierarchyDrillStates[r] !== undefined) row['_drillState'] = hierarchyDrillStates[r];
+            if (hierarchyParentIndexes[r] !== undefined) row['_parentIndex'] = hierarchyParentIndexes[r];
         }
 
         // Add measure values (cells are laid out as [row0_col0, row0_col1, ..., row1_col0, ...])

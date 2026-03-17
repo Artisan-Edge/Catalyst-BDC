@@ -14,6 +14,7 @@ export type {
     InaQueryResult,
     InaDataSource,
     InaDimensionRequest,
+    InaHierarchyNavigation,
     InaVariable,
     InaFilterSelection,
     InaDimensionInfo,
