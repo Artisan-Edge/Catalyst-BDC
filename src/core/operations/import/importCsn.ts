@@ -23,14 +23,16 @@ export async function importCsn(
     csn: CsnFile,
 ): AsyncResult<ImportCsnResult> {
     const definitionCount = Object.keys(csn.definitions ?? {}).length;
-    debug(`Importing CSN with ${definitionCount} definitions via /deepsea/repository/...`);
+    const blCount = Object.keys(csn.businessLayerDefinitions ?? {}).length;
+    const flowCount = Object.keys(csn.replicationflows ?? {}).length;
+    debug(`Importing CSN with ${definitionCount} definitions, ${blCount} business layer definitions, ${flowCount} flows via /deepsea/repository/...`);
 
     const payload = {
         data: {
             content: csn,
             saveAction: 'import',
             async: false,
-            name: 'batch-import.json',
+            name: 'Catalyst Import',
             space_id: spaceId,
             customValidationOptions: { allowBackwardTransitions: true },
         },

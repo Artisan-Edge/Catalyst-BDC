@@ -356,11 +356,16 @@ export class BdcClientImpl implements BdcClient {
 
         // Async import — Datasphere processes large payloads in the background
         // and returns no object IDs. Poll designObjects until they appear.
-        if (objectIds.length === 0 && Object.keys(csn.definitions ?? {}).length > 0) {
+        const allObjectNames = [
+            ...Object.keys(csn.definitions ?? {}),
+            ...Object.keys(csn.businessLayerDefinitions ?? {}),
+            ...Object.keys(csn.replicationflows ?? {}),
+        ];
+
+        if (objectIds.length === 0 && allObjectNames.length > 0) {
             debug('Import returned no object IDs (async background save). Polling for completion...');
 
-            const definitionNames = Object.keys(csn.definitions ?? {});
-            const [pollResult, pollErr] = await corePollForObjectGuids(this.requestor, this.config.space, definitionNames);
+            const [pollResult, pollErr] = await corePollForObjectGuids(this.requestor, this.config.space, allObjectNames);
             if (pollErr) return err(pollErr);
 
             objectIds = pollResult.objectIds;
