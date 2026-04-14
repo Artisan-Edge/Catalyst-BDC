@@ -16,12 +16,20 @@ export interface TokenConfig {
     expiresAfter?: number;
 }
 
+export interface SessionConfig {
+    cookies: string;
+    obtainedAt?: number;
+}
+
 export interface BdcConfig {
     host: string;
     space: string;
     verbose?: boolean;
-    oauth: OAuthConfig | { optionsFile: string };
+    oauth?: OAuthConfig | { optionsFile: string };
     tokens?: TokenConfig;
+    session?: SessionConfig;
+    onTokenRefreshed?: (tokens: { accessToken: string; refreshToken: string; expiresAfter: number }) => void;
+    onSessionExpired?: () => Promise<SessionConfig>;
 }
 
 export const oauthConfigSchema = z.union([
@@ -36,11 +44,16 @@ export const oauthConfigSchema = z.union([
     }),
 ]);
 
+export const sessionConfigSchema = z.object({
+    cookies: z.string().min(1),
+    obtainedAt: z.number().optional(),
+});
+
 export const bdcConfigSchema = z.object({
     host: z.string().url(),
     space: z.string().min(1),
     verbose: z.boolean().optional(),
-    oauth: oauthConfigSchema,
+    oauth: oauthConfigSchema.optional(),
     tokens: z.object({
         accessToken: z.string().min(1),
         refreshToken: z.string().min(1),
@@ -49,4 +62,10 @@ export const bdcConfigSchema = z.object({
         clientSecret: z.string().min(1),
         expiresAfter: z.number().optional(),
     }).optional(),
-});
+    session: sessionConfigSchema.optional(),
+    onTokenRefreshed: z.function().optional(),
+    onSessionExpired: z.function().optional(),
+}).refine(
+    (data) => data.oauth !== undefined || data.tokens !== undefined || data.session !== undefined,
+    { message: 'At least one of `oauth`, `tokens`, or `session` must be provided' },
+);

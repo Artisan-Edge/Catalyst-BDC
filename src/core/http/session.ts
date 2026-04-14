@@ -84,3 +84,39 @@ export async function fetchCsrf(
 
     return ok({ csrf, cookies });
 }
+
+export async function fetchCsrfWithSession(
+    host: string,
+    sessionCookies: string,
+): AsyncResult<{ csrf: string; cookies: string }> {
+    const response = await fetch(`${host}/api/v1/csrf`, {
+        method: 'HEAD',
+        headers: {
+            'Cookie': sessionCookies,
+            'X-Csrf-Token': 'Fetch',
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+        redirect: 'manual',
+    });
+
+    // 302 or 401 indicate session expiry
+    if (response.status === 302 || response.status === 401) {
+        return err(new Error(`Session expired (${response.status})`));
+    }
+
+    if (!response.ok) {
+        return err(new Error(`CSRF fetch with session failed (${response.status})`));
+    }
+
+    const csrf = response.headers.get('x-csrf-token');
+    if (!csrf) {
+        return err(new Error('No x-csrf-token header in session CSRF response'));
+    }
+
+    // Merge server set-cookie with session cookies
+    const setCookies = response.headers.getSetCookie().map(c => c.split(';')[0]).join('; ');
+    const mergedCookies = setCookies ? `${sessionCookies}; ${setCookies}` : sessionCookies;
+    debug('Session CSRF token acquired');
+
+    return ok({ csrf, cookies: mergedCookies });
+}

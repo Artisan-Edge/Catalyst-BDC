@@ -1,6 +1,6 @@
 // [EXPERIMENTAL] INA (Information Access) protocol operations
 export { getServerInfo } from './getServerInfo';
-export { fetchInaCsrf } from './fetchInaCsrf';
+export { fetchInaCsrf, fetchInaCsrfWithSession } from './fetchInaCsrf';
 export { getMetadata } from './getMetadata';
 export { queryData } from './queryData';
 export { listModels } from './listModels';

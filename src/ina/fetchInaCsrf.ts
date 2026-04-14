@@ -44,3 +44,39 @@ export async function fetchInaCsrf(
 
     return ok({ csrf, cookies });
 }
+
+export async function fetchInaCsrfWithSession(
+    host: string,
+    sessionCookies: string,
+): AsyncResult<InaCsrfToken> {
+    const url = buildDatasphereUrl(host, INA_CSRF_PATH);
+    debug(`INA CSRF (session): fetching from ${INA_CSRF_PATH}`);
+
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Cookie': sessionCookies,
+            'X-Csrf-Token': 'Fetch',
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+        redirect: 'manual',
+    });
+
+    if (response.status === 302 || response.status === 401) {
+        return err(new Error(`Session expired during INA CSRF fetch (${response.status})`));
+    }
+
+    if (!response.ok) {
+        return err(new Error(`INA CSRF fetch with session failed: HTTP ${response.status}`));
+    }
+
+    const csrf = response.headers.get('x-csrf-token');
+    if (!csrf) {
+        return err(new Error('INA CSRF fetch (session): no x-csrf-token header in response'));
+    }
+
+    const cookies = response.headers.get('set-cookie') ?? '';
+    debug('INA CSRF (session): acquired');
+
+    return ok({ csrf, cookies });
+}

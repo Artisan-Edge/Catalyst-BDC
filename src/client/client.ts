@@ -1,4 +1,4 @@
-import type { BdcConfig } from '../types/config';
+import type { BdcConfig, SessionConfig } from '../types/config';
 import type { CsnFile } from '../types/csn';
 import type { AsyncResult } from '../types/result';
 import { ok, err } from '../types/result';
@@ -13,7 +13,7 @@ import type { RunReplicationFlowResult } from '../core/operations/replication-fl
 import type { ImportCsnResult } from '../core/operations/import/importCsn';
 import type { SearchResult } from '../core/operations/navigator/searchObjects';
 import { getServerInfo as coreInaGetServerInfo } from '../ina/getServerInfo';
-import { fetchInaCsrf as coreFetchInaCsrf } from '../ina/fetchInaCsrf';
+import { fetchInaCsrf as coreFetchInaCsrf, fetchInaCsrfWithSession as coreFetchInaCsrfWithSession } from '../ina/fetchInaCsrf';
 import { getMetadata as coreInaGetMetadata } from '../ina/getMetadata';
 import { queryData as coreInaQueryData } from '../ina/queryData';
 import { listModels as coreInaListModels } from '../ina/listModels';
@@ -44,7 +44,7 @@ import { resolveSpaceId as coreResolveSpaceId } from '../core/operations/import/
 import { importCsn as coreImportCsn } from '../core/operations/import/importCsn';
 import { deployObjects as coreDeployObjects } from '../core/operations/import/deployObjects';
 import { pollForObjectGuids as corePollForObjectGuids } from '../core/operations/import/pollForObjectGuids';
-import { refreshAccessToken, fetchCsrf, TOKEN_EXPIRY_BUFFER_SEC } from '../core/http/session';
+import { refreshAccessToken, fetchCsrf, fetchCsrfWithSession, TOKEN_EXPIRY_BUFFER_SEC } from '../core/http/session';
 import { buildDatasphereUrl } from '../core/http/helpers';
 import { debug } from '../core/utils/logging';
 
@@ -110,6 +110,7 @@ export interface BdcClient {
 export class BdcClientImpl implements BdcClient {
     readonly config: BdcConfig;
     private tokenCache: TokenCache | null = null;
+    private sessionConfig: SessionConfig | null = null;
     private csrfCache: CsrfCache | null = null;
     private spaceId: string | null = null;
     private inaCsrf: InaCsrfToken | null = null;
@@ -130,6 +131,15 @@ export class BdcClientImpl implements BdcClient {
                 clientSecret: config.tokens.clientSecret,
             };
         }
+
+        // Seed from session cookies
+        if (config.session) {
+            this.sessionConfig = { ...config.session };
+        }
+    }
+
+    private isSessionMode(): boolean {
+        return this.sessionConfig !== null && this.tokenCache === null;
     }
 
     private async ensureAccessToken(): AsyncResult<string> {
@@ -155,8 +165,16 @@ export class BdcClientImpl implements BdcClient {
         this.tokenCache.accessToken = refreshed.accessToken;
         this.tokenCache.expiresAfter = refreshed.expiresAfter;
 
-        // Persist refreshed tokens
-        saveCachedTokens(this.config.host, this.tokenCache as OAuthTokens);
+        // Persist refreshed tokens — use callback if provided, otherwise file cache
+        if (this.config.onTokenRefreshed) {
+            this.config.onTokenRefreshed({
+                accessToken: this.tokenCache.accessToken,
+                refreshToken: this.tokenCache.refreshToken,
+                expiresAfter: this.tokenCache.expiresAfter,
+            });
+        } else {
+            saveCachedTokens(this.config.host, this.tokenCache as OAuthTokens);
+        }
 
         // Invalidate CSRF since access token changed
         this.csrfCache = null;
@@ -164,8 +182,17 @@ export class BdcClientImpl implements BdcClient {
         return ok(refreshed.accessToken);
     }
 
-    private async ensureCsrf(accessToken: string): AsyncResult<CsrfCache> {
+    private async ensureCsrf(accessToken: string | null): AsyncResult<CsrfCache> {
         if (this.csrfCache) return ok(this.csrfCache);
+
+        if (this.isSessionMode()) {
+            const [csrfResult, csrfErr] = await fetchCsrfWithSession(this.config.host, this.sessionConfig!.cookies);
+            if (csrfErr) return err(csrfErr);
+            this.csrfCache = csrfResult;
+            return ok(this.csrfCache);
+        }
+
+        if (!accessToken) return err(new Error('No access token available for CSRF fetch'));
 
         const [csrfResult, csrfErr] = await fetchCsrf(this.config.host, accessToken);
         if (csrfErr) return err(csrfErr);
@@ -175,8 +202,15 @@ export class BdcClientImpl implements BdcClient {
     }
 
     private async request(options: DatasphereRequestOptions): AsyncResult<Response, Error> {
-        const [accessToken, tokenErr] = await this.ensureAccessToken();
-        if (tokenErr) return err(tokenErr);
+        const sessionMode = this.isSessionMode();
+
+        // Token mode: ensure access token
+        let accessToken: string | null = null;
+        if (!sessionMode) {
+            const [token, tokenErr] = await this.ensureAccessToken();
+            if (tokenErr) return err(tokenErr);
+            accessToken = token;
+        }
 
         // Mutations need CSRF
         const isMutation = options.method !== 'GET' && options.method !== 'HEAD';
@@ -192,10 +226,16 @@ export class BdcClientImpl implements BdcClient {
         debug(options.method, url);
 
         const headers: Record<string, string> = {
-            'Authorization': `Bearer ${accessToken}`,
             'X-Requested-With': 'XMLHttpRequest',
             ...options.headers,
         };
+
+        // Auth headers
+        if (sessionMode) {
+            headers['Cookie'] = csrf ? `${this.sessionConfig!.cookies}; ${csrf.cookies}` : this.sessionConfig!.cookies;
+        } else {
+            headers['Authorization'] = `Bearer ${accessToken}`;
+        }
 
         // Datasphere API requires explicit Accept header for GET requests
         if (!isMutation && !headers['Accept']) {
@@ -204,14 +244,34 @@ export class BdcClientImpl implements BdcClient {
 
         if (csrf) {
             headers['X-Csrf-Token'] = csrf.csrf;
-            headers['Cookie'] = csrf.cookies;
+            if (!sessionMode) {
+                headers['Cookie'] = csrf.cookies;
+            }
         }
 
-        const response = await fetch(url, {
+        const fetchOptions: RequestInit = {
             method: options.method,
             headers,
             body: options.body,
-        });
+        };
+
+        // Session mode uses manual redirect to detect IdP redirects as session expiry
+        if (sessionMode) {
+            fetchOptions.redirect = 'manual';
+        }
+
+        const response = await fetch(url, fetchOptions);
+
+        // Session expiry detection (302 redirect to IdP or 401)
+        if (sessionMode && (response.status === 302 || response.status === 401)) {
+            debug('Session expired, attempting refresh via onSessionExpired callback...');
+            const refreshed = await this.refreshSession();
+            if (!refreshed) return err(new Error(`Session expired (${response.status}) and no onSessionExpired callback provided`));
+
+            // Invalidate CSRF and retry
+            this.csrfCache = null;
+            return this.request(options);
+        }
 
         // CSRF retry on 403
         if (response.status === 403 && isMutation) {
@@ -222,21 +282,39 @@ export class BdcClientImpl implements BdcClient {
             if (freshCsrfErr) return err(freshCsrfErr);
 
             headers['X-Csrf-Token'] = freshCsrf.csrf;
-            headers['Cookie'] = freshCsrf.cookies;
+            if (sessionMode) {
+                headers['Cookie'] = `${this.sessionConfig!.cookies}; ${freshCsrf.cookies}`;
+            } else {
+                headers['Cookie'] = freshCsrf.cookies;
+            }
 
-            const retryResponse = await fetch(url, {
-                method: options.method,
-                headers,
-                body: options.body,
-            });
-
+            const retryResponse = await fetch(url, fetchOptions);
             return ok(retryResponse);
         }
 
         return ok(response);
     }
 
+    private async refreshSession(): Promise<boolean> {
+        if (!this.config.onSessionExpired) return false;
+
+        const freshSession = await this.config.onSessionExpired();
+        this.sessionConfig = { ...freshSession };
+        this.csrfCache = null;
+        this.inaCsrf = null;
+        debug('Session refreshed via callback');
+        return true;
+    }
+
     async login(): AsyncResult<OAuthTokens> {
+        if (this.isSessionMode()) {
+            return err(new Error('Session auth does not use login() — pass cookies via config.session'));
+        }
+
+        if (!this.config.oauth) {
+            return err(new Error('Cannot perform browser login — no OAuth config provided. Supply tokens directly via config.tokens.'));
+        }
+
         // Try cached tokens first
         const [cached] = loadCachedTokens(this.config.host);
         if (cached) {
@@ -266,7 +344,15 @@ export class BdcClientImpl implements BdcClient {
                     expiresAfter: refreshed.expiresAfter,
                 };
                 this.tokenCache = tokens;
-                saveCachedTokens(this.config.host, tokens);
+                if (this.config.onTokenRefreshed) {
+                    this.config.onTokenRefreshed({
+                        accessToken: tokens.accessToken,
+                        refreshToken: tokens.refreshToken,
+                        expiresAfter: tokens.expiresAfter,
+                    });
+                } else {
+                    saveCachedTokens(this.config.host, tokens);
+                }
 
                 const [csrfResult, csrfErr] = await fetchCsrf(this.config.host, tokens.accessToken);
                 if (!csrfErr) {
@@ -292,7 +378,15 @@ export class BdcClientImpl implements BdcClient {
             clientSecret: tokens.clientSecret,
         };
 
-        saveCachedTokens(this.config.host, tokens);
+        if (this.config.onTokenRefreshed) {
+            this.config.onTokenRefreshed({
+                accessToken: tokens.accessToken,
+                refreshToken: tokens.refreshToken,
+                expiresAfter: tokens.expiresAfter,
+            });
+        } else {
+            saveCachedTokens(this.config.host, tokens);
+        }
 
         // Fetch initial CSRF
         const [csrfResult, csrfErr] = await fetchCsrf(this.config.host, tokens.accessToken);
@@ -406,6 +500,13 @@ export class BdcClientImpl implements BdcClient {
     // [EXPERIMENTAL] INA protocol
     private async ensureInaCsrf(): AsyncResult<InaCsrfToken> {
         if (this.inaCsrf) return ok(this.inaCsrf);
+
+        if (this.isSessionMode()) {
+            const [csrf, csrfErr] = await coreFetchInaCsrfWithSession(this.config.host, this.sessionConfig!.cookies);
+            if (csrfErr) return err(csrfErr);
+            this.inaCsrf = csrf;
+            return ok(csrf);
+        }
 
         const [accessToken, tokenErr] = await this.ensureAccessToken();
         if (tokenErr) return err(tokenErr);

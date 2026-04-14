@@ -3,7 +3,7 @@ export { createClient } from './client';
 export type { BdcClient } from './client';
 
 // Types
-export type { BdcConfig, OAuthConfig, TokenConfig } from './types/config';
+export type { BdcConfig, OAuthConfig, TokenConfig, SessionConfig } from './types/config';
 export type { CsnFile, CsnEntity, CsnElement, CsnReplicationFlow } from './types/csn';
 export type {
     DesignObject, SearchObject, ListObjectsOptions, SearchOptions,
@@ -20,7 +20,7 @@ export { ok, err } from './types/result';
 export type { OAuthTokens } from './core/auth/oauth';
 
 // HTTP helpers (for advanced usage / scripts)
-export { refreshAccessToken, fetchCsrf } from './core/http/session';
+export { refreshAccessToken, fetchCsrf, fetchCsrfWithSession } from './core/http/session';
 export { checkResponse, buildDatasphereUrl } from './core/http/helpers';
 
 // Import (multi-definition CSN via /deepsea/ API)
@@ -40,7 +40,7 @@ export type { ViewColumn } from './core/operations/navigator';
 export type { RunReplicationFlowResult } from './core/operations/replication-flow/run';
 
 // [EXPERIMENTAL] INA protocol — low-level
-export { getServerInfo as inaGetServerInfo, fetchInaCsrf, getMetadata as inaGetMetadata, queryData as inaQueryData } from './ina';
+export { getServerInfo as inaGetServerInfo, fetchInaCsrf, fetchInaCsrfWithSession, getMetadata as inaGetMetadata, queryData as inaQueryData } from './ina';
 export type { InaCsrfToken } from './ina';
 export type {
     InaServerInfo, InaMetadataResult, InaQueryOptions, InaQueryResult,
