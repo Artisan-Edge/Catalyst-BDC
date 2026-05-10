@@ -47,6 +47,7 @@ import { pollForObjectGuids as corePollForObjectGuids } from '../core/operations
 import { refreshAccessToken, fetchCsrf, TOKEN_EXPIRY_BUFFER_SEC } from '../core/http/session';
 import { buildDatasphereUrl } from '../core/http/helpers';
 import { debug } from '../core/utils/logging';
+import { safeFetch } from '../core/utils/fetch';
 
 interface TokenCache {
     accessToken: string;
@@ -207,11 +208,12 @@ export class BdcClientImpl implements BdcClient {
             headers['Cookie'] = csrf.cookies;
         }
 
-        const response = await fetch(url, {
+        const [response, fetchErr] = await safeFetch(url, {
             method: options.method,
             headers,
             body: options.body,
         });
+        if (fetchErr) return err(fetchErr);
 
         // CSRF retry on 403
         if (response.status === 403 && isMutation) {
@@ -224,12 +226,12 @@ export class BdcClientImpl implements BdcClient {
             headers['X-Csrf-Token'] = freshCsrf.csrf;
             headers['Cookie'] = freshCsrf.cookies;
 
-            const retryResponse = await fetch(url, {
+            const [retryResponse, retryErr] = await safeFetch(url, {
                 method: options.method,
                 headers,
                 body: options.body,
             });
-
+            if (retryErr) return err(retryErr);
             return ok(retryResponse);
         }
 
