@@ -1,7 +1,6 @@
 import http from 'node:http';
 import { randomBytes } from 'node:crypto';
 import { exec } from 'node:child_process';
-import fs from 'node:fs';
 import path from 'node:path';
 import { z } from 'zod';
 import type { OAuthConfig } from '../../types/config';
@@ -32,24 +31,25 @@ export interface OAuthTokens {
     clientSecret: string;
 }
 
-function resolveOAuthConfig(oauth: OAuthConfig | { optionsFile: string }): [OAuthConfig, null] | [null, Error] {
-    if ('clientId' in oauth) return [oauth, null];
+async function resolveOAuthConfig(oauth: OAuthConfig | { optionsFile: string }): AsyncResult<OAuthConfig> {
+    if ('clientId' in oauth) return ok(oauth);
 
     const resolved = path.resolve(oauth.optionsFile);
-    if (!fs.existsSync(resolved)) {
-        return [null, new Error(`OAuth options file not found: ${resolved}`)];
+    const file = Bun.file(resolved);
+    if (!(await file.exists())) {
+        return err(new Error(`OAuth options file not found: ${resolved}`));
     }
 
-    const raw = fs.readFileSync(resolved, 'utf-8');
+    const raw = await file.text();
     const [parsed, parseErr] = safeJsonParse(raw, optionsFileSchema);
-    if (parseErr) return [null, parseErr];
+    if (parseErr) return err(parseErr);
 
-    return [{
+    return ok({
         clientId: parsed['client-id'],
         clientSecret: parsed['client-secret'],
         authorizationUrl: parsed['authorization-url'],
         tokenUrl: parsed['token-url'],
-    }, null];
+    });
 }
 
 // SAP Datasphere CLI convention: sb- prefixed = custom client (port 8080), otherwise pre-delivered (port 65000)
@@ -74,7 +74,7 @@ function openBrowser(url: string): void {
 export async function performOAuthLogin(
     oauth: OAuthConfig | { optionsFile: string },
 ): AsyncResult<OAuthTokens> {
-    const [config, configErr] = resolveOAuthConfig(oauth);
+    const [config, configErr] = await resolveOAuthConfig(oauth);
     if (configErr) return err(configErr);
 
     const state = randomBytes(16).toString('hex');

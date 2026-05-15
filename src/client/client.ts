@@ -157,7 +157,7 @@ export class BdcClientImpl implements BdcClient {
         this.tokenCache.expiresAfter = refreshed.expiresAfter;
 
         // Persist refreshed tokens
-        saveCachedTokens(this.config.host, this.tokenCache as OAuthTokens);
+        await saveCachedTokens(this.config.host, this.tokenCache as OAuthTokens);
 
         // Invalidate CSRF since access token changed
         this.csrfCache = null;
@@ -240,7 +240,7 @@ export class BdcClientImpl implements BdcClient {
 
     async login(): AsyncResult<OAuthTokens> {
         // Try cached tokens first
-        const [cached] = loadCachedTokens(this.config.host);
+        const [cached] = await loadCachedTokens(this.config.host);
         if (cached) {
             const nowSec = Math.floor(Date.now() / 1000);
 
@@ -268,7 +268,7 @@ export class BdcClientImpl implements BdcClient {
                     expiresAfter: refreshed.expiresAfter,
                 };
                 this.tokenCache = tokens;
-                saveCachedTokens(this.config.host, tokens);
+                await saveCachedTokens(this.config.host, tokens);
 
                 const [csrfResult, csrfErr] = await fetchCsrf(this.config.host, tokens.accessToken);
                 if (!csrfErr) {
@@ -294,7 +294,7 @@ export class BdcClientImpl implements BdcClient {
             clientSecret: tokens.clientSecret,
         };
 
-        saveCachedTokens(this.config.host, tokens);
+        await saveCachedTokens(this.config.host, tokens);
 
         // Fetch initial CSRF
         const [csrfResult, csrfErr] = await fetchCsrf(this.config.host, tokens.accessToken);

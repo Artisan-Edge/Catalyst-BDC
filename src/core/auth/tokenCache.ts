@@ -1,15 +1,13 @@
-import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import { z } from 'zod';
 import type { OAuthTokens } from './oauth';
-import type { Result } from '../../types/result';
+import type { AsyncResult } from '../../types/result';
 import { ok, err } from '../../types/result';
 import { safeJsonParse } from '../utils/json';
 import { debug } from '../utils/logging';
 
-const TOKEN_DIR = path.join(os.homedir(), '.catalyst-bdc');
-const TOKEN_FILE = path.join(TOKEN_DIR, 'tokens.json');
+const TOKEN_FILE = path.join(os.homedir(), '.catalyst-bdc', 'tokens.json');
 
 const cachedTokensSchema = z.record(z.string(), z.object({
     accessToken: z.string(),
@@ -26,9 +24,10 @@ function hostKey(host: string): string {
     return new URL(host).hostname;
 }
 
-function readStore(): TokenStore {
-    if (!fs.existsSync(TOKEN_FILE)) return {};
-    const raw = fs.readFileSync(TOKEN_FILE, 'utf-8');
+async function readStore(): Promise<TokenStore> {
+    const file = Bun.file(TOKEN_FILE);
+    if (!(await file.exists())) return {};
+    const raw = await file.text();
     const [store, parseErr] = safeJsonParse(raw, cachedTokensSchema);
     if (parseErr) {
         debug('Failed to parse token cache:', parseErr.message);
@@ -37,15 +36,8 @@ function readStore(): TokenStore {
     return store;
 }
 
-function writeStore(store: TokenStore): void {
-    if (!fs.existsSync(TOKEN_DIR)) {
-        fs.mkdirSync(TOKEN_DIR, { recursive: true });
-    }
-    fs.writeFileSync(TOKEN_FILE, JSON.stringify(store, null, 2));
-}
-
-export function loadCachedTokens(host: string): Result<OAuthTokens> {
-    const store = readStore();
+export async function loadCachedTokens(host: string): AsyncResult<OAuthTokens> {
+    const store = await readStore();
     const key = hostKey(host);
     const entry = store[key];
     if (!entry) {
@@ -55,10 +47,10 @@ export function loadCachedTokens(host: string): Result<OAuthTokens> {
     return ok(entry);
 }
 
-export function saveCachedTokens(host: string, tokens: OAuthTokens): void {
-    const store = readStore();
+export async function saveCachedTokens(host: string, tokens: OAuthTokens): Promise<void> {
+    const store = await readStore();
     const key = hostKey(host);
     store[key] = tokens;
-    writeStore(store);
+    await Bun.write(TOKEN_FILE, JSON.stringify(store, null, 2));
     debug('Saved tokens to cache for', key);
 }
