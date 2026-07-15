@@ -8,7 +8,7 @@ import type { SearchObject, ListObjectsOptions, SearchOptions, SpaceFolder } fro
 import type { DataPreviewOptions, DataPreviewResult } from '../core/operations/navigator/previewData';
 import type { ViewColumn } from '../core/operations/navigator/getViewColumns';
 import type { OAuthTokens } from '../core/auth/oauth';
-import { loadCachedTokens, saveCachedTokens } from '../core/auth/tokenCache';
+import { loadCachedTokens, saveCachedTokens, deleteCachedTokens } from '../core/auth/tokenCache';
 import type { RunReplicationFlowResult } from '../core/operations/replication-flow/run';
 import type { ImportCsnResult } from '../core/operations/import/importCsn';
 import type { SearchResult } from '../core/operations/navigator/searchObjects';
@@ -66,6 +66,7 @@ interface CsrfCache {
 export interface BdcClient {
     readonly config: BdcConfig;
     login(): AsyncResult<OAuthTokens>;
+    logout(): AsyncResult<boolean>;
 
     // Read
     readAnalyticModel(objectName: string): AsyncResult<string>;
@@ -302,6 +303,17 @@ export class BdcClientImpl implements BdcClient {
         this.csrfCache = csrfResult;
 
         return ok(tokens);
+    }
+
+    // Clears in-memory auth state and removes this host's entry from the
+    // token cache file. Returns whether cached tokens existed.
+    async logout(): AsyncResult<boolean> {
+        this.tokenCache = null;
+        this.csrfCache = null;
+        this.inaCsrf = null;
+
+        const existed = await deleteCachedTokens(this.config.host);
+        return ok(existed);
     }
 
     // Read

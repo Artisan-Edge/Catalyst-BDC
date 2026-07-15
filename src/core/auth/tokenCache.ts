@@ -54,3 +54,14 @@ export async function saveCachedTokens(host: string, tokens: OAuthTokens): Promi
     await Bun.write(TOKEN_FILE, JSON.stringify(store, null, 2));
     debug('Saved tokens to cache for', key);
 }
+
+export async function deleteCachedTokens(host: string): Promise<boolean> {
+    const store = await readStore();
+    const key = hostKey(host);
+    if (!(key in store)) return false;
+
+    delete store[key];
+    await Bun.write(TOKEN_FILE, JSON.stringify(store, null, 2));
+    debug('Deleted cached tokens for', key);
+    return true;
+}
