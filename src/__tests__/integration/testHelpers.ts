@@ -35,6 +35,11 @@ export async function safeDelete(
     name: string,
 ): Promise<void> {
     switch (type) {
+        case 'analytic-model': {
+            const [, deleteErr] = await client.deleteAnalyticModel(name);
+            if (deleteErr) console.warn(`Cleanup: failed to delete analytic model "${name}":`, deleteErr.message);
+            break;
+        }
         case 'view': {
             const [, deleteErr] = await client.deleteView(name);
             if (deleteErr) console.warn(`Cleanup: failed to delete view "${name}":`, deleteErr.message);
@@ -48,6 +53,11 @@ export async function safeDelete(
         case 'replication-flow': {
             const [, deleteErr] = await client.deleteReplicationFlow(name);
             if (deleteErr) console.warn(`Cleanup: failed to delete replication flow "${name}":`, deleteErr.message);
+            break;
+        }
+        case 'transformation-flow': {
+            const [, deleteErr] = await client.deleteTransformationFlow(name);
+            if (deleteErr) console.warn(`Cleanup: failed to delete transformation flow "${name}":`, deleteErr.message);
             break;
         }
     }

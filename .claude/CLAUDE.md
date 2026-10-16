@@ -13,9 +13,8 @@ src/
 ├── types/          # Result tuples, BdcConfig (Zod), CSN types, object type registry, DatasphereRequestor
 ├── core/
 │   ├── auth/       # Native OAuth browser flow (performOAuthLogin)
-│   ├── csn/        # extractObject, validateCsnFile, resolveDependencies
 │   ├── http/       # checkResponse, buildDatasphereUrl, CSRF/token management
-│   ├── operations/ # CRUD for views, tables, flows (one function per file)
+│   ├── operations/ # Read, delete, import, run (one function per file)
 │   └── utils/      # debug logging, safe JSON parsing
 ├── client/         # BdcClient interface + createClient factory (self-referencing DatasphereRequestor)
 └── index.ts        # Public barrel exports
@@ -23,10 +22,10 @@ src/
 
 ## Module Conventions
 
-- **One function per file** in core/operations and core/csn
+- **One function per file** in core/operations
 - **Result tuples** (`[T, null] | [null, Error]`) for all fallible operations — no thrown exceptions
 - **Barrel exports** (`index.ts`) at every directory level
-- **Import hierarchy**: `types ← core/utils ← core/auth ← core/http ← core/csn ← core/operations ← client` — no cycles
+- **Import hierarchy**: `types ← core/utils ← core/auth ← core/http ← core/operations ← client` — no cycles
 - **DatasphereRequestor pattern**: Operations receive a `DatasphereRequestor` interface (not raw fetch). The client implements it via `{ request: this.request.bind(this) }` with auto token refresh + CSRF retry.
 
 ## Testing Rules
@@ -34,14 +33,12 @@ src/
 - **No mocking, ever.** All tests run against real functions and real services.
 - Integration tests hit the real Datasphere HTTP API — requires OAuth login
 - Tests read `DSP_HOST` and `DSP_SPACE` from environment (`.env` via dotenv)
-- Pure logic tests (CSN extraction, validation) use real fixture data from `src/__tests__/assets/`
 
 ## Documentation
 
 - **[docs/README.md](../docs/README.md)** — Full library documentation
 - **[docs/architecture.md](../docs/architecture.md)** — Module hierarchy, patterns, request lifecycle
 - **[docs/references.md](../docs/references.md)** — External documentation sources
-- **[PLAN.md](../PLAN.md)** — Objectives tracking and architecture decisions
 
 ## Type Safety Rules
 
@@ -53,9 +50,9 @@ src/
 
 ## Quick Reminders
 
-- All CRUD goes through direct HTTP — no CLI dependency
-- API accepts **one object per request** — split multi-definition CSN files
-- Replication flows don't auto-create target local tables — create them first
+- All writes go through `importCsn` → `/deepsea/repository/{space}/objects/` (supports multi-definition CSN)
+- Reads and deletes use `/dwaas-core/api/v1/spaces/{space}/{endpoint}/{name}`
+- `importCsn` resolves the space UUID automatically (cached), imports, then deploys
 - CSRF tokens are fetched from `/api/v1/csrf` and auto-retried on 403
 - Access tokens are auto-refreshed when expired
 - `TokenConfig` in BdcConfig allows headless/CI usage without browser login

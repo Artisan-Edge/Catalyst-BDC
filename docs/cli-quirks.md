@@ -29,13 +29,15 @@ The CLI joins all option values with spaces then splits on spaces — **file pat
 
 ## API Constraints
 
-The Datasphere API only accepts **one object per request**. Multi-definition CSN files must be split before sending.
+The CRUD API (`/dwaas-core/api/v1/spaces/{space}/views`) only accepts **one object per request**. Multi-definition CSN files must be split before sending.
+
+For multi-definition imports (e.g. views with circular references), use the `/deepsea/repository/{spaceName}/objects/` endpoint instead. This is the same API the Datasphere UI uses for imports. It accepts a full CSN with multiple definitions in a single request. The `importCsn` operation wraps this endpoint — see `BdcClient.importCsn()`.
 
 ---
 
 ## Replication Flows
 
-Replication flows via CLI do **not** auto-create target local tables (the UI does). Target tables must be created explicitly first. The `createReplicationFlow` operation handles this via the `preDeps` mechanism in `src/types/objectTypes.ts`.
+Replication flows do **not** auto-create target local tables (the UI does). When using the CRUD API, target tables must be created explicitly first. When using `importCsn`, include both the table definitions and the replication flow in the same CSN — the import handles ordering automatically.
 
 ---
 
@@ -62,9 +64,10 @@ Replication flows via CLI do **not** auto-create target local tables (the UI doe
 ## Folder Assignments
 
 - Folder IDs (e.g. `Folder_VJHFMFLE`) are set via `_meta.dependencies.folderAssignment` in CSN
-- Folder assignment is **write-only** — reading an object back does not return its folder
-- There is no CLI or API endpoint to list folders or resolve folder names to IDs
-- Folder IDs must be discovered via the Datasphere UI
+- Folder assignment is **write-only** via the CRUD API — reading an object back does not return its folder
+- The **search API** (`/deepsea/repository/{space}/search/$all`) returns folder metadata (`folder_id`, `folder_name`, display names) and supports `folder_id:CHILD_OF` for browsing folder contents
+- Folder display names (e.g. "SNAP F01") differ from technical names (e.g. `Folder_YBEQBWWQ`) — the search API provides both
+- Use `BdcClient.listFolders()` to list folders with display names, and `searchObjects({ folderId })` to browse folder contents
 
 ---
 

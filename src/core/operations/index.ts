@@ -2,13 +2,30 @@ export { login } from './login';
 export { objectExists } from './objectExists';
 
 // Local table
-export { createLocalTable, readLocalTable, updateLocalTable, deleteLocalTable, upsertLocalTable } from './local-table';
-export type { UpsertLocalTableResult } from './local-table';
+export { readLocalTable, deleteLocalTable } from './local-table';
 
 // Replication flow
-export { createReplicationFlow, readReplicationFlow, updateReplicationFlow, deleteReplicationFlow, upsertReplicationFlow, runReplicationFlow } from './replication-flow';
-export type { UpsertReplicationFlowResult, RunReplicationFlowResult } from './replication-flow';
+export { readReplicationFlow, deleteReplicationFlow, runReplicationFlow } from './replication-flow';
+export type { RunReplicationFlowResult } from './replication-flow';
+
+// Transformation flow
+export { readTransformationFlow, deleteTransformationFlow, runTransformationFlow } from './transformation-flow';
+export type { RunTransformationFlowResult } from './transformation-flow';
+
+// Analytic model
+export { readAnalyticModel, deleteAnalyticModel } from './analytic-model';
 
 // SQL view
-export { createView, readView, updateView, deleteView, upsertView } from './sql-view';
-export type { UpsertViewResult } from './sql-view';
+export { readView, deleteView } from './sql-view';
+
+// Import (multi-definition CSN via /deepsea/ API)
+export { resolveSpaceId, importCsn, deployObjects } from './import';
+export type { ImportCsnResult } from './import';
+
+// Navigator
+export { listObjects, listFolders, searchObjects } from './navigator';
+export type { SearchResult } from './navigator';
+
+// Data preview
+export { previewData, getViewColumns } from './navigator';
+export type { DataPreviewOptions, DataPreviewResult, ViewColumn } from './navigator';

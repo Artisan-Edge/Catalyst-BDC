@@ -11,7 +11,7 @@ Documentation sources for the SAP Datasphere CLI.
 - [View Generation Blog](#view-generation-blog)
 
 ---
-
+ 
 ## npm Package README
 
 - **URL**: <https://www.npmjs.com/package/@sap/datasphere-cli>

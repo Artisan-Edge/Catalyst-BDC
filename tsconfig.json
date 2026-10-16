@@ -15,7 +15,8 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "verbatimModuleSyntax": true,
-    "types": ["bun-types"]
+    "ignoreDeprecations": "6.0",
+    "types": ["bun-types", "node"]
   },
   "include": ["src/**/*"]
 }

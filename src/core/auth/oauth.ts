@@ -1,11 +1,10 @@
 import http from 'node:http';
 import { randomBytes } from 'node:crypto';
 import { exec } from 'node:child_process';
-import fs from 'node:fs';
 import path from 'node:path';
 import { z } from 'zod';
 import type { OAuthConfig } from '../../types/config';
-import type { AsyncResult } from '../../types/result';
+import type { AsyncResult, Result } from '../../types/result';
 import { ok, err } from '../../types/result';
 import { safeJsonParse } from '../utils/json';
 import { debug } from '../utils/logging';
@@ -23,6 +22,8 @@ const optionsFileSchema = z.object({
     'token-url': z.string().url(),
 });
 
+const LOGIN_TIMEOUT_MS = 5 * 60 * 1000;
+
 export interface OAuthTokens {
     accessToken: string;
     refreshToken: string;
@@ -32,24 +33,25 @@ export interface OAuthTokens {
     clientSecret: string;
 }
 
-function resolveOAuthConfig(oauth: OAuthConfig | { optionsFile: string }): [OAuthConfig, null] | [null, Error] {
-    if ('clientId' in oauth) return [oauth, null];
+async function resolveOAuthConfig(oauth: OAuthConfig | { optionsFile: string }): AsyncResult<OAuthConfig> {
+    if ('clientId' in oauth) return ok(oauth);
 
     const resolved = path.resolve(oauth.optionsFile);
-    if (!fs.existsSync(resolved)) {
-        return [null, new Error(`OAuth options file not found: ${resolved}`)];
+    const file = Bun.file(resolved);
+    if (!(await file.exists())) {
+        return err(new Error(`OAuth options file not found: ${resolved}`));
     }
 
-    const raw = fs.readFileSync(resolved, 'utf-8');
+    const raw = await file.text();
     const [parsed, parseErr] = safeJsonParse(raw, optionsFileSchema);
-    if (parseErr) return [null, parseErr];
+    if (parseErr) return err(parseErr);
 
-    return [{
+    return ok({
         clientId: parsed['client-id'],
         clientSecret: parsed['client-secret'],
         authorizationUrl: parsed['authorization-url'],
         tokenUrl: parsed['token-url'],
-    }, null];
+    });
 }
 
 // SAP Datasphere CLI convention: sb- prefixed = custom client (port 8080), otherwise pre-delivered (port 65000)
@@ -74,7 +76,7 @@ function openBrowser(url: string): void {
 export async function performOAuthLogin(
     oauth: OAuthConfig | { optionsFile: string },
 ): AsyncResult<OAuthTokens> {
-    const [config, configErr] = resolveOAuthConfig(oauth);
+    const [config, configErr] = await resolveOAuthConfig(oauth);
     if (configErr) return err(configErr);
 
     const state = randomBytes(16).toString('hex');
@@ -91,9 +93,13 @@ function waitForCallback(
     state: string,
     port: number,
 ): AsyncResult<OAuthTokens> {
+    const redirectUri = `http://localhost:${port}`;
+
     return new Promise((resolve) => {
+        let timeoutHandle: ReturnType<typeof setTimeout> | undefined;
+
         const server = http.createServer(async (req, res) => {
-            const url = new URL(req.url ?? '/', `http://localhost:${port}`);
+            const url = new URL(req.url ?? '/', redirectUri);
 
             const code = url.searchParams.get('code');
             const returnedState = url.searchParams.get('state');
@@ -107,31 +113,35 @@ function waitForCallback(
             if (returnedState && returnedState !== state) {
                 res.writeHead(400);
                 res.end('Invalid callback — state mismatch');
-                server.close();
-                resolve(err(new Error('OAuth callback: state mismatch')));
+                settle(err(new Error('OAuth callback: state mismatch')));
                 return;
             }
 
             // Exchange code for tokens
-            const redirectUri = `http://localhost:${port}`;
             const [tokens, tokenErr] = await exchangeCodeForTokens(config, code, redirectUri);
-            server.close();
 
             if (tokenErr) {
                 res.writeHead(500);
                 res.end('Token exchange failed');
-                resolve(err(tokenErr));
+                settle(err(tokenErr));
                 return;
             }
 
             res.writeHead(200, { 'Content-Type': 'text/html' });
             res.end('<html><body><h2>Login successful</h2><p>You can close this tab.</p></body></html>');
-            resolve(ok(tokens));
+            settle(ok(tokens));
         });
 
-        server.listen(port, 'localhost', () => {
-            const redirectUri = `http://localhost:${port}`;
+        // Every exit path routes through here. Clearing the timer is what lets the
+        // CLI exit: a pending timeout holds the event loop open, so a successful
+        // login would otherwise hang at the prompt until the timeout fires.
+        const settle = (result: Result<OAuthTokens>): void => {
+            if (timeoutHandle) clearTimeout(timeoutHandle);
+            server.close();
+            resolve(result);
+        };
 
+        server.listen(port, 'localhost', () => {
             // Match SAP CLI behavior: only send response_type, client_id, and state
             const authUrl = new URL(config.authorizationUrl);
             authUrl.searchParams.set('response_type', 'code');
@@ -145,16 +155,14 @@ function waitForCallback(
         });
 
         server.on('error', (e) => {
-            resolve(err(new Error(`Failed to start OAuth callback server on port ${port}: ${e.message}`)));
+            settle(err(new Error(`Failed to start OAuth callback server on port ${port}: ${e.message}`)));
         });
 
-        // Timeout after 5 minutes
-        setTimeout(() => {
-            server.close();
-            resolve(err(new Error(
-                `OAuth login timed out. Did you maintain the redirect URI as http://localhost:${port} in SAP Datasphere?`,
+        timeoutHandle = setTimeout(() => {
+            settle(err(new Error(
+                `OAuth login timed out. Did you maintain the redirect URI as ${redirectUri} in SAP Datasphere?`,
             )));
-        }, 5 * 60 * 1000);
+        }, LOGIN_TIMEOUT_MS);
     });
 }
 

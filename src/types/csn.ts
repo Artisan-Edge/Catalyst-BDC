@@ -35,6 +35,18 @@ export interface CsnReplicationFlow {
     [key: string]: unknown;
 }
 
+// Deliberately permissive — the transformation-flow CSN schema is still being
+// reverse-engineered, so only the discriminating `kind` is pinned down.
+export interface CsnTransformationFlow {
+    kind: 'sap.dis.transformationflow';
+    '@EndUserText.label'?: string;
+    contents?: Record<string, unknown>;
+    sources?: Record<string, unknown>;
+    targets?: Record<string, { elements?: Record<string, unknown> }>;
+    connections?: Record<string, unknown>;
+    [key: string]: unknown;
+}
+
 export interface CsnVersion {
     csn: string;
 }
@@ -45,7 +57,9 @@ export interface CsnMeta {
 
 export interface CsnFile {
     definitions?: Record<string, CsnEntity>;
+    businessLayerDefinitions?: Record<string, CsnEntity>;
     replicationflows?: Record<string, CsnReplicationFlow>;
+    transformationflows?: Record<string, CsnTransformationFlow>;
     version?: CsnVersion;
     meta?: CsnMeta;
     $version?: string;

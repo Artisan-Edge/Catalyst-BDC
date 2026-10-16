@@ -20,7 +20,7 @@ export async function clientLogin(
     currentTokenCache: TokenCache | null,
 ): AsyncResult<ClientLoginResult> {
     // Try cached tokens first
-    const [cached] = loadCachedTokens(config.host);
+    const [cached] = await loadCachedTokens(config.host);
     if (cached) {
         const nowSec = Math.floor(Date.now() / 1000);
 
@@ -45,7 +45,7 @@ export async function clientLogin(
                 accessToken: refreshed.accessToken,
                 expiresAfter: refreshed.expiresAfter,
             };
-            saveCachedTokens(config.host, tokens);
+            await saveCachedTokens(config.host, tokens);
 
             const [csrfResult, csrfErr] = await fetchCsrf(config.host, tokens.accessToken);
             if (!csrfErr) {
@@ -70,7 +70,7 @@ export async function clientLogin(
         clientSecret: tokens.clientSecret,
     };
 
-    saveCachedTokens(config.host, tokens);
+    await saveCachedTokens(config.host, tokens);
 
     // Fetch initial CSRF
     const [csrfResult, csrfErr] = await fetchCsrf(config.host, tokens.accessToken);

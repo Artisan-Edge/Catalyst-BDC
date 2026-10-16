@@ -6,6 +6,7 @@ import { ensureAccessToken } from './ensureAccessToken';
 import { ensureCsrf } from './ensureCsrf';
 import { buildDatasphereUrl } from '../core/http/buildDatasphereUrl';
 import { debug } from '../core/utils/logging';
+import { safeFetch } from '../core/utils/fetch';
 
 export interface RequestState {
     tokenCache: TokenCache | null;
@@ -61,11 +62,12 @@ export async function executeRequest(
         headers['Cookie'] = csrf.cookies;
     }
 
-    const response = await fetch(url, {
+    const [response, fetchErr] = await safeFetch(url, {
         method: options.method,
         headers,
         body: options.body,
     });
+    if (fetchErr) return err(fetchErr);
 
     // CSRF retry on 403
     if (response.status === 403 && isMutation) {
@@ -77,11 +79,12 @@ export async function executeRequest(
         headers['X-Csrf-Token'] = freshCsrf.csrf;
         headers['Cookie'] = freshCsrf.cookies;
 
-        const retryResponse = await fetch(url, {
+        const [retryResponse, retryErr] = await safeFetch(url, {
             method: options.method,
             headers,
             body: options.body,
         });
+        if (retryErr) return err(retryErr);
 
         return ok({ response: retryResponse, state: { ...currentState, csrfCache: freshCsrf } });
     }
