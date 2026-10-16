@@ -55,5 +55,10 @@ export async function safeDelete(
             if (deleteErr) console.warn(`Cleanup: failed to delete replication flow "${name}":`, deleteErr.message);
             break;
         }
+        case 'transformation-flow': {
+            const [, deleteErr] = await client.deleteTransformationFlow(name);
+            if (deleteErr) console.warn(`Cleanup: failed to delete transformation flow "${name}":`, deleteErr.message);
+            break;
+        }
     }
 }

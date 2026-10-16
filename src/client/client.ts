@@ -10,6 +10,7 @@ import type { ViewColumn } from '../core/operations/navigator/getViewColumns';
 import type { OAuthTokens } from '../core/auth/oauth';
 import { loadCachedTokens, saveCachedTokens, deleteCachedTokens } from '../core/auth/tokenCache';
 import type { RunReplicationFlowResult } from '../core/operations/replication-flow/run';
+import type { RunTransformationFlowResult } from '../core/operations/transformation-flow/run';
 import type { ImportCsnResult } from '../core/operations/import/importCsn';
 import type { SearchResult } from '../core/operations/navigator/searchObjects';
 import { getServerInfo as coreInaGetServerInfo } from '../ina/getServerInfo';
@@ -34,6 +35,9 @@ import { deleteLocalTable as coreDeleteLocalTable } from '../core/operations/loc
 import { readReplicationFlow as coreReadReplicationFlow } from '../core/operations/replication-flow/read';
 import { deleteReplicationFlow as coreDeleteReplicationFlow } from '../core/operations/replication-flow/delete';
 import { runReplicationFlow as coreRunReplicationFlow } from '../core/operations/replication-flow/run';
+import { readTransformationFlow as coreReadTransformationFlow } from '../core/operations/transformation-flow/read';
+import { deleteTransformationFlow as coreDeleteTransformationFlow } from '../core/operations/transformation-flow/delete';
+import { runTransformationFlow as coreRunTransformationFlow } from '../core/operations/transformation-flow/run';
 import { objectExists as coreObjectExists } from '../core/operations/objectExists';
 import { listObjects as coreListObjects } from '../core/operations/navigator/listObjects';
 import { listFolders as coreListFolders } from '../core/operations/navigator/listFolders';
@@ -73,15 +77,20 @@ export interface BdcClient {
     readView(objectName: string): AsyncResult<string>;
     readLocalTable(objectName: string): AsyncResult<string>;
     readReplicationFlow(objectName: string): AsyncResult<string>;
+    readTransformationFlow(objectName: string): AsyncResult<string>;
 
     // Delete
     deleteAnalyticModel(objectName: string): AsyncResult<string>;
     deleteView(objectName: string): AsyncResult<string>;
     deleteLocalTable(objectName: string): AsyncResult<string>;
     deleteReplicationFlow(objectName: string): AsyncResult<string>;
+    deleteTransformationFlow(objectName: string): AsyncResult<string>;
 
     // Replication flow
     runReplicationFlow(flowName: string): AsyncResult<RunReplicationFlowResult>;
+
+    // Transformation flow
+    runTransformationFlow(flowName: string): AsyncResult<RunTransformationFlowResult>;
 
     // Import (multi-definition CSN via /deepsea/ API)
     importCsn(csn: CsnFile): AsyncResult<ImportCsnResult>;
@@ -333,6 +342,10 @@ export class BdcClientImpl implements BdcClient {
         return coreReadReplicationFlow(this.requestor, this.config.space, objectName);
     }
 
+    async readTransformationFlow(objectName: string): AsyncResult<string> {
+        return coreReadTransformationFlow(this.requestor, this.config.space, objectName);
+    }
+
     // Delete
     async deleteAnalyticModel(objectName: string): AsyncResult<string> {
         return coreDeleteAnalyticModel(this.requestor, this.config.space, objectName);
@@ -350,9 +363,18 @@ export class BdcClientImpl implements BdcClient {
         return coreDeleteReplicationFlow(this.requestor, this.config.space, objectName);
     }
 
+    async deleteTransformationFlow(objectName: string): AsyncResult<string> {
+        return coreDeleteTransformationFlow(this.requestor, this.config.space, objectName);
+    }
+
     // Replication flow
     async runReplicationFlow(flowName: string): AsyncResult<RunReplicationFlowResult> {
         return coreRunReplicationFlow(this.requestor, this.config.space, flowName);
+    }
+
+    // Transformation flow
+    async runTransformationFlow(flowName: string): AsyncResult<RunTransformationFlowResult> {
+        return coreRunTransformationFlow(this.requestor, this.config.space, flowName);
     }
 
     // Import
@@ -374,6 +396,7 @@ export class BdcClientImpl implements BdcClient {
             ...Object.keys(csn.definitions ?? {}),
             ...Object.keys(csn.businessLayerDefinitions ?? {}),
             ...Object.keys(csn.replicationflows ?? {}),
+            ...Object.keys(csn.transformationflows ?? {}),
         ];
 
         if (objectIds.length === 0 && allObjectNames.length > 0) {

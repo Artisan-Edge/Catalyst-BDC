@@ -4,7 +4,7 @@ export type { BdcClient } from './client';
 
 // Types
 export type { BdcConfig, OAuthConfig, TokenConfig } from './types/config';
-export type { CsnFile, CsnEntity, CsnElement, CsnReplicationFlow } from './types/csn';
+export type { CsnFile, CsnEntity, CsnElement, CsnReplicationFlow, CsnTransformationFlow } from './types/csn';
 export type {
     DesignObject, SearchObject, ListObjectsOptions, SearchOptions,
     DesignObjectKind, SpaceFolder, FolderHierarchyEntry,
@@ -38,6 +38,7 @@ export type { ViewColumn } from './core/operations/navigator';
 
 // Operation result types
 export type { RunReplicationFlowResult } from './core/operations/replication-flow/run';
+export type { RunTransformationFlowResult } from './core/operations/transformation-flow/run';
 
 // [EXPERIMENTAL] INA protocol — low-level
 export { getServerInfo as inaGetServerInfo, fetchInaCsrf, getMetadata as inaGetMetadata, queryData as inaQueryData } from './ina';

@@ -8,6 +8,10 @@ export { readLocalTable, deleteLocalTable } from './local-table';
 export { readReplicationFlow, deleteReplicationFlow, runReplicationFlow } from './replication-flow';
 export type { RunReplicationFlowResult } from './replication-flow';
 
+// Transformation flow
+export { readTransformationFlow, deleteTransformationFlow, runTransformationFlow } from './transformation-flow';
+export type { RunTransformationFlowResult } from './transformation-flow';
+
 // Analytic model
 export { readAnalyticModel, deleteAnalyticModel } from './analytic-model';
 

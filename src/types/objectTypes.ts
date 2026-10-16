@@ -18,6 +18,10 @@ export const DATASPHERE_OBJECT_TYPES = {
         endpoint: 'replicationflows',
         csnKey: 'replicationflows',
     },
+    'transformation-flow': {
+        endpoint: 'transformationflows',
+        csnKey: 'transformationflows',
+    },
     'analytic-model': {
         endpoint: 'analyticmodels',
         csnKey: 'definitions',
