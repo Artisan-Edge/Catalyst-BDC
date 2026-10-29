@@ -1,46 +1,35 @@
-import type { TokenCache, CsrfCache } from './types';
+import type { CsrfCache } from './types';
 import type { DatasphereRequestOptions } from '../types/requestor';
 import type { AsyncResult } from '../types/result';
 import { ok, err } from '../types/result';
-import { ensureAccessToken } from './ensureAccessToken';
-import { ensureCsrf } from './ensureCsrf';
 import { buildDatasphereUrl } from '../core/http/buildDatasphereUrl';
 import { debug } from '../core/utils/logging';
 import { safeFetch } from '../core/utils/fetch';
 
-export interface RequestState {
-    tokenCache: TokenCache | null;
-    csrfCache: CsrfCache | null;
-}
-
-export interface ExecuteRequestResult {
-    response: Response;
-    state: RequestState;
+// Auth state lives on the client, so concurrent requests share one token refresh and one CSRF fetch
+export interface RequestAuth {
+    accessToken(): AsyncResult<string>;
+    csrf(accessToken: string): AsyncResult<CsrfCache>;
+    // Forget `stale` so the next csrf() fetches a new token; a newer cached token is left alone
+    invalidateCsrf(stale: CsrfCache): void;
 }
 
 export async function executeRequest(
     host: string,
-    state: RequestState,
+    auth: RequestAuth,
     options: DatasphereRequestOptions,
-): AsyncResult<ExecuteRequestResult> {
-    const [tokenResult, tokenErr] = await ensureAccessToken(state.tokenCache, host);
+): AsyncResult<Response> {
+    const [accessToken, tokenErr] = await auth.accessToken();
     if (tokenErr) return err(tokenErr);
 
-    let currentState: RequestState = {
-        tokenCache: tokenResult.tokenCache,
-        csrfCache: tokenResult.csrfInvalidated ? null : state.csrfCache,
-    };
-
-    const { accessToken } = tokenResult;
     const isMutation = options.method !== 'GET' && options.method !== 'HEAD';
 
     // Mutations need CSRF
     let csrf: CsrfCache | null = null;
     if (isMutation) {
-        const [csrfResult, csrfErr] = await ensureCsrf(currentState.csrfCache, host, accessToken);
+        const [csrfResult, csrfErr] = await auth.csrf(accessToken);
         if (csrfErr) return err(csrfErr);
         csrf = csrfResult;
-        currentState = { ...currentState, csrfCache: csrf };
     }
 
     const url = buildDatasphereUrl(host, options.path, options.params);
@@ -70,24 +59,23 @@ export async function executeRequest(
     if (fetchErr) return err(fetchErr);
 
     // CSRF retry on 403
-    if (response.status === 403 && isMutation) {
-        debug('Got 403, retrying with fresh CSRF token...');
+    if (response.status !== 403 || !csrf) return ok(response);
 
-        const [freshCsrf, freshCsrfErr] = await ensureCsrf(null, host, accessToken);
-        if (freshCsrfErr) return err(freshCsrfErr);
+    debug('Got 403, retrying with fresh CSRF token...');
+    auth.invalidateCsrf(csrf);
 
-        headers['X-Csrf-Token'] = freshCsrf.csrf;
-        headers['Cookie'] = freshCsrf.cookies;
+    const [freshCsrf, freshCsrfErr] = await auth.csrf(accessToken);
+    if (freshCsrfErr) return err(freshCsrfErr);
 
-        const [retryResponse, retryErr] = await safeFetch(url, {
-            method: options.method,
-            headers,
-            body: options.body,
-        });
-        if (retryErr) return err(retryErr);
+    headers['X-Csrf-Token'] = freshCsrf.csrf;
+    headers['Cookie'] = freshCsrf.cookies;
 
-        return ok({ response: retryResponse, state: { ...currentState, csrfCache: freshCsrf } });
-    }
+    const [retryResponse, retryErr] = await safeFetch(url, {
+        method: options.method,
+        headers,
+        body: options.body,
+    });
+    if (retryErr) return err(retryErr);
 
-    return ok({ response, state: currentState });
+    return ok(retryResponse);
 }

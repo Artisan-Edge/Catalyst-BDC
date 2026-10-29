@@ -7,6 +7,7 @@ import { safeJsonParse } from '../utils/json';
 const tokenResponseSchema = z.object({
     access_token: z.string(),
     expires_in: z.number(),
+    refresh_token: z.string().optional(),
 });
 
 export const TOKEN_EXPIRY_BUFFER_SEC = 60;
@@ -14,6 +15,8 @@ export const TOKEN_EXPIRY_BUFFER_SEC = 60;
 export interface AccessTokenResult {
     accessToken: string;
     expiresAfter: number;
+    // Set when the identity provider rotates refresh tokens; the old one may no longer work
+    refreshToken?: string;
 }
 
 export async function refreshAccessToken(
@@ -48,5 +51,6 @@ export async function refreshAccessToken(
 
     const expiresAfter = Math.floor(Date.now() / 1000) + tokenData.expires_in;
     debug('Token refreshed, expires in', tokenData.expires_in, 'seconds');
-    return ok({ accessToken: tokenData.access_token, expiresAfter });
+    if (!tokenData.refresh_token) return ok({ accessToken: tokenData.access_token, expiresAfter });
+    return ok({ accessToken: tokenData.access_token, expiresAfter, refreshToken: tokenData.refresh_token });
 }

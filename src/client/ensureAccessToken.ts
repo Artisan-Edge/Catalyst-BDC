@@ -39,6 +39,7 @@ export async function ensureAccessToken(
         ...tokenCache,
         accessToken: refreshed.accessToken,
         expiresAfter: refreshed.expiresAfter,
+        refreshToken: refreshed.refreshToken ?? tokenCache.refreshToken,
     };
 
     await saveCachedTokens(host, updatedCache as OAuthTokens);

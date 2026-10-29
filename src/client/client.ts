@@ -47,11 +47,13 @@ import { resolveSpaceId as coreResolveSpaceId } from '../core/operations/import/
 import { importCsn as coreImportCsn } from '../core/operations/import/importCsn';
 import { deployObjects as coreDeployObjects } from '../core/operations/import/deployObjects';
 import { pollForObjectGuids as corePollForObjectGuids } from '../core/operations/import/pollForObjectGuids';
+import { fetchCsrf } from '../core/http/fetchCsrf';
 import { debug } from '../core/utils/logging';
 import type { BdcClient, TokenCache, CsrfCache } from './types';
-import { executeRequest } from './request';
+import { executeRequest, type RequestAuth } from './request';
 import { clientLogin } from './login';
 import { ensureAccessToken } from './ensureAccessToken';
+import { singleFlight } from './singleFlight';
 
 export class BdcClientImpl implements BdcClient {
     readonly config: BdcConfig;
@@ -60,10 +62,25 @@ export class BdcClientImpl implements BdcClient {
     private spaceId: string | null = null;
     private inaCsrf: InaCsrfToken | null = null;
     private requestor: DatasphereRequestor;
+    private auth: RequestAuth;
+
+    // Concurrent callers share one in-flight fetch: near expiry, N parallel requests would
+    // otherwise each refresh the token and rewrite the shared token file
+    private readonly sharedAccessToken = singleFlight(() => this.loadAccessToken());
+    private readonly sharedCsrf = singleFlight((accessToken: string) => this.loadCsrf(accessToken));
+    private readonly sharedSpaceId = singleFlight(() => this.loadSpaceId());
+    private readonly sharedInaCsrf = singleFlight(() => this.loadInaCsrf());
 
     constructor(config: BdcConfig) {
         this.config = config;
         this.requestor = { request: this.request.bind(this) };
+        this.auth = {
+            accessToken: () => this.sharedAccessToken(),
+            csrf: accessToken => this.csrfCache ? Promise.resolve(ok(this.csrfCache)) : this.sharedCsrf(accessToken),
+            invalidateCsrf: stale => {
+                if (this.csrfCache === stale) this.csrfCache = null;
+            },
+        };
 
         if (config.tokens) {
             this.tokenCache = {
@@ -77,14 +94,37 @@ export class BdcClientImpl implements BdcClient {
         }
     }
 
-    private async request(options: DatasphereRequestOptions): AsyncResult<Response, Error> {
-        const state = { tokenCache: this.tokenCache, csrfCache: this.csrfCache };
-        const [result, error] = await executeRequest(this.config.host, state, options);
+    private request(options: DatasphereRequestOptions): AsyncResult<Response, Error> {
+        return executeRequest(this.config.host, this.auth, options);
+    }
+
+    private async loadAccessToken(): AsyncResult<string> {
+        const [result, error] = await ensureAccessToken(this.tokenCache, this.config.host);
         if (error) return err(error);
 
-        this.tokenCache = result.state.tokenCache;
-        this.csrfCache = result.state.csrfCache;
-        return ok(result.response);
+        this.tokenCache = result.tokenCache;
+        if (result.csrfInvalidated) this.csrfCache = null;
+        return ok(result.accessToken);
+    }
+
+    private async loadCsrf(accessToken: string): AsyncResult<CsrfCache> {
+        const [csrf, error] = await fetchCsrf(this.config.host, accessToken);
+        if (error) return err(error);
+
+        // A token refresh while this was in flight makes it a CSRF for the old access token; hand it to
+        // the callers waiting on it (a 403 will retry them) but don't cache it for everyone else
+        if (this.tokenCache?.accessToken === accessToken) this.csrfCache = csrf;
+        return ok(csrf);
+    }
+
+    private async loadSpaceId(): AsyncResult<string> {
+        if (this.spaceId) return ok(this.spaceId);
+
+        const [spaceId, error] = await coreResolveSpaceId(this.requestor, this.config.space);
+        if (error) return err(error);
+
+        this.spaceId = spaceId;
+        return ok(spaceId);
     }
 
     async login(): AsyncResult<OAuthTokens> {
@@ -161,13 +201,10 @@ export class BdcClientImpl implements BdcClient {
 
     // Import
     async importCsn(csn: CsnFile): AsyncResult<ImportCsnResult> {
-        if (!this.spaceId) {
-            const [resolved, resolveErr] = await coreResolveSpaceId(this.requestor, this.config.space);
-            if (resolveErr) return err(resolveErr);
-            this.spaceId = resolved;
-        }
+        const [spaceId, spaceIdErr] = await this.sharedSpaceId();
+        if (spaceIdErr) return err(spaceIdErr);
 
-        const [importResult, importErr] = await coreImportCsn(this.requestor, this.config.space, this.spaceId, csn);
+        const [importResult, importErr] = await coreImportCsn(this.requestor, this.config.space, spaceId, csn);
         if (importErr) return err(importErr);
 
         let objectIds = importResult.objectIds;
@@ -192,7 +229,7 @@ export class BdcClientImpl implements BdcClient {
 
         // Deploy imported objects
         if (objectIds.length > 0) {
-            const [, deployErr] = await coreDeployObjects(this.requestor, this.config.space, this.spaceId, objectIds);
+            const [, deployErr] = await coreDeployObjects(this.requestor, this.config.space, spaceId, objectIds);
             if (deployErr) return err(deployErr);
         }
 
@@ -227,16 +264,16 @@ export class BdcClientImpl implements BdcClient {
     }
 
     // [EXPERIMENTAL] INA protocol
-    private async ensureInaCsrf(): AsyncResult<InaCsrfToken> {
-        if (this.inaCsrf) return ok(this.inaCsrf);
+    private ensureInaCsrf(): AsyncResult<InaCsrfToken> {
+        if (this.inaCsrf) return Promise.resolve(ok(this.inaCsrf));
+        return this.sharedInaCsrf();
+    }
 
-        const [tokenResult, tokenErr] = await ensureAccessToken(this.tokenCache, this.config.host);
+    private async loadInaCsrf(): AsyncResult<InaCsrfToken> {
+        const [accessToken, tokenErr] = await this.sharedAccessToken();
         if (tokenErr) return err(tokenErr);
 
-        this.tokenCache = tokenResult.tokenCache;
-        if (tokenResult.csrfInvalidated) this.csrfCache = null;
-
-        const [csrf, csrfErr] = await coreFetchInaCsrf(this.config.host, tokenResult.accessToken);
+        const [csrf, csrfErr] = await coreFetchInaCsrf(this.config.host, accessToken);
         if (csrfErr) return err(csrfErr);
 
         this.inaCsrf = csrf;

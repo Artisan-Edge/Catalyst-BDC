@@ -44,6 +44,7 @@ export async function clientLogin(
                 ...cached,
                 accessToken: refreshed.accessToken,
                 expiresAfter: refreshed.expiresAfter,
+                refreshToken: refreshed.refreshToken ?? cached.refreshToken,
             };
             await saveCachedTokens(config.host, tokens);
 
