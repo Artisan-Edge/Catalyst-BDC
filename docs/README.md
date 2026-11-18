@@ -152,4 +152,4 @@ src/
 
 ---
 
-*Last updated: v0.2.1*
+*Last updated: v0.3.0*

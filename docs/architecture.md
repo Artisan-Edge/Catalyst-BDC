@@ -146,4 +146,4 @@ Login follows a different path: native OAuth authorization code flow via local H
 
 ---
 
-*Last updated: v0.2.1*
+*Last updated: v0.3.0*
