@@ -15,6 +15,12 @@ export type { RunTransformationFlowResult } from './transformation-flow';
 // Task chain
 export { readTaskChain, deleteTaskChain } from './task-chain';
 
+// Schedules, task consent, task runs and logs
+export { listSchedules, createSchedule, deleteSchedule } from './task-schedule';
+export type { TaskSchedule, CreateScheduleInput } from './task-schedule';
+export { readTaskConsent, runTaskChain, readTaskLog, readCurrentUser } from './task';
+export type { TaskConsent, TaskLog } from './task';
+
 // Analytic model
 export { readAnalyticModel, deleteAnalyticModel } from './analytic-model';
 

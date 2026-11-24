@@ -46,6 +46,10 @@ import { createDataAccessControl as coreCreateDataAccessControl } from '../core/
 import { updateDataAccessControl as coreUpdateDataAccessControl } from '../core/operations/data-access-control/update';
 import { deleteDataAccessControl as coreDeleteDataAccessControl } from '../core/operations/data-access-control/delete';
 import { objectExists as coreObjectExists } from '../core/operations/objectExists';
+import { listSchedules as coreListSchedules, createSchedule as coreCreateSchedule, deleteSchedule as coreDeleteSchedule } from '../core/operations/task-schedule';
+import type { TaskSchedule, CreateScheduleInput } from '../core/operations/task-schedule';
+import { readTaskConsent as coreReadTaskConsent, runTaskChain as coreRunTaskChain, readTaskLog as coreReadTaskLog, readCurrentUser as coreReadCurrentUser } from '../core/operations/task';
+import type { TaskConsent, TaskLog } from '../core/operations/task';
 import { listObjects as coreListObjects } from '../core/operations/navigator/listObjects';
 import { listFolders as coreListFolders } from '../core/operations/navigator/listFolders';
 import { searchObjects as coreSearchObjects } from '../core/operations/navigator/searchObjects';
@@ -235,6 +239,35 @@ export class BdcClientImpl implements BdcClient {
     // Transformation flow
     runTransformationFlow(flowName: string): AsyncResult<RunTransformationFlowResult> {
         return coreRunTransformationFlow(this.requestor, this.config.space, flowName);
+    }
+
+    // Schedules and task runs
+    listSchedules(): AsyncResult<TaskSchedule[]> {
+        return coreListSchedules(this.requestor, this.config.space);
+    }
+
+    createSchedule(input: CreateScheduleInput): AsyncResult<{ scheduleId: string }> {
+        return coreCreateSchedule(this.requestor, this.config.space, input);
+    }
+
+    deleteSchedule(scheduleId: string): AsyncResult<void> {
+        return coreDeleteSchedule(this.requestor, this.config.space, scheduleId);
+    }
+
+    readTaskConsent(): AsyncResult<TaskConsent> {
+        return coreReadTaskConsent(this.requestor);
+    }
+
+    runTaskChain(chainName: string): AsyncResult<{ logId: number }> {
+        return coreRunTaskChain(this.requestor, this.config.space, chainName);
+    }
+
+    readTaskLog(logId: number): AsyncResult<TaskLog> {
+        return coreReadTaskLog(this.requestor, this.config.space, logId);
+    }
+
+    readCurrentUser(): AsyncResult<string | null> {
+        return coreReadCurrentUser(this.requestor);
     }
 
     // Import

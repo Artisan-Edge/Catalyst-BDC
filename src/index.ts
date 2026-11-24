@@ -41,6 +41,10 @@ export { previewData, getViewColumns } from './core/operations/navigator';
 export type { DataPreviewOptions, DataPreviewResult } from './core/operations/navigator';
 export type { ViewColumn } from './core/operations/navigator';
 
+// Schedules and task runs
+export { listSchedules, createSchedule, deleteSchedule, readTaskConsent, runTaskChain, readTaskLog, readCurrentUser } from './core/operations';
+export type { TaskSchedule, CreateScheduleInput, TaskConsent, TaskLog } from './core/operations';
+
 // Operation result types
 export type { RunReplicationFlowResult } from './core/operations/replication-flow/run';
 export type { RunTransformationFlowResult } from './core/operations/transformation-flow/run';
