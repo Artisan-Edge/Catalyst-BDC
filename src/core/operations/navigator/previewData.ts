@@ -23,14 +23,14 @@ export interface DataPreviewResult {
 // OData v2: { d: { results: [...], __count?: "123" } }
 const ODataV2Schema = z.object({
     d: z.object({
-        results: z.array(z.record(z.unknown())),
+        results: z.array(z.record(z.string(), z.unknown())),
         __count: z.string().optional(),
     }),
 });
 
 // OData v4: { value: [...], @odata.count?: 123 }
 const ODataV4Schema = z.object({
-    value: z.array(z.record(z.unknown())),
+    value: z.array(z.record(z.string(), z.unknown())),
     '@odata.count': z.number().optional(),
 });
 
