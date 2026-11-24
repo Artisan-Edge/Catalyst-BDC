@@ -7,6 +7,7 @@ describe('client capabilities', () => {
         const [client, error] = createClient({ host: 'https://tenant.example', space: 'SPACE', oauth: { clientId: 'id', clientSecret: 'secret', authorizationUrl: 'https://auth.example/authorize', tokenUrl: 'https://auth.example/token' } });
         expect(error).toBeNull();
         expect(client?.capabilities).toContain('task-chain-delete-options');
-        expect(CLIENT_CAPABILITIES).toEqual(['task-chain-delete-options']);
+        expect(client?.capabilities).toContain('task-schedules');
+        expect(CLIENT_CAPABILITIES).toEqual(['task-chain-delete-options', 'task-schedules']);
     });
 });

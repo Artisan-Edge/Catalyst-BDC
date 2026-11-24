@@ -86,7 +86,7 @@ Controls are not imported through `importCsn`. They use the documented `/dwaas-c
 
 `DeleteOptions` has `deleteAnyway`. It defaults to `false` for controls and `true` for views and task chains, which keeps their old behaviour. All three option types are exported from the package entry.
 
-`client.capabilities` lists what a build can do that a caller cannot tell from a method's presence (`CLIENT_CAPABILITIES`, exported). `'task-chain-delete-options'` (v0.6.0): `deleteTaskChain` honours `{ deleteAnyway }`; an older build ignores the options and forces the delete.
+`client.capabilities` lists what a build can do that a caller cannot tell from a method's presence (`CLIENT_CAPABILITIES`, exported). `'task-chain-delete-options'` (v0.6.0): `deleteTaskChain` honours `{ deleteAnyway }`; an older build ignores the options and forces the delete. `'task-schedules'`: the schedule and task run methods below.
 
 ```typescript
 const csn = JSON.parse(
@@ -95,6 +95,20 @@ const csn = JSON.parse(
 const [, createErr] = await client.createDataAccessControl(csn); // saved and deployed
 const [, deleteErr] = await client.deleteDataAccessControl("MY_DAC"); // refused while in use
 ```
+
+### Schedules and Task Runs
+
+Schedules go through Datasphere's internal task-framework endpoint (`/dwaas-core/tf/{space}/schedules`, undocumented, the Data Builder's own; verified on a tenant 2026-11-24); the consent, runs and logs through the documented `/dwaas-core/api/v1/tasks` endpoints SAP's CLI calls.
+
+| Method            | Signature                                              | Description                                                                                                                                                         |
+| ----------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `listSchedules`   | `() => AsyncResult<TaskSchedule[]>`                    | Every schedule of the space: `scheduleId`, `applicationId` (`TASK_CHAINS`), `activity` (`RUN_CHAIN`), `objectId`, `cron`, `activationStatus`, `owner`, `nextRun`; `timezone` only when a record carries one (none seen: the cron is UTC). |
+| `createSchedule`  | `(input: CreateScheduleInput) => AsyncResult<{ scheduleId }>` | `POST` with `applicationId`, `activity`, `objectId`, `description` (default the object), `cron`, `activationStatus` (default `ENABLED`); owned by the signed-in user. |
+| `deleteSchedule`  | `(scheduleId) => AsyncResult<void>`                    | `DELETE` (204).                                                                                                                                                     |
+| `readTaskConsent` | `() => AsyncResult<TaskConsent>`                       | The signed-in user's consent to run tasks: `status` (`CONSENT_GIVEN`, `NO_CONSENT`, `CONSENT_EXPIRED`), `createdAt`, `validUntil`. No one can read another user's.    |
+| `readCurrentUser` | `() => AsyncResult<string \| null>`                    | The signed-in user's Datasphere user name (what a schedule's `owner` holds), from the shell's session endpoint.                                                      |
+| `runTaskChain`    | `(chainName) => AsyncResult<{ logId }>`                | Starts a run.                                                                                                                                                       |
+| `readTaskLog`     | `(logId) => AsyncResult<TaskLog>`                      | `status` (`RUNNING`, `COMPLETED`, `FAILED`), times, `children` (one per task), `messages`.                                                                           |
 
 ---
 

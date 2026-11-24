@@ -12,6 +12,8 @@ import type { ImportCsnResult } from '../core/operations/import/importCsn';
 import type { SearchResult } from '../core/operations/navigator/searchObjects';
 import type { DataPreviewOptions, DataPreviewResult } from '../core/operations/navigator/previewData';
 import type { ViewColumn } from '../core/operations/navigator/getViewColumns';
+import type { TaskSchedule, CreateScheduleInput } from '../core/operations/task-schedule';
+import type { TaskConsent, TaskLog } from '../core/operations/task';
 import type {
     InaServerInfo, InaMetadataResult, InaQueryOptions, InaQueryResult,
     InaDataSource, InaVariable, InaModelEntry, InaModelDetails, InaSimpleQueryOptions,
@@ -33,7 +35,8 @@ export interface CsrfCache {
 
 // What this build can do that an older one cannot tell by a method's presence (callers test for a name):
 // 'task-chain-delete-options' = deleteTaskChain honours { deleteAnyway } (an older build ignores it and forces)
-export const CLIENT_CAPABILITIES = ['task-chain-delete-options'] as const;
+// 'task-schedules' = schedules (list, create, delete), the task consent, task chain runs and their logs, the user name
+export const CLIENT_CAPABILITIES = ['task-chain-delete-options', 'task-schedules'] as const;
 export type ClientCapability = (typeof CLIENT_CAPABILITIES)[number];
 
 export interface BdcClient {
@@ -73,6 +76,18 @@ export interface BdcClient {
 
     // Transformation flow
     runTransformationFlow(flowName: string): AsyncResult<RunTransformationFlowResult>;
+
+    // Schedules and task runs (the space's schedules through the internal /dwaas-core/tf endpoint; consent, runs and
+    // logs through the documented /dwaas-core/api/v1/tasks endpoints)
+    listSchedules(): AsyncResult<TaskSchedule[]>;
+    createSchedule(input: CreateScheduleInput): AsyncResult<{ scheduleId: string }>;
+    deleteSchedule(scheduleId: string): AsyncResult<void>;
+    // The signed-in user's consent to run tasks (nobody can read another user's)
+    readTaskConsent(): AsyncResult<TaskConsent>;
+    runTaskChain(chainName: string): AsyncResult<{ logId: number }>;
+    readTaskLog(logId: number): AsyncResult<TaskLog>;
+    // The signed-in user's Datasphere user name (a schedule's owner is named so); null when unknown
+    readCurrentUser(): AsyncResult<string | null>;
 
     // Import (multi-definition CSN via /deepsea/ API)
     importCsn(csn: CsnFile): AsyncResult<ImportCsnResult>;
