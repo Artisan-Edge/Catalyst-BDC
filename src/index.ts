@@ -1,6 +1,8 @@
 // Public API
 export { createClient } from './client';
 export type { BdcClient } from './client';
+export { CLIENT_CAPABILITIES } from './client/types';
+export type { ClientCapability } from './client/types';
 
 // Types
 export type { BdcConfig, OAuthConfig, TokenConfig } from './types/config';

@@ -57,7 +57,7 @@ import { deployObjects as coreDeployObjects } from '../core/operations/import/de
 import { pollForObjectGuids as corePollForObjectGuids } from '../core/operations/import/pollForObjectGuids';
 import { fetchCsrf } from '../core/http/fetchCsrf';
 import { debug } from '../core/utils/logging';
-import type { BdcClient, TokenCache, CsrfCache } from './types';
+import { CLIENT_CAPABILITIES, type BdcClient, type TokenCache, type CsrfCache } from './types';
 import { executeRequest, type RequestAuth } from './request';
 import { clientLogin } from './login';
 import { ensureAccessToken } from './ensureAccessToken';
@@ -65,6 +65,7 @@ import { singleFlight } from './singleFlight';
 
 export class BdcClientImpl implements BdcClient {
     readonly config: BdcConfig;
+    readonly capabilities = CLIENT_CAPABILITIES;
     private tokenCache: TokenCache | null = null;
     private csrfCache: CsrfCache | null = null;
     private spaceId: string | null = null;
@@ -201,8 +202,8 @@ export class BdcClientImpl implements BdcClient {
         return coreDeleteTransformationFlow(this.requestor, this.config.space, objectName);
     }
 
-    deleteTaskChain(objectName: string): AsyncResult<string> {
-        return coreDeleteTaskChain(this.requestor, this.config.space, objectName);
+    deleteTaskChain(objectName: string, options?: DeleteOptions): AsyncResult<string> {
+        return coreDeleteTaskChain(this.requestor, this.config.space, objectName, options);
     }
 
     // Data access control

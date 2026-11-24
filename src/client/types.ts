@@ -31,8 +31,14 @@ export interface CsrfCache {
     cookies: string;
 }
 
+// What this build can do that an older one cannot tell by a method's presence (callers test for a name):
+// 'task-chain-delete-options' = deleteTaskChain honours { deleteAnyway } (an older build ignores it and forces)
+export const CLIENT_CAPABILITIES = ['task-chain-delete-options'] as const;
+export type ClientCapability = (typeof CLIENT_CAPABILITIES)[number];
+
 export interface BdcClient {
     readonly config: BdcConfig;
+    readonly capabilities: readonly ClientCapability[];
     login(): AsyncResult<OAuthTokens>;
     logout(): AsyncResult<boolean>;
 
@@ -51,7 +57,8 @@ export interface BdcClient {
     deleteLocalTable(objectName: string): AsyncResult<string>;
     deleteReplicationFlow(objectName: string): AsyncResult<string>;
     deleteTransformationFlow(objectName: string): AsyncResult<string>;
-    deleteTaskChain(objectName: string): AsyncResult<string>;
+    // Forced (deleteAnyway=true) unless { deleteAnyway: false }
+    deleteTaskChain(objectName: string, options?: DeleteOptions): AsyncResult<string>;
 
     // Data access control (the documented /dwaas-core/api/v1 endpoints). Writes deploy by default; delete is
     // not forced unless { deleteAnyway: true }
