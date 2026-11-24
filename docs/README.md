@@ -14,9 +14,9 @@ Programmatic Datasphere object management via direct HTTP API.
 
 ## Overview
 
-Catalyst-BDC is a TypeScript library for automated Datasphere object management. It communicates directly with the Datasphere REST API (no CLI dependency). It handles native OAuth browser login, CSRF token management, automatic token refresh, and import/read/delete operations for views, local tables, replication flows, and analytic models.
+Catalyst-BDC is a TypeScript library for automated Datasphere object management. It communicates directly with the Datasphere REST API (no CLI dependency). It handles native OAuth browser login, CSRF token management, automatic token refresh, and import/read/delete operations for views, local tables, replication flows, transformation flows, task chains, and analytic models, plus list/read/create/update/delete for data access controls.
 
-All write operations use the `/deepsea/repository/` import API — the same endpoint the Datasphere UI uses. This supports multi-definition CSN files in a single request, handles circular references between objects, and automatically deploys after import.
+Object writes use the `/deepsea/repository/` import API — the same endpoint the Datasphere UI uses. This supports multi-definition CSN files in a single request, handles circular references between objects, and automatically deploys after import. Data access controls are the exception: they are saved and deployed through the documented `/dwaas-core/api/v1/spaces/{space}/dataaccesscontrols` endpoints (see [api.md](./api.md#data-access-controls)).
 
 ---
 
@@ -32,23 +32,26 @@ An `oauth.json` file is required for authentication. It must be present in the p
 ### Authentication Options
 
 **Browser login (interactive):**
+
 ```typescript
 const [tokens, loginErr] = await client.login();
 // Opens a browser, receives OAuth callback, stores tokens
 ```
 
 **Pre-provided tokens (CI/headless):**
+
 ```typescript
 const [client, err] = createClient({
-    host, space,
-    oauth: { optionsFile: './oauth.json' },
-    tokens: {
-        accessToken: '...',
-        refreshToken: '...',
-        tokenUrl: '...',
-        clientId: '...',
-        clientSecret: '...',
-    },
+  host,
+  space,
+  oauth: { optionsFile: "./oauth.json" },
+  tokens: {
+    accessToken: "...",
+    refreshToken: "...",
+    tokenUrl: "...",
+    clientId: "...",
+    clientSecret: "...",
+  },
 });
 // No login() needed — operations work immediately
 ```
@@ -75,40 +78,40 @@ A script follows this pattern:
 ### Full example — importing views
 
 ```typescript
-import 'dotenv/config';
-import { readFileSync } from 'node:fs';
-import { createClient } from '../src';
-import type { CsnFile, BdcConfig } from '../src';
+import "dotenv/config";
+import { readFileSync } from "node:fs";
+import { createClient } from "../src";
+import type { CsnFile, BdcConfig } from "../src";
 
 const config: BdcConfig = {
-    host: process.env['DSP_HOST']!,
-    space: process.env['DSP_SPACE']!,
-    verbose: true,
-    oauth: { optionsFile: './oauth.json' },
+  host: process.env["DSP_HOST"]!,
+  space: process.env["DSP_SPACE"]!,
+  verbose: true,
+  oauth: { optionsFile: "./oauth.json" },
 };
 
 async function main(): Promise<void> {
-    const csn: CsnFile = JSON.parse(readFileSync('my-views.json', 'utf-8'));
+  const csn: CsnFile = JSON.parse(readFileSync("my-views.json", "utf-8"));
 
-    const [client, clientErr] = createClient(config);
-    if (clientErr) {
-        console.error('Failed to create client:', clientErr.message);
-        process.exit(1);
-    }
+  const [client, clientErr] = createClient(config);
+  if (clientErr) {
+    console.error("Failed to create client:", clientErr.message);
+    process.exit(1);
+  }
 
-    const [, loginErr] = await client.login();
-    if (loginErr) {
-        console.error('Login failed:', loginErr.message);
-        process.exit(1);
-    }
+  const [, loginErr] = await client.login();
+  if (loginErr) {
+    console.error("Login failed:", loginErr.message);
+    process.exit(1);
+  }
 
-    const [result, importErr] = await client.importCsn(csn);
-    if (importErr) {
-        console.error('Import failed:', importErr.message);
-        process.exit(1);
-    }
+  const [result, importErr] = await client.importCsn(csn);
+  if (importErr) {
+    console.error("Import failed:", importErr.message);
+    process.exit(1);
+  }
 
-    console.log(`Imported ${result.objectIds.length} objects.`);
+  console.log(`Imported ${result.objectIds.length} objects.`);
 }
 
 main();
@@ -131,25 +134,25 @@ src/
 └── index.ts         # Public barrel exports
 ```
 
-| Script | Purpose |
-|--------|---------|
-| `npm run build` | tsup build (ESM + CJS + types) |
-| `npm run test` | bun test suite |
-| `npm run typecheck` | tsc --noEmit |
+| Script              | Purpose                        |
+| ------------------- | ------------------------------ |
+| `npm run build`     | tsup build (ESM + CJS + types) |
+| `npm run test`      | bun test suite                 |
+| `npm run typecheck` | tsc --noEmit                   |
 
 ---
 
 ## Additional Docs
 
-| Document | Description |
-|----------|-------------|
-| [api.md](./api.md) | BdcClient API reference, configuration, error handling, CSN files |
-| [navigator.md](./navigator.md) | Space browsing, data preview, OData filtering |
-| [ina.md](./ina.md) | INA protocol for analytic model queries (experimental) |
-| [architecture.md](./architecture.md) | Module hierarchy, patterns, request lifecycle |
-| [references.md](./references.md) | External documentation sources |
-| [changelogs/](./changelogs/) | Version history and release notes |
+| Document                             | Description                                                       |
+| ------------------------------------ | ----------------------------------------------------------------- |
+| [api.md](./api.md)                   | BdcClient API reference, configuration, error handling, CSN files |
+| [navigator.md](./navigator.md)       | Space browsing, data preview, OData filtering                     |
+| [ina.md](./ina.md)                   | INA protocol for analytic model queries (experimental)            |
+| [architecture.md](./architecture.md) | Module hierarchy, patterns, request lifecycle                     |
+| [references.md](./references.md)     | External documentation sources                                    |
+| [changelogs/](./changelogs/)         | Version history and release notes                                 |
 
 ---
 
-*Last updated: v0.3.0*
+_Last updated: v0.5.0_

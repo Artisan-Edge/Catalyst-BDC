@@ -26,7 +26,8 @@ export async function importCsn(
     const blCount = Object.keys(csn.businessLayerDefinitions ?? {}).length;
     const flowCount = Object.keys(csn.replicationflows ?? {}).length;
     const tFlowCount = Object.keys(csn.transformationflows ?? {}).length;
-    debug(`Importing CSN with ${definitionCount} definitions, ${blCount} business layer definitions, ${flowCount} replication flows, ${tFlowCount} transformation flows via /deepsea/repository/...`);
+    const chainCount = Object.keys(csn.taskchains ?? {}).length;
+    debug(`Importing CSN with ${definitionCount} definitions, ${blCount} business layer definitions, ${flowCount} replication flows, ${tFlowCount} transformation flows, ${chainCount} task chains via /deepsea/repository/...`);
 
     const payload = {
         data: {

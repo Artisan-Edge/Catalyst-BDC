@@ -4,6 +4,7 @@ import type { AsyncResult } from '../types/result';
 import { ok, err } from '../types/result';
 import type { DatasphereRequestor, DatasphereRequestOptions } from '../types/requestor';
 import type { DatasphereObjectTypeName } from '../types/objectTypes';
+import type { DeleteOptions, ListOptions, ObjectWriteOptions } from '../types/operationOptions';
 import type { SearchObject, ListObjectsOptions, SearchOptions, SpaceFolder } from '../types/designObject';
 import type { DataPreviewOptions, DataPreviewResult } from '../core/operations/navigator/previewData';
 import type { ViewColumn } from '../core/operations/navigator/getViewColumns';
@@ -37,6 +38,13 @@ import { runReplicationFlow as coreRunReplicationFlow } from '../core/operations
 import { readTransformationFlow as coreReadTransformationFlow } from '../core/operations/transformation-flow/read';
 import { deleteTransformationFlow as coreDeleteTransformationFlow } from '../core/operations/transformation-flow/delete';
 import { runTransformationFlow as coreRunTransformationFlow } from '../core/operations/transformation-flow/run';
+import { readTaskChain as coreReadTaskChain } from '../core/operations/task-chain/read';
+import { deleteTaskChain as coreDeleteTaskChain } from '../core/operations/task-chain/delete';
+import { listDataAccessControls as coreListDataAccessControls } from '../core/operations/data-access-control/list';
+import { readDataAccessControl as coreReadDataAccessControl } from '../core/operations/data-access-control/read';
+import { createDataAccessControl as coreCreateDataAccessControl } from '../core/operations/data-access-control/create';
+import { updateDataAccessControl as coreUpdateDataAccessControl } from '../core/operations/data-access-control/update';
+import { deleteDataAccessControl as coreDeleteDataAccessControl } from '../core/operations/data-access-control/delete';
 import { objectExists as coreObjectExists } from '../core/operations/objectExists';
 import { listObjects as coreListObjects } from '../core/operations/navigator/listObjects';
 import { listFolders as coreListFolders } from '../core/operations/navigator/listFolders';
@@ -49,7 +57,7 @@ import { deployObjects as coreDeployObjects } from '../core/operations/import/de
 import { pollForObjectGuids as corePollForObjectGuids } from '../core/operations/import/pollForObjectGuids';
 import { fetchCsrf } from '../core/http/fetchCsrf';
 import { debug } from '../core/utils/logging';
-import type { BdcClient, TokenCache, CsrfCache } from './types';
+import { CLIENT_CAPABILITIES, type BdcClient, type TokenCache, type CsrfCache } from './types';
 import { executeRequest, type RequestAuth } from './request';
 import { clientLogin } from './login';
 import { ensureAccessToken } from './ensureAccessToken';
@@ -57,6 +65,7 @@ import { singleFlight } from './singleFlight';
 
 export class BdcClientImpl implements BdcClient {
     readonly config: BdcConfig;
+    readonly capabilities = CLIENT_CAPABILITIES;
     private tokenCache: TokenCache | null = null;
     private csrfCache: CsrfCache | null = null;
     private spaceId: string | null = null;
@@ -168,13 +177,17 @@ export class BdcClientImpl implements BdcClient {
         return coreReadTransformationFlow(this.requestor, this.config.space, objectName);
     }
 
+    readTaskChain(objectName: string): AsyncResult<string> {
+        return coreReadTaskChain(this.requestor, this.config.space, objectName);
+    }
+
     // Delete
     deleteAnalyticModel(objectName: string): AsyncResult<string> {
         return coreDeleteAnalyticModel(this.requestor, this.config.space, objectName);
     }
 
-    deleteView(objectName: string): AsyncResult<string> {
-        return coreDeleteView(this.requestor, this.config.space, objectName);
+    deleteView(objectName: string, options?: DeleteOptions): AsyncResult<string> {
+        return coreDeleteView(this.requestor, this.config.space, objectName, options);
     }
 
     deleteLocalTable(objectName: string): AsyncResult<string> {
@@ -187,6 +200,31 @@ export class BdcClientImpl implements BdcClient {
 
     deleteTransformationFlow(objectName: string): AsyncResult<string> {
         return coreDeleteTransformationFlow(this.requestor, this.config.space, objectName);
+    }
+
+    deleteTaskChain(objectName: string, options?: DeleteOptions): AsyncResult<string> {
+        return coreDeleteTaskChain(this.requestor, this.config.space, objectName, options);
+    }
+
+    // Data access control
+    listDataAccessControls(options?: ListOptions): AsyncResult<string[]> {
+        return coreListDataAccessControls(this.requestor, this.config.space, options);
+    }
+
+    readDataAccessControl(objectName: string): AsyncResult<string> {
+        return coreReadDataAccessControl(this.requestor, this.config.space, objectName);
+    }
+
+    createDataAccessControl(content: CsnFile, options?: ObjectWriteOptions): AsyncResult<string> {
+        return coreCreateDataAccessControl(this.requestor, this.config.space, content, options);
+    }
+
+    updateDataAccessControl(objectName: string, content: CsnFile, options?: ObjectWriteOptions): AsyncResult<string> {
+        return coreUpdateDataAccessControl(this.requestor, this.config.space, objectName, content, options);
+    }
+
+    deleteDataAccessControl(objectName: string, options?: DeleteOptions): AsyncResult<string> {
+        return coreDeleteDataAccessControl(this.requestor, this.config.space, objectName, options);
     }
 
     // Replication flow
@@ -216,6 +254,7 @@ export class BdcClientImpl implements BdcClient {
             ...Object.keys(csn.businessLayerDefinitions ?? {}),
             ...Object.keys(csn.replicationflows ?? {}),
             ...Object.keys(csn.transformationflows ?? {}),
+            ...Object.keys(csn.taskchains ?? {}),
         ];
 
         if (objectIds.length === 0 && allObjectNames.length > 0) {

@@ -12,11 +12,17 @@ export type { RunReplicationFlowResult } from './replication-flow';
 export { readTransformationFlow, deleteTransformationFlow, runTransformationFlow } from './transformation-flow';
 export type { RunTransformationFlowResult } from './transformation-flow';
 
+// Task chain
+export { readTaskChain, deleteTaskChain } from './task-chain';
+
 // Analytic model
 export { readAnalyticModel, deleteAnalyticModel } from './analytic-model';
 
 // SQL view
 export { readView, deleteView } from './sql-view';
+
+// Data access control
+export { listDataAccessControls, readDataAccessControl, createDataAccessControl, updateDataAccessControl, deleteDataAccessControl } from './data-access-control';
 
 // Import (multi-definition CSN via /deepsea/ API)
 export { resolveSpaceId, importCsn, deployObjects } from './import';

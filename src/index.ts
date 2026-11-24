@@ -1,10 +1,12 @@
 // Public API
 export { createClient } from './client';
 export type { BdcClient } from './client';
+export { CLIENT_CAPABILITIES } from './client/types';
+export type { ClientCapability } from './client/types';
 
 // Types
 export type { BdcConfig, OAuthConfig, TokenConfig } from './types/config';
-export type { CsnFile, CsnEntity, CsnElement, CsnReplicationFlow, CsnTransformationFlow } from './types/csn';
+export type { CsnFile, CsnEntity, CsnElement, CsnReplicationFlow, CsnTransformationFlow, CsnTaskChain } from './types/csn';
 export type {
     DesignObject, SearchObject, ListObjectsOptions, SearchOptions,
     DesignObjectKind, SpaceFolder, FolderHierarchyEntry,
@@ -12,6 +14,7 @@ export type {
 export { DESIGN_OBJECT_KINDS } from './types/designObject';
 export type { DatasphereObjectType, DatasphereObjectTypeName } from './types/objectTypes';
 export { DATASPHERE_OBJECT_TYPES } from './types/objectTypes';
+export type { DeleteOptions, ObjectWriteOptions, ListOptions } from './types/operationOptions';
 export type { DatasphereRequestor, DatasphereRequestOptions } from './types/requestor';
 export type { Result, AsyncResult } from './types/result';
 export { ok, err } from './types/result';
