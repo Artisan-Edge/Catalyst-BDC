@@ -1,6 +1,6 @@
 {
   "name": "catalyst-bdc",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Programmatic Datasphere object management via direct HTTP API",
   "type": "module",
   "exports": {
