@@ -3,6 +3,7 @@ import type { CsnFile } from '../types/csn';
 import type { AsyncResult } from '../types/result';
 import type { DatasphereRequestOptions } from '../types/requestor';
 import type { DatasphereObjectTypeName } from '../types/objectTypes';
+import type { DeleteOptions, ListOptions, ObjectWriteOptions } from '../types/operationOptions';
 import type { SearchObject, ListObjectsOptions, SearchOptions, SpaceFolder } from '../types/designObject';
 import type { OAuthTokens } from '../core/auth/oauth';
 import type { RunReplicationFlowResult } from '../core/operations/replication-flow/run';
@@ -45,11 +46,20 @@ export interface BdcClient {
 
     // Delete
     deleteAnalyticModel(objectName: string): AsyncResult<string>;
-    deleteView(objectName: string): AsyncResult<string>;
+    // Forced (deleteAnyway=true) unless { deleteAnyway: false }
+    deleteView(objectName: string, options?: DeleteOptions): AsyncResult<string>;
     deleteLocalTable(objectName: string): AsyncResult<string>;
     deleteReplicationFlow(objectName: string): AsyncResult<string>;
     deleteTransformationFlow(objectName: string): AsyncResult<string>;
     deleteTaskChain(objectName: string): AsyncResult<string>;
+
+    // Data access control (the documented /dwaas-core/api/v1 endpoints). Writes deploy by default; delete is
+    // not forced unless { deleteAnyway: true }
+    listDataAccessControls(options?: ListOptions): AsyncResult<string[]>;
+    readDataAccessControl(objectName: string): AsyncResult<string>;
+    createDataAccessControl(content: CsnFile, options?: ObjectWriteOptions): AsyncResult<string>;
+    updateDataAccessControl(objectName: string, content: CsnFile, options?: ObjectWriteOptions): AsyncResult<string>;
+    deleteDataAccessControl(objectName: string, options?: DeleteOptions): AsyncResult<string>;
 
     // Replication flow
     runReplicationFlow(flowName: string): AsyncResult<RunReplicationFlowResult>;

@@ -65,5 +65,10 @@ export async function safeDelete(
             if (deleteErr) console.warn(`Cleanup: failed to delete task chain "${name}":`, deleteErr.message);
             break;
         }
+        case 'data-access-control': {
+            const [, deleteErr] = await client.deleteDataAccessControl(name);
+            if (deleteErr) console.warn(`Cleanup: failed to delete data access control "${name}":`, deleteErr.message);
+            break;
+        }
     }
 }

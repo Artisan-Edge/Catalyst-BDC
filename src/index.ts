@@ -12,6 +12,7 @@ export type {
 export { DESIGN_OBJECT_KINDS } from './types/designObject';
 export type { DatasphereObjectType, DatasphereObjectTypeName } from './types/objectTypes';
 export { DATASPHERE_OBJECT_TYPES } from './types/objectTypes';
+export type { DeleteOptions, ObjectWriteOptions, ListOptions } from './types/operationOptions';
 export type { DatasphereRequestor, DatasphereRequestOptions } from './types/requestor';
 export type { Result, AsyncResult } from './types/result';
 export { ok, err } from './types/result';

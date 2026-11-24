@@ -26,10 +26,16 @@ export const DATASPHERE_OBJECT_TYPES = {
         endpoint: 'analyticmodels',
         csnKey: 'definitions',
     },
-    // Path by analogy with the other types (SAP CLI type name without the hyphen); not yet seen on a tenant
+    // Path by analogy with the other types (SAP CLI type name without the hyphen); the tenant's discovery
+    // document lists it, but no chain has been read through it yet
     'task-chain': {
         endpoint: 'taskchains',
         csnKey: 'taskchains',
+    },
+    // Path from the tenant's discovery document; a control is a CSN definition of kind entity
+    'data-access-control': {
+        endpoint: 'dataaccesscontrols',
+        csnKey: 'definitions',
     },
 } as const satisfies Record<string, DatasphereObjectType>;
 

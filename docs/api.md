@@ -17,13 +17,19 @@ Create a client with `createClient(config)`. Returns a `Result<BdcClient>` tuple
 
 ```typescript
 interface BdcConfig {
-    host: string;       // Datasphere tenant URL (e.g. 'https://tenant.us10.hcs.cloud.sap/')
-    space: string;      // Space ID (e.g. 'MYSPACE')
-    verbose?: boolean;  // Enable debug logging
-    oauth:              // OAuth credentials (required) — either inline or file reference
-        | { clientId: string; clientSecret: string; authorizationUrl: string; tokenUrl: string }
-        | { optionsFile: string };
-    tokens?: TokenConfig;  // Pre-provided tokens — skip login()
+  host: string; // Datasphere tenant URL (e.g. 'https://tenant.us10.hcs.cloud.sap/')
+  space: string; // Space ID (e.g. 'MYSPACE')
+  verbose?: boolean; // Enable debug logging
+  oauth:
+    // OAuth credentials (required) — either inline or file reference
+    | {
+        clientId: string;
+        clientSecret: string;
+        authorizationUrl: string;
+        tokenUrl: string;
+      }
+    | { optionsFile: string };
+  tokens?: TokenConfig; // Pre-provided tokens — skip login()
 }
 ```
 
@@ -33,34 +39,60 @@ interface BdcConfig {
 
 ## Methods
 
-| Method | Signature | Description |
-|--------|-----------|-------------|
-| `login` | `() => AsyncResult<OAuthTokens>` | Native OAuth browser flow. Returns tokens. |
-| `importCsn` | `(csn) => AsyncResult<ImportCsnResult>` | Imports a CSN (single or multi-definition) via `/deepsea/` API, then deploys. |
-| `readAnalyticModel` | `(objectName) => AsyncResult<string>` | Reads an analytic model definition via GET. |
-| `readView` | `(objectName) => AsyncResult<string>` | Reads a view definition via GET. |
-| `readLocalTable` | `(objectName) => AsyncResult<string>` | Reads a local table definition via GET. |
-| `readReplicationFlow` | `(objectName) => AsyncResult<string>` | Reads a replication flow definition via GET. |
-| `readTaskChain` | `(objectName) => AsyncResult<string>` | Reads a task chain definition via GET (`taskchains` endpoint, not yet confirmed on a tenant). |
-| `deleteAnalyticModel` | `(objectName) => AsyncResult<string>` | Deletes an analytic model via DELETE. |
-| `deleteView` | `(objectName) => AsyncResult<string>` | Deletes a view via DELETE. |
-| `deleteLocalTable` | `(objectName) => AsyncResult<string>` | Deletes a local table via DELETE. |
-| `deleteReplicationFlow` | `(objectName) => AsyncResult<string>` | Deletes a replication flow via DELETE. |
-| `deleteTaskChain` | `(objectName) => AsyncResult<string>` | Deletes a task chain via DELETE (`taskchains` endpoint, not yet confirmed on a tenant). |
-| `runReplicationFlow` | `(flowName) => AsyncResult<RunReplicationFlowResult>` | Triggers a replication flow run. |
-| `objectExists` | `(objectType, name) => AsyncResult<boolean>` | Checks if an object exists (GET + 200 check). |
-| `previewData` | `(viewName, options?) => AsyncResult<DataPreviewResult>` | Fetches data rows from a deployed view via OData. |
-| `getViewColumns` | `(viewName) => AsyncResult<ViewColumn[]>` | Fetches column metadata from a view's OData `$metadata`. |
-| **Navigator** | | |
-| `listObjects` | `(options?) => AsyncResult<SearchObject[]>` | Lists all design objects in the space with auto-pagination. |
-| `listFolders` | `(parentFolderId?) => AsyncResult<SpaceFolder[]>` | Lists folders in the space. Pass a parent ID to drill into subfolders. |
-| `searchObjects` | `(options?) => AsyncResult<SearchResult>` | Raw search API access with text queries, kind filtering, and pagination. |
-| **INA (Experimental)** | | |
-| `inaGetServerInfo` | `() => AsyncResult<InaServerInfo>` | INA server connectivity and capability check. |
-| `inaGetMetadata` | `(dataSource) => AsyncResult<InaMetadataResult>` | Retrieves dimensions, measures, and variables for an analytic model. |
-| `inaQueryData` | `(options) => AsyncResult<InaQueryResult>` | Queries data from an analytic model via the INA protocol. |
+| Method                    | Signature                                                | Description                                                                                                                                           |
+| ------------------------- | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `login`                   | `() => AsyncResult<OAuthTokens>`                         | Native OAuth browser flow. Returns tokens.                                                                                                            |
+| `importCsn`               | `(csn) => AsyncResult<ImportCsnResult>`                  | Imports a CSN (single or multi-definition) via `/deepsea/` API, then deploys.                                                                         |
+| `readAnalyticModel`       | `(objectName) => AsyncResult<string>`                    | Reads an analytic model definition via GET.                                                                                                           |
+| `readView`                | `(objectName) => AsyncResult<string>`                    | Reads a view definition via GET.                                                                                                                      |
+| `readLocalTable`          | `(objectName) => AsyncResult<string>`                    | Reads a local table definition via GET.                                                                                                               |
+| `readReplicationFlow`     | `(objectName) => AsyncResult<string>`                    | Reads a replication flow definition via GET.                                                                                                          |
+| `readTaskChain`           | `(objectName) => AsyncResult<string>`                    | Reads a task chain definition via GET (`taskchains` endpoint, not yet confirmed on a tenant).                                                         |
+| `deleteAnalyticModel`     | `(objectName) => AsyncResult<string>`                    | Deletes an analytic model via DELETE.                                                                                                                 |
+| `deleteView`              | `(objectName, options?) => AsyncResult<string>`          | Deletes a view via DELETE. Forced (`deleteAnyway=true`) unless `{ deleteAnyway: false }`, which lets Datasphere refuse while something uses the view. |
+| `deleteLocalTable`        | `(objectName) => AsyncResult<string>`                    | Deletes a local table via DELETE.                                                                                                                     |
+| `deleteReplicationFlow`   | `(objectName) => AsyncResult<string>`                    | Deletes a replication flow via DELETE.                                                                                                                |
+| `deleteTaskChain`         | `(objectName) => AsyncResult<string>`                    | Deletes a task chain via DELETE (`taskchains` endpoint, not yet confirmed on a tenant).                                                               |
+| **Data access controls**  |                                                          |                                                                                                                                                       |
+| `listDataAccessControls`  | `(options?) => AsyncResult<string[]>`                    | Technical names of the space's controls. `{ top, skip }` reads one page; without `top`, every page (25 at a time). `technicalNames` filters.          |
+| `readDataAccessControl`   | `(objectName) => AsyncResult<string>`                    | The control as saved, `{"definitions": {NAME: {...}}}`.                                                                                               |
+| `createDataAccessControl` | `(content, options?) => AsyncResult<string>`             | POSTs the control's CSN and deploys it.                                                                                                               |
+| `updateDataAccessControl` | `(objectName, content, options?) => AsyncResult<string>` | PUTs the control's CSN and deploys it.                                                                                                                |
+| `deleteDataAccessControl` | `(objectName, options?) => AsyncResult<string>`          | Not forced (`deleteAnyway=false`) unless `{ deleteAnyway: true }`: Datasphere refuses while something uses the control.                               |
+| `runReplicationFlow`      | `(flowName) => AsyncResult<RunReplicationFlowResult>`    | Triggers a replication flow run.                                                                                                                      |
+| `objectExists`            | `(objectType, name) => AsyncResult<boolean>`             | Checks if an object exists (GET + 200 check).                                                                                                         |
+| `previewData`             | `(viewName, options?) => AsyncResult<DataPreviewResult>` | Fetches data rows from a deployed view via OData.                                                                                                     |
+| `getViewColumns`          | `(viewName) => AsyncResult<ViewColumn[]>`                | Fetches column metadata from a view's OData `$metadata`.                                                                                              |
+| **Navigator**             |                                                          |                                                                                                                                                       |
+| `listObjects`             | `(options?) => AsyncResult<SearchObject[]>`              | Lists all design objects in the space with auto-pagination.                                                                                           |
+| `listFolders`             | `(parentFolderId?) => AsyncResult<SpaceFolder[]>`        | Lists folders in the space. Pass a parent ID to drill into subfolders.                                                                                |
+| `searchObjects`           | `(options?) => AsyncResult<SearchResult>`                | Raw search API access with text queries, kind filtering, and pagination.                                                                              |
+| **INA (Experimental)**    |                                                          |                                                                                                                                                       |
+| `inaGetServerInfo`        | `() => AsyncResult<InaServerInfo>`                       | INA server connectivity and capability check.                                                                                                         |
+| `inaGetMetadata`          | `(dataSource) => AsyncResult<InaMetadataResult>`         | Retrieves dimensions, measures, and variables for an analytic model.                                                                                  |
+| `inaQueryData`            | `(options) => AsyncResult<InaQueryResult>`               | Queries data from an analytic model via the INA protocol.                                                                                             |
 
 All methods return `AsyncResult<T>` which is `Promise<[T, null] | [null, Error]>`.
+
+### Data Access Controls
+
+Controls are not imported through `importCsn`. They use the documented `/dwaas-core/api/v1/spaces/{space}/dataaccesscontrols` endpoints, and every query parameter is sent explicitly, as SAP's `datasphere` CLI sends it:
+
+| Option (`ObjectWriteOptions`) | Default | Meaning                                         |
+| ----------------------------- | ------- | ----------------------------------------------- |
+| `deploy`                      | `true`  | Deploy after saving                             |
+| `saveAnyway`                  | `false` | Save despite validation messages                |
+| `allowMissingDependencies`    | `false` | Save although objects it depends on are missing |
+
+`DeleteOptions` has `deleteAnyway`. It defaults to `false` for controls and `true` for views, which keeps the old view behaviour. All three option types are exported from the package entry.
+
+```typescript
+const csn = JSON.parse(
+  readFileSync("csn/data_access_controls/MY_DAC.json", "utf-8"),
+);
+const [, createErr] = await client.createDataAccessControl(csn); // saved and deployed
+const [, deleteErr] = await client.deleteDataAccessControl("MY_DAC"); // refused while in use
+```
 
 ---
 
@@ -78,8 +110,8 @@ Every fallible operation returns a Result. Always check the error before using t
 ```typescript
 const [result, error] = await client.importCsn(csn);
 if (error) {
-    console.error(error.message);
-    return;
+  console.error(error.message);
+  return;
 }
 // result is guaranteed non-null here
 console.log(`Imported ${result.objectIds.length} objects`);
@@ -95,11 +127,11 @@ CSN (Core Schema Notation) files are JSON exports from SAP Datasphere. They cont
 
 ```typescript
 interface CsnFile {
-    definitions?: Record<string, CsnEntity>;              // views, local tables, analytic models
-    replicationflows?: Record<string, CsnReplicationFlow>; // replication flows
-    version?: { csn: string };
-    meta?: { creator: string };
-    $version?: string;
+  definitions?: Record<string, CsnEntity>; // views, local tables, analytic models
+  replicationflows?: Record<string, CsnReplicationFlow>; // replication flows
+  version?: { csn: string };
+  meta?: { creator: string };
+  $version?: string;
 }
 ```
 
@@ -110,4 +142,4 @@ interface CsnFile {
 
 ---
 
-*Last updated: v0.4.0*
+_Last updated: v0.5.0_

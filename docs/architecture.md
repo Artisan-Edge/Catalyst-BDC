@@ -39,6 +39,8 @@ src/
 │   │   ├── local-table/     # read, delete
 │   │   ├── replication-flow/  # read, delete, run
 │   │   ├── task-chain/      # read, delete
+│   │   ├── data-access-control/  # list, read, create, update, delete
+│   │   ├── writeParams.ts   # saveAnyway/allowMissingDependencies/deploy query of a save
 │   │   ├── import/      # resolveSpaceId, importCsn, deployObjects
 │   │   └── navigator/   # listObjects, listFolders, searchObjects, previewData, getViewColumns
 │   └── index.ts
@@ -82,7 +84,7 @@ All operations receive a `DatasphereRequestor` interface instead of directly cal
 
 ```typescript
 interface DatasphereRequestor {
-    request(options: DatasphereRequestOptions): AsyncResult<Response, Error>;
+  request(options: DatasphereRequestOptions): AsyncResult<Response, Error>;
 }
 
 // In BdcClientImpl:
@@ -90,6 +92,7 @@ this.requestor = { request: this.request.bind(this) };
 ```
 
 This pattern allows:
+
 - Automatic token refresh on expiry
 - CSRF auto-retry on 403
 - Operations to be tested with custom requestors
@@ -102,23 +105,28 @@ All fallible operations return `Result<T, Error>` — no thrown exceptions:
 type Result<T, E extends Error = Error> = [T, null] | [null, E];
 
 const [result, error] = await client.importCsn(csn);
-if (error) { /* handle */ }
+if (error) {
+  /* handle */
+}
 // result is guaranteed non-null
 ```
 
 ### Endpoint Mapping
 
-| Operation | Method | Path |
-|-----------|--------|------|
-| import | POST | `/deepsea/repository/{space}/objects/` |
-| deploy | POST | `/dwaas-core/deploy/{space}/objects` |
-| read | GET | `/dwaas-core/api/v1/spaces/{space}/{endpoint}/{name}` |
-| delete | DELETE | `/dwaas-core/api/v1/spaces/{space}/{endpoint}/{name}` |
-| run | POST | `/dwaas-core/replicationflow/space/{space}/flows/{name}/run` |
-| preview (OData) | GET | `/dwaas-core/data-access/instant/{space}/{view}` |
-| search | GET | `/dwaas-core/api/v1/spaces/{space}/designObjects` |
-| INA CSRF | GET | `/sap/bc/ina/service/v2/GetServerInfo` |
-| INA query | POST | `/dwaas-core/sap/bc/ina/service/v2/GetResponse` |
+| Operation                  | Method | Path                                                                                                        |
+| -------------------------- | ------ | ----------------------------------------------------------------------------------------------------------- |
+| import                     | POST   | `/deepsea/repository/{space}/objects/`                                                                      |
+| deploy                     | POST   | `/dwaas-core/deploy/{space}/objects`                                                                        |
+| read                       | GET    | `/dwaas-core/api/v1/spaces/{space}/{endpoint}/{name}`                                                       |
+| delete                     | DELETE | `/dwaas-core/api/v1/spaces/{space}/{endpoint}/{name}?deleteAnyway=true\|false`                              |
+| list data access controls  | GET    | `/dwaas-core/api/v1/spaces/{space}/dataaccesscontrols?select=technicalName&top=&skip=`                      |
+| create data access control | POST   | `/dwaas-core/api/v1/spaces/{space}/dataaccesscontrols?saveAnyway=&allowMissingDependencies=&deploy=`        |
+| update data access control | PUT    | `/dwaas-core/api/v1/spaces/{space}/dataaccesscontrols/{name}?saveAnyway=&allowMissingDependencies=&deploy=` |
+| run                        | POST   | `/dwaas-core/replicationflow/space/{space}/flows/{name}/run`                                                |
+| preview (OData)            | GET    | `/dwaas-core/data-access/instant/{space}/{view}`                                                            |
+| search                     | GET    | `/dwaas-core/api/v1/spaces/{space}/designObjects`                                                           |
+| INA CSRF                   | GET    | `/sap/bc/ina/service/v2/GetServerInfo`                                                                      |
+| INA query                  | POST   | `/dwaas-core/sap/bc/ina/service/v2/GetResponse`                                                             |
 
 ### One Function Per File
 
@@ -147,4 +155,4 @@ Login follows a different path: native OAuth authorization code flow via local H
 
 ---
 
-*Last updated: v0.4.0*
+_Last updated: v0.5.0_

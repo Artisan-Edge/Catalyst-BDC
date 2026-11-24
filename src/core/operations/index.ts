@@ -21,6 +21,9 @@ export { readAnalyticModel, deleteAnalyticModel } from './analytic-model';
 // SQL view
 export { readView, deleteView } from './sql-view';
 
+// Data access control
+export { listDataAccessControls, readDataAccessControl, createDataAccessControl, updateDataAccessControl, deleteDataAccessControl } from './data-access-control';
+
 // Import (multi-definition CSN via /deepsea/ API)
 export { resolveSpaceId, importCsn, deployObjects } from './import';
 export type { ImportCsnResult } from './import';
