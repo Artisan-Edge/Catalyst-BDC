@@ -60,5 +60,10 @@ export async function safeDelete(
             if (deleteErr) console.warn(`Cleanup: failed to delete transformation flow "${name}":`, deleteErr.message);
             break;
         }
+        case 'task-chain': {
+            const [, deleteErr] = await client.deleteTaskChain(name);
+            if (deleteErr) console.warn(`Cleanup: failed to delete task chain "${name}":`, deleteErr.message);
+            break;
+        }
     }
 }

@@ -38,6 +38,7 @@ src/
 │   │   ├── sql-view/        # read, delete
 │   │   ├── local-table/     # read, delete
 │   │   ├── replication-flow/  # read, delete, run
+│   │   ├── task-chain/      # read, delete
 │   │   ├── import/      # resolveSpaceId, importCsn, deployObjects
 │   │   └── navigator/   # listObjects, listFolders, searchObjects, previewData, getViewColumns
 │   └── index.ts
@@ -146,4 +147,4 @@ Login follows a different path: native OAuth authorization code flow via local H
 
 ---
 
-*Last updated: v0.3.0*
+*Last updated: v0.4.0*

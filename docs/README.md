@@ -14,7 +14,7 @@ Programmatic Datasphere object management via direct HTTP API.
 
 ## Overview
 
-Catalyst-BDC is a TypeScript library for automated Datasphere object management. It communicates directly with the Datasphere REST API (no CLI dependency). It handles native OAuth browser login, CSRF token management, automatic token refresh, and import/read/delete operations for views, local tables, replication flows, and analytic models.
+Catalyst-BDC is a TypeScript library for automated Datasphere object management. It communicates directly with the Datasphere REST API (no CLI dependency). It handles native OAuth browser login, CSRF token management, automatic token refresh, and import/read/delete operations for views, local tables, replication flows, transformation flows, task chains, and analytic models.
 
 All write operations use the `/deepsea/repository/` import API — the same endpoint the Datasphere UI uses. This supports multi-definition CSN files in a single request, handles circular references between objects, and automatically deploys after import.
 
@@ -152,4 +152,4 @@ src/
 
 ---
 
-*Last updated: v0.3.0*
+*Last updated: v0.4.0*

@@ -26,6 +26,11 @@ export const DATASPHERE_OBJECT_TYPES = {
         endpoint: 'analyticmodels',
         csnKey: 'definitions',
     },
+    // Path by analogy with the other types (SAP CLI type name without the hyphen); not yet seen on a tenant
+    'task-chain': {
+        endpoint: 'taskchains',
+        csnKey: 'taskchains',
+    },
 } as const satisfies Record<string, DatasphereObjectType>;
 
 export type DatasphereObjectTypeName = keyof typeof DATASPHERE_OBJECT_TYPES;

@@ -37,6 +37,8 @@ import { runReplicationFlow as coreRunReplicationFlow } from '../core/operations
 import { readTransformationFlow as coreReadTransformationFlow } from '../core/operations/transformation-flow/read';
 import { deleteTransformationFlow as coreDeleteTransformationFlow } from '../core/operations/transformation-flow/delete';
 import { runTransformationFlow as coreRunTransformationFlow } from '../core/operations/transformation-flow/run';
+import { readTaskChain as coreReadTaskChain } from '../core/operations/task-chain/read';
+import { deleteTaskChain as coreDeleteTaskChain } from '../core/operations/task-chain/delete';
 import { objectExists as coreObjectExists } from '../core/operations/objectExists';
 import { listObjects as coreListObjects } from '../core/operations/navigator/listObjects';
 import { listFolders as coreListFolders } from '../core/operations/navigator/listFolders';
@@ -168,6 +170,10 @@ export class BdcClientImpl implements BdcClient {
         return coreReadTransformationFlow(this.requestor, this.config.space, objectName);
     }
 
+    readTaskChain(objectName: string): AsyncResult<string> {
+        return coreReadTaskChain(this.requestor, this.config.space, objectName);
+    }
+
     // Delete
     deleteAnalyticModel(objectName: string): AsyncResult<string> {
         return coreDeleteAnalyticModel(this.requestor, this.config.space, objectName);
@@ -187,6 +193,10 @@ export class BdcClientImpl implements BdcClient {
 
     deleteTransformationFlow(objectName: string): AsyncResult<string> {
         return coreDeleteTransformationFlow(this.requestor, this.config.space, objectName);
+    }
+
+    deleteTaskChain(objectName: string): AsyncResult<string> {
+        return coreDeleteTaskChain(this.requestor, this.config.space, objectName);
     }
 
     // Replication flow
@@ -216,6 +226,7 @@ export class BdcClientImpl implements BdcClient {
             ...Object.keys(csn.businessLayerDefinitions ?? {}),
             ...Object.keys(csn.replicationflows ?? {}),
             ...Object.keys(csn.transformationflows ?? {}),
+            ...Object.keys(csn.taskchains ?? {}),
         ];
 
         if (objectIds.length === 0 && allObjectNames.length > 0) {

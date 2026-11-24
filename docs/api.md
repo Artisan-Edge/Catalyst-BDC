@@ -41,10 +41,12 @@ interface BdcConfig {
 | `readView` | `(objectName) => AsyncResult<string>` | Reads a view definition via GET. |
 | `readLocalTable` | `(objectName) => AsyncResult<string>` | Reads a local table definition via GET. |
 | `readReplicationFlow` | `(objectName) => AsyncResult<string>` | Reads a replication flow definition via GET. |
+| `readTaskChain` | `(objectName) => AsyncResult<string>` | Reads a task chain definition via GET (`taskchains` endpoint, not yet confirmed on a tenant). |
 | `deleteAnalyticModel` | `(objectName) => AsyncResult<string>` | Deletes an analytic model via DELETE. |
 | `deleteView` | `(objectName) => AsyncResult<string>` | Deletes a view via DELETE. |
 | `deleteLocalTable` | `(objectName) => AsyncResult<string>` | Deletes a local table via DELETE. |
 | `deleteReplicationFlow` | `(objectName) => AsyncResult<string>` | Deletes a replication flow via DELETE. |
+| `deleteTaskChain` | `(objectName) => AsyncResult<string>` | Deletes a task chain via DELETE (`taskchains` endpoint, not yet confirmed on a tenant). |
 | `runReplicationFlow` | `(flowName) => AsyncResult<RunReplicationFlowResult>` | Triggers a replication flow run. |
 | `objectExists` | `(objectType, name) => AsyncResult<boolean>` | Checks if an object exists (GET + 200 check). |
 | `previewData` | `(viewName, options?) => AsyncResult<DataPreviewResult>` | Fetches data rows from a deployed view via OData. |
@@ -108,4 +110,4 @@ interface CsnFile {
 
 ---
 
-*Last updated: v0.3.0*
+*Last updated: v0.4.0*

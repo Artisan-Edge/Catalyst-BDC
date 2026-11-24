@@ -47,6 +47,16 @@ export interface CsnTransformationFlow {
     [key: string]: unknown;
 }
 
+// Deliberately permissive — only the discriminating `kind` is pinned down
+export interface CsnTaskChain {
+    kind: 'sap.dwc.taskChain';
+    '@EndUserText.label'?: string;
+    nodes?: unknown[];
+    links?: unknown[];
+    params?: Record<string, unknown>;
+    [key: string]: unknown;
+}
+
 export interface CsnVersion {
     csn: string;
 }
@@ -60,6 +70,7 @@ export interface CsnFile {
     businessLayerDefinitions?: Record<string, CsnEntity>;
     replicationflows?: Record<string, CsnReplicationFlow>;
     transformationflows?: Record<string, CsnTransformationFlow>;
+    taskchains?: Record<string, CsnTaskChain>;
     version?: CsnVersion;
     meta?: CsnMeta;
     $version?: string;

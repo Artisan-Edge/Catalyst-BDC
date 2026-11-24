@@ -41,6 +41,7 @@ export interface BdcClient {
     readLocalTable(objectName: string): AsyncResult<string>;
     readReplicationFlow(objectName: string): AsyncResult<string>;
     readTransformationFlow(objectName: string): AsyncResult<string>;
+    readTaskChain(objectName: string): AsyncResult<string>;
 
     // Delete
     deleteAnalyticModel(objectName: string): AsyncResult<string>;
@@ -48,6 +49,7 @@ export interface BdcClient {
     deleteLocalTable(objectName: string): AsyncResult<string>;
     deleteReplicationFlow(objectName: string): AsyncResult<string>;
     deleteTransformationFlow(objectName: string): AsyncResult<string>;
+    deleteTaskChain(objectName: string): AsyncResult<string>;
 
     // Replication flow
     runReplicationFlow(flowName: string): AsyncResult<RunReplicationFlowResult>;

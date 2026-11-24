@@ -38,4 +38,21 @@ describe('endpoint discovery', () => {
         expect(readErr!.message).not.toContain('401');
         expect(readErr!.message).not.toContain('403');
     }, 30_000);
+
+    // Task chain endpoint — path by analogy, not yet confirmed. Set DSP_TEST_TASK_CHAIN to an
+    // existing chain to tell a wrong path (404 here too) from a missing object.
+    test('task chain endpoint responds (not 401/403)', async () => {
+        const [, readErr] = await client.readTaskChain('__NONEXISTENT__');
+        expect(readErr).not.toBeNull();
+        console.log('Task chain endpoint response:', readErr!.message);
+        expect(readErr!.message).not.toContain('401');
+        expect(readErr!.message).not.toContain('403');
+    }, 30_000);
+
+    test.if(Boolean(process.env['DSP_TEST_TASK_CHAIN']))('task chain endpoint reads an existing chain', async () => {
+        const [content, readErr] = await client.readTaskChain(process.env['DSP_TEST_TASK_CHAIN']!);
+        if (readErr) console.error('readTaskChain failed:', readErr.message);
+        expect(readErr).toBeNull();
+        expect(content).toContain('sap.dwc.taskChain');
+    }, 30_000);
 });

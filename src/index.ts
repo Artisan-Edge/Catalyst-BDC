@@ -4,7 +4,7 @@ export type { BdcClient } from './client';
 
 // Types
 export type { BdcConfig, OAuthConfig, TokenConfig } from './types/config';
-export type { CsnFile, CsnEntity, CsnElement, CsnReplicationFlow, CsnTransformationFlow } from './types/csn';
+export type { CsnFile, CsnEntity, CsnElement, CsnReplicationFlow, CsnTransformationFlow, CsnTaskChain } from './types/csn';
 export type {
     DesignObject, SearchObject, ListObjectsOptions, SearchOptions,
     DesignObjectKind, SpaceFolder, FolderHierarchyEntry,

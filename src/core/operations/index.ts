@@ -12,6 +12,9 @@ export type { RunReplicationFlowResult } from './replication-flow';
 export { readTransformationFlow, deleteTransformationFlow, runTransformationFlow } from './transformation-flow';
 export type { RunTransformationFlowResult } from './transformation-flow';
 
+// Task chain
+export { readTaskChain, deleteTaskChain } from './task-chain';
+
 // Analytic model
 export { readAnalyticModel, deleteAnalyticModel } from './analytic-model';
 
