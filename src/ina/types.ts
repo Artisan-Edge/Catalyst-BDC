@@ -198,7 +198,7 @@ export const InaGridSchema = z.object({
     Axes: z.array(InaAxisSchema).optional(),
     Cells: z.union([InaCellsV2Schema, z.array(z.unknown())]).optional(),
     CellArraySizes: z.array(z.number()).optional(),
-    Units: z.array(z.record(z.unknown())).optional(),
+    Units: z.array(z.record(z.string(), z.unknown())).optional(),
     Messages: z.array(InaMessageSchema).optional(),
     SubSetDescription: z.object({
         RowFrom: z.number(),
@@ -214,7 +214,7 @@ export const InaServerInfoResponseSchema = z.object({
         Version: z.string().optional(),
         SystemId: z.string().optional(),
     }).passthrough().optional(),
-    Services: z.array(z.record(z.unknown())).optional(),
+    Services: z.array(z.record(z.string(), z.unknown())).optional(),
 }).passthrough();
 
 // Variable definition returned in DataSource.Variables
